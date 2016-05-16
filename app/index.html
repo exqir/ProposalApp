@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="proposalApp">
+<head>
+    <meta charset="utf8" />
+    <title>Stellenausschreibung</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+</head>
+<body>
+	<div ng-controller="testCtrl" ng-hide="hide">
+    <table>
+      <thead>
+        <td>ID</td>
+        <td>InstID</td>
+        <td>Title</td>
+      </thead>
+      <tr ng-repeat="proposal in proposals">
+        <td>{{proposal.ID}}</td>
+        <td>{{proposal.InstID}}</td>
+        <td>{{proposal.Title}}</td>
+      </tr>
+    </table>
+  </div>
+
+    <script src="./js/angular-v1-5-3.js"></script>
+    <script src="./js/angular-route-v1-5-3.js"></script>
+    <!-- <script src="./js/angular/angular-sanitize-v1-5-3.js"></script> -->
+	  <!-- <script src="./js/bootstrap/ui-bootstrap-1.2.4.min.js"></script> -->
+    <!-- <script src="./js/bootstrap/ui-bootstrap-tpls-1.2.4.js"></script> -->
+    <script src="./js/proposalApp.js"></script>
+</body>
+</html>
