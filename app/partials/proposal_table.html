@@ -1,0 +1,27 @@
+<table class="table table-bordered">
+  <thead>
+    <td>ID</td>
+    <td>Organization</td>
+    <td>Title</td>
+    <td>Besoldung</td>
+    <td>Tenure</td>
+    <td>Link</td>
+    <td>Erfasst am</td>
+  </thead>
+  <tr ng-repeat="proposal in proposals">
+    <td>{{proposal.ID}}</td>
+    <td>{{proposal.instName}}</td>
+    <td>{{proposal.Title}}</td>
+    <td>
+      {{proposal.W1}}
+      {{proposal.W2}}
+      {{proposal.W3}}
+      {{proposal.C1}}
+      {{proposal.C2}}
+      {{proposal.C3}}
+    </td>
+    <td>{{proposal.Tenure | convertToYesOrNo}}</td>
+    <td><a href="https://www.academics.de{{proposal.Link}}">Link</a></td>
+    <td>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</td>
+  </tr>
+</table>

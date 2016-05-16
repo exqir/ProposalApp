@@ -4,24 +4,20 @@
     <meta charset="utf8" />
     <title>Stellenausschreibung</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-	<div ng-view ng-controller="testCtrl">
-    <table>
-      <thead>
-        <td>ID</td>
-        <td>Organization</td>
-        <td>Title</td>
-      </thead>
-      <tr ng-repeat="proposal in proposals">
-        <td>{{proposal.ID}}</td>
-        <td>{{proposal.instName}}</td>
-        <td>{{proposal.Title}}</td>
-      </tr>
-    </table>
+  <header>
+    <nav class="main-navigation">
+      <ul>
+        <li><a href=".#/">Offene Stellen</a></li>
+        <li><a href=".#/organizations/">Organisationen</a></li>
+      </ul>
+    </nav>
+  </header>
+	<div ng-view class="content">
   </div>
-
     <script src="./js/angular-v1-5-3.js"></script>
     <script src="./js/angular-route-v1-5-3.js"></script>
     <script src="./js/angular-sanitize-v1-5-3.js"></script>
