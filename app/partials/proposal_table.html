@@ -13,14 +13,14 @@
     <td>{{proposal.instName}}</td>
     <td>{{proposal.Title}}</td>
     <td>
-      {{proposal.W1}}
-      {{proposal.W2}}
-      {{proposal.W3}}
-      {{proposal.C1}}
-      {{proposal.C2}}
-      {{proposal.C3}}
+      {{proposal.W1 | convertToName: 'W1' }}
+      {{proposal.W2 | convertToName: 'W2' }}
+      {{proposal.W3 | convertToName: 'W3' }}
+      {{proposal.C1 | convertToName: 'C1' }}
+      {{proposal.C2 | convertToName: 'C2' }}
+      {{proposal.C3 | convertToName: 'C3' }}
     </td>
-    <td>{{proposal.Tenure | convertToYesOrNo}}</td>
+    <td>{{proposal.Tenure | convertToYesOrNo }}</td>
     <td><a href="https://www.academics.de{{proposal.Link}}">Link</a></td>
     <td>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</td>
   </tr>

@@ -16,10 +16,17 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate'])
       return dateObject;
      };
 })
-.filter('convertToYesOrNo', function(){
+.filter('convertToYesOrNo', function() {
   return function (int) {
     if(int === "1") return "Ja";
     else return "Nein";
+  };
+})
+.filter('convertToName', function() {
+  return function (int,name) {
+    console.log(name);
+    if(int === "1") return name;
+    else return "";
   };
 })
 .controller('proposalCtrl', function($scope, $http){
