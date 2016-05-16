@@ -49,7 +49,8 @@
 			//STR_TO_DATE(?, '%Y-%m-%d')
 			if($stmt = $this->mysqli->prepare($query))
 			{
-				$stmt->bind_param("ss", trim($title), $enddate);
+				$title = trim($title);
+				$stmt->bind_param("ss", $title, $enddate);
 				if($stmt->execute())
 				{
 					$stmt->store_result();

@@ -17,7 +17,7 @@ class Parser
 		$resultArray = TITLEADDITIONS;
 		$titleArray = TITLEEXPRESSIONS;
 		foreach (array_keys($titleArray) as $addition) {
-			foreach ($titleAdditions[$addition] as $expression) {
+			foreach ($titleArray[$addition] as $expression) {
 				if(strpos($title,$expression) !== false) {
 					$resultArray[$addition] = 1;
 					break;
