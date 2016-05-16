@@ -14,6 +14,18 @@ define("TITLEADDITIONS", [
 			"Ass" => 0,
 		]);
 
+define("TITLEEXPRESSIONS", [
+	"W1" => ["W1","Juniorprofessor","Jun.-Prof."],
+	"W2" => ["W2","Assoc. Prof","Associate Professor"],
+	"W3" => ["W3","Full Professor"],
+	"C1" => ["C1"],
+	"C2" => ["C2"],
+	"C3" => ["C3"],
+	"C4" => ["C4"],
+	"Tenure" => ["Tenure"],
+	"Ass" => ["Ass","Assistenz","Assistent","Assistant"],
+]);
+
 define("DB_PROPOSAL", [
 			"InstID" => "?",
 			"TypeID" => "?",

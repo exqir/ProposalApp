@@ -14,42 +14,8 @@ class Parser
 	**/
 	public function searchTitleAdditions($title)
 	{
-		$titleArray = TITLEADDITIONS;
-		foreach(array_keys($titleArray) as $arrayKey)
-		{
-			if(strpos($title,$arrayKey) !== false)
-			{
-				$titleArray[$arrayKey] = 1;
-
-				if(strpos($arrayKey, "Ass") !== false)
-				{
-					if(strpos($title, "Assistenz") !== false || strpos($title, "Assistent") !== false || strpos($title, "Assistant") !== false)
-					{
-						$titleArray[$arrayKey] = 1;
-					}
-					else
-					{
-						$titleArray[$arrayKey] = 0;
-					}
-				}
-			}
-		}
-		return $titleArray;
-	}
-	public function searchT($title)
-	{
 		$resultArray = TITLEADDITIONS;
-		$titleArray = [
-			"W1" => ["W1"],
-			"W2" => ["W2"],
-			"W3" => ["W3"],
-			"C1" => ["C1"],
-			"C2" => ["C2"],
-			"C3" => ["C3"],
-			"C4" => ["C4"],
-			"Tenure" => ["Tenure"],
-			"Ass" => ["Ass","Assistenz","Assistent","Assistant"],
-		];
+		$titleArray = TITLEEXPRESSIONS;
 		foreach (array_keys($titleArray) as $addition) {
 			foreach ($titleAdditions[$addition] as $expression) {
 				if(strpos($title,$expression) !== false) {
