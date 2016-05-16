@@ -348,7 +348,13 @@
 
 		public function getProposals()
 		{
-			$query = "SELECT * FROM proposal ORDER BY id DESC LIMIT 100";
+			$query =
+			"SELECT proposal.*, institutes.Abbrev AS inst_abbrev, institutes.Institute AS instName
+			FROM proposal
+			INNER JOIN institutes
+			ON proposal.InstID = institutes.ID
+			ORDER BY id
+			DESC LIMIT 100";
 			if($stmt = $this->mysqli->query($query)){
 				$res = array();
 				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){

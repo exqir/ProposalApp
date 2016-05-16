@@ -1,7 +1,7 @@
 <?php
 require_once 'flight/Flight.php';
 require_once __DIR__ . '/../classes/sqlHandler.php';
-require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../db.php';
 
 Flight::route('GET /', function(){
     echo 'GET hello world!';
