@@ -5,6 +5,9 @@ header {
   background-color: #2980b9;
   padding: 10px 0;
 }
+.block {
+  display: block;
+}
 .content {
   padding: 5px;
 }
@@ -26,4 +29,13 @@ nav.main-navigation ul li {
 }
 nav.main-navigation ul li:hover {
   border-bottom: 2px solid rgba(255, 255, 255, 1);
+}
+form select.form-control.select-inline {
+  display: inline-block;;
+  width: 10%;
+}
+form input.form-control.input-inline {
+  display: inline-block;
+  width: 89%;
+  float: right;
 }

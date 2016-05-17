@@ -9,7 +9,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate'])
       templateUrl: 'partials/proposal_table.html',
       controller: 'proposalListCtrl'
     })
-    .when('/proposals/1', {
+    .when('/proposals/:id', {
       templateUrl: 'partials/proposal_detail.html',
       controller: 'proposalDetailCtrl'
     })
@@ -41,9 +41,12 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate'])
       $scope.proposals = response.data;
     });
 })
-.controller('proposalDetailCtrl', function($scope, $http){
-  $http.get("http://localhost:8888/ProposalApp/restEndpoint/proposals/2431")
+.controller('proposalDetailCtrl', function($scope, $http, $routeParams){
+  var proposalID = $routeParams.id;
+  $http.get("http://localhost:8888/ProposalApp/restEndpoint/proposals/" + proposalID)
     .then(function (response) {
       $scope.proposal = response.data;
     });
+  $scope.editProposal = function(){
+  };
 });

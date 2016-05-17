@@ -27,5 +27,11 @@ Flight::route('GET /proposals/@id/', function($id){
   $sql->closeConnection();
 });
 
+Flight::route('PUT /proposals/@id', function($id){
+    echo 'PUT proposal';
+    $sql->editProposal($id);
+    $sql->closeConnection();
+});
+
 Flight::start();
 ?>
