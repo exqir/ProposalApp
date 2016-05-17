@@ -36,17 +36,21 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate'])
   };
 })
 .controller('proposalListCtrl', function($scope, $http){
-  $http.get("http://localhost:8888/ProposalApp/restEndpoint/proposals")
+  $http.get("./../restEndpoint/proposals")
     .then(function (response) {
       $scope.proposals = response.data;
     });
 })
 .controller('proposalDetailCtrl', function($scope, $http, $routeParams){
   var proposalID = $routeParams.id;
-  $http.get("http://localhost:8888/ProposalApp/restEndpoint/proposals/" + proposalID)
+  $http.get("./../restEndpoint/proposals/" + proposalID)
     .then(function (response) {
       $scope.proposal = response.data;
     });
   $scope.editProposal = function(){
+    $http.put("./../restEndpoint/proposals/" + proposalID, $scope.proposal)
+    .then(function (response) {
+      console.log(response);
+    })
   };
 });

@@ -346,21 +346,21 @@
 			}
 		}
 
-		public function editProposal($id)
-		{
-			$updateColVal = "";
-			foreach(array_keys(DB_PROPOSAL) as $key){
-				if($key === end(array_keys(DB_PROPOSAL))) {
-					$updateColVal .= $key . '=' . B_PROPOSAL[$key];
-				}
-				else $updateColVal .= $key . '=' . B_PROPOSAL[$key] . ',';
-			}
-			return $updateColVal;
-			$query = "UPDATE proposal SET $updateColVal WHERE id = ?";
-			if($stmt = $this->mysqli->prepare($query)){
-				$stmt->bind_param("i", $id);
-			}
-		}
+		// public function editProposal($id)
+		// {
+		// 	$updateColVal = "";
+		// 	foreach(array_keys(DB_PROPOSAL) as $key){
+		// 		if($key === end(array_keys(DB_PROPOSAL))) {
+		// 			$updateColVal .= $key . '=' . B_PROPOSAL[$key];
+		// 		}
+		// 		else $updateColVal .= $key . '=' . B_PROPOSAL[$key] . ',';
+		// 	}
+		// 	return $updateColVal;
+		// 	$query = "UPDATE proposal SET $updateColVal WHERE id = ?";
+		// 	if($stmt = $this->mysqli->prepare($query)){
+		// 		$stmt->bind_param("i", $id);
+		// 	}
+		// }
 
 		public function getProposals()
 		{
