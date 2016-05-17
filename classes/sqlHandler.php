@@ -363,11 +363,28 @@
 				$stmt->free();
 				return $res;
 			} else {
-				printf('errno: %d, error: %s', $sql->errno, $sql->error);
+				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				die;
+			}
+			$sql->close();
+		}
+
+		public function getProposal($id)
+		{
+			$query =
+			"SELECT proposal.*, institutes.Abbrev AS instAbbrev, institutes.Institute AS instName
+			FROM proposal
+			INNER JOIN institutes
+			ON proposal.InstID = institutes.ID
+			WHERE proposal.ID = $id";
+			echo $query;
+			if($stmt = $this->mysqli->query($query)) {
+				return $stmt->fetch_assoc();
+			} else {
+				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
 				die;
 			}
 			$sql->close();
 		}
 	}
-
 ?>

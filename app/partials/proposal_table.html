@@ -23,5 +23,6 @@
     <td>{{proposal.Tenure | convertToYesOrNo }}</td>
     <td><a href="https://www.academics.de{{proposal.Link}}">Link</a></td>
     <td>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</td>
+    <td><a href="./proposals/{{proposal.ID}}/">Bearbeiten</a></td>
   </tr>
 </table>

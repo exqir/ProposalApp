@@ -3,10 +3,17 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate'])
   function($routeProvider){
     $routeProvider.
     when('/', {
+      redirectTo: '/'
+    })
+    .when('/proposals', {
       templateUrl: 'partials/proposal_table.html',
-      controller: 'proposalCtrl'
-    }).
-    otherwise({redirectTo: '/'});
+      controller: 'proposalListCtrl'
+    })
+    .when('/proposals/1', {
+      templateUrl: 'partials/proposal_detail.html',
+      controller: 'proposalDetailCtrl'
+    })
+    .otherwise({redirectTo: '/'});
   }
 ])
 .filter('convertSQLdate', function () {
@@ -24,14 +31,19 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate'])
 })
 .filter('convertToName', function() {
   return function (int,name) {
-    console.log(name);
     if(int === "1") return name;
     else return "";
   };
 })
-.controller('proposalCtrl', function($scope, $http){
+.controller('proposalListCtrl', function($scope, $http){
   $http.get("http://localhost:8888/ProposalApp/restEndpoint/proposals")
     .then(function (response) {
       $scope.proposals = response.data;
+    });
+})
+.controller('proposalDetailCtrl', function($scope, $http){
+  $http.get("http://localhost:8888/ProposalApp/restEndpoint/proposals/2431")
+    .then(function (response) {
+      $scope.proposal = response.data;
     });
 });
