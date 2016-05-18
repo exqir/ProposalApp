@@ -29,17 +29,35 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate'])
     else return "Nein";
   };
 })
+.filter('convertToStatus', function() {
+  return function (int) {
+    if(int === "1") return "<span class='label label-warning'>Raw</span>";
+    else if(int === "2") return "<span class='label label-info'>Edited</span>";
+    else if(int === "3") return "<span class='label label-danger'>Imported</span>";
+    else return "<span class='label label-success'>Manual</span>";
+  };
+})
 .filter('convertToName', function() {
   return function (int,name) {
     if(int === "1") return name;
     else return "";
   };
 })
-.controller('proposalListCtrl', function($scope, $http){
+.factory('searchTerm', function () {
+    return "";
+})
+.controller('header', function($scope, searchTerm) {
+  $scope.search = searchTerm;
+  $scope.goSearch = function() {
+    searchTerm = $scope.search;
+  };
+})
+.controller('proposalListCtrl', function($scope, $http, searchTerm){
   $http.get("./../restEndpoint/proposals")
     .then(function (response) {
       $scope.proposals = response.data;
     });
+  $scope.search = searchTerm;
 })
 .controller('proposalDetailCtrl', function($scope, $http, $routeParams){
   var proposalID = $routeParams.id;
@@ -51,6 +69,6 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate'])
     $http.put("./../restEndpoint/proposals/" + proposalID, $scope.proposal)
     .then(function (response) {
       console.log(response);
-    })
+    });
   };
 });

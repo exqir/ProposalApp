@@ -1,16 +1,23 @@
+<!-- <div class="input-group">
+  <input type="text" class="form-control" placeholder="Search for..." ng-model="search">
+  <span class="input-group-btn">
+    <button class="btn btn-default" type="button" ng-click="goSearch()">Go!</button>
+  </span>
+</div> -->
 <table class="table table-bordered">
   <thead>
     <td>ID</td>
-    <td>Organization</td>
+    <td>Status</td>
     <td>Title</td>
     <td>Besoldung</td>
     <td>Tenure</td>
+    <td>Organization</td>
     <td>Link</td>
     <td>Erfasst am</td>
   </thead>
-  <tr ng-repeat="proposal in proposals">
+  <tr ng-repeat="proposal in proposals | filter:search">
     <td>{{proposal.ID}}</td>
-    <td>{{proposal.instName}}</td>
+    <td ng-bind-html="proposal.Raw | convertToStatus"></td>
     <td>{{proposal.Title}}</td>
     <td>
       {{proposal.W1 | convertToName: 'W1' }}
@@ -21,6 +28,7 @@
       {{proposal.C3 | convertToName: 'C3' }}
     </td>
     <td>{{proposal.Tenure | convertToYesOrNo }}</td>
+    <td>{{proposal.instName}}</td>
     <td><a href="https://www.academics.de{{proposal.Link}}">Link</a></td>
     <td>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</td>
     <td><a href=".#/proposals/{{proposal.ID}}/">Bearbeiten</a></td>

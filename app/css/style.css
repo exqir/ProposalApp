@@ -11,6 +11,22 @@ header {
 .content {
   padding: 5px;
 }
+header .input-group.search {
+  width: 30%;
+  min-width: 200px;
+  display: inline-block;
+  float: right;
+  margin-right: 20px;
+}
+header .input-group.search input {
+  width: 90%;
+}
+header .input-group.search input, header .input-group.search span {
+  float: left;
+}
+nav.main-navigation {
+  display: inline-block;
+}
 nav.main-navigation a {
   color: white;
   font-size: 1.25em;

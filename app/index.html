@@ -8,13 +8,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-  <header>
+  <header ng-controller="header">
+    <img  width="200px" height="100px"/>
     <nav class="main-navigation">
       <ul>
         <li><a href=".#/proposals/">Offene Stellen</a></li>
+        <li><a href=".#/jobs/">Besetzte Stellen</a></li>
         <li><a href=".#/organizations/">Organisationen</a></li>
       </ul>
     </nav>
+    <div class="input-group search">
+      <input type="text" class="form-control" placeholder="Search for..." ng-model="search">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="goSearch()">Go!</button>
+      </span>
+    </div>
   </header>
 	<div ng-view class="content">
   </div>

@@ -346,21 +346,51 @@
 			}
 		}
 
-		// public function editProposal($id)
-		// {
-		// 	$updateColVal = "";
-		// 	foreach(array_keys(DB_PROPOSAL) as $key){
-		// 		if($key === end(array_keys(DB_PROPOSAL))) {
-		// 			$updateColVal .= $key . '=' . B_PROPOSAL[$key];
-		// 		}
-		// 		else $updateColVal .= $key . '=' . B_PROPOSAL[$key] . ',';
-		// 	}
-		// 	return $updateColVal;
-		// 	$query = "UPDATE proposal SET $updateColVal WHERE id = ?";
-		// 	if($stmt = $this->mysqli->prepare($query)){
-		// 		$stmt->bind_param("i", $id);
-		// 	}
-		// }
+		public function editProposal(Proposal $proposal)
+		{
+			// $updateColVal = "";
+			// foreach(array_keys(DB_PROPOSAL) as $key){
+			// 	if($key === end(array_keys(DB_PROPOSAL))) {
+			// 		$updateColVal .= $key . '=' . B_PROPOSAL[$key];
+			// 	}
+			// 	else $updateColVal .= $key . '=' . B_PROPOSAL[$key] . ',';
+			// }
+			// return $updateColVal;
+			$query = "UPDATE proposal SET
+			Title = ?,
+			Description = ?,
+			W1 = ?,
+			W2 = ?,
+			W3 = ?,
+			C1 = ?,
+			C2 = ?,
+			C3 = ?,
+			Tenure = ?,
+			Ass = ?,
+			Raw = ?
+			WHERE id = ?";
+			echo $proposal->getTitle();
+			if($stmt = $this->mysqli->prepare($query)){
+				$stmt->bind_param("ssiiiiiiiiii",
+					$proposal->getTitle(),
+					$proposal->getDescription(),
+					$proposal->w1,
+					$proposal->w2,
+					$proposal->w3,
+					$proposal->c1,
+					$proposal->c2,
+					$proposal->c3,
+					$proposal->tenure,
+					$proposal->ass,
+					$proposal->raw,
+					$proposal->getId());
+					if($stmt->execute()) {
+						//success
+						$this->close();
+						return 1;
+					}
+			}
+		}
 
 		public function getProposals()
 		{
