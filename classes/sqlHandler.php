@@ -369,24 +369,28 @@
 			Ass = ?,
 			Raw = ?
 			WHERE id = ?";
-			echo $proposal->getTitle();
 			if($stmt = $this->mysqli->prepare($query)){
+				$title = $proposal->getTitle();
+				$desc = $proposal->getDescription();
+				$titleAdditions = $proposal->getTitleAdditions();
+				$raw = $proposal->raw;
+				$id = $proposal->getId();
 				$stmt->bind_param("ssiiiiiiiiii",
-					$proposal->getTitle(),
-					$proposal->getDescription(),
-					$proposal->w1,
-					$proposal->w2,
-					$proposal->w3,
-					$proposal->c1,
-					$proposal->c2,
-					$proposal->c3,
-					$proposal->tenure,
-					$proposal->ass,
-					$proposal->raw,
-					$proposal->getId());
+				$title,
+				$desc,
+				$titleAdditions['W1'],
+				$titleAdditions['W2'],
+				$titleAdditions['W3'],
+				$titleAdditions['C1'],
+				$titleAdditions['C2'],
+				$titleAdditions['C3'],
+				$titleAdditions['Tenure'],
+				$titleAdditions['Ass'],
+				$raw,
+				$id);
 					if($stmt->execute()) {
 						//success
-						$this->close();
+						$stmt->close();
 						return 1;
 					}
 			}
@@ -395,7 +399,7 @@
 		public function getProposals()
 		{
 			$query =
-			"SELECT proposal.*, institutes.Abbrev AS inst_abbrev, institutes.Institute AS instName
+			"SELECT proposal.*, institutes.Abbrev AS instAbbrev, institutes.Institute AS instName
 			FROM proposal
 			INNER JOIN institutes
 			ON proposal.InstID = institutes.ID
@@ -412,7 +416,7 @@
 				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
 				die;
 			}
-			$sql->close();
+			$stmt->close();
 		}
 
 		public function getProposal($id)
@@ -430,7 +434,7 @@
 				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
 				die;
 			}
-			$sql->close();
+			$stmt->close();
 		}
 	}
 ?>

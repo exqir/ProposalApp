@@ -125,17 +125,18 @@ class Proposal
 
     public function setProposalByArray(array $array)
     {
-        $this->id = $array["ID"];
-        $this->title = $array["Title"];
+        $this->setId($array["ID"]);
+        $this->setTitle($array["Title"]);
         $this->description = $array["Description"];
-        $this->w1 = $array["W1"];
-        $this->w2 = $array["W2"];
-        $this->w3 = $array["W3"];
-        $this->c1 = $array["C1"];
-        $this->c2 = $array["C2"];
-        $this->c3 = $array["C3"];
-        $this->tenure = $array["Tenure"];
-        $this->ass = $array["Ass"];
+        $this->titleAdditions = array();
+        $this->titleAdditions["W1"] = $array["W1"];
+        $this->titleAdditions["W2"] = $array["W2"];
+        $this->titleAdditions["W3"] = $array["W3"];
+        $this->titleAdditions["C1"] = $array["C1"];
+        $this->titleAdditions["C2"] = $array["C2"];
+        $this->titleAdditions["C3"] = $array["C3"];
+        $this->titleAdditions["Tenure"]= $array["Tenure"];
+        $this->titleAdditions["Ass"] = $array["Ass"];
         $this->raw = "2";
     }
 }

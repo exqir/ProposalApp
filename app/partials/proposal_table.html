@@ -10,9 +10,7 @@
     <td>Status</td>
     <td>Title</td>
     <td>Besoldung</td>
-    <td>Tenure</td>
     <td>Organization</td>
-    <td>Link</td>
     <td>Erfasst am</td>
   </thead>
   <tr ng-repeat="proposal in proposals | filter:search">
@@ -26,10 +24,12 @@
       {{proposal.C1 | convertToName: 'C1' }}
       {{proposal.C2 | convertToName: 'C2' }}
       {{proposal.C3 | convertToName: 'C3' }}
+      {{proposal.Tenure | convertTenure }}
     </td>
-    <td>{{proposal.Tenure | convertToYesOrNo }}</td>
-    <td>{{proposal.instName}}</td>
-    <td><a href="https://www.academics.de{{proposal.Link}}">Link</a></td>
+    <td>
+      <span class="label label-default">{{proposal.instAbbrev}}</span>
+      {{proposal.instName}}
+    </td>
     <td>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</td>
     <td><a href=".#/proposals/{{proposal.ID}}/">Bearbeiten</a></td>
   </tr>

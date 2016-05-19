@@ -26,7 +26,7 @@ class Parser
 		}
 		if($resultArray["Tenure"] == 1) {
 			if(strpos($title,"ohne Tenure") !== false || strpos($title,"keine Tenure") !== false) {
-				$resultArray["Tenure"] = 0;
+				$resultArray["Tenure"] = -1;
 			}
 		}
 		return $resultArray;

@@ -28,14 +28,14 @@ Flight::route('GET /proposals/@id/', function($id){
 
 Flight::route('PUT /proposals/@id', function(){
     $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-    echo 'PUT proposal<br />';
+    echo 'PUT proposal';
     $payload = json_decode(Flight::request()->getBody(), true);
     //$json = json_decode($payload, true);
     //var_dump(json_decode($payload, true));
     //echo $json["test"];
     $proposal = new Proposal();
     $proposal->setProposalByArray($payload);
-    echo "RETURN:" . $sql->editProposal($proposal);
+    $sql->editProposal($proposal);
     echo $proposal->getTitle();
 });
 

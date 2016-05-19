@@ -23,10 +23,11 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate'])
       return dateObject;
      };
 })
-.filter('convertToYesOrNo', function() {
+.filter('convertTenure', function() {
   return function (int) {
-    if(int === "1") return "Ja";
-    else return "Nein";
+    if(int === "1") return "mit Tenure";
+    else if (int === "-1") return "ohne Tenure";
+    else return "";
   };
 })
 .filter('convertToStatus', function() {
