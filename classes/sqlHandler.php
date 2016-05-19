@@ -436,5 +436,47 @@
 			}
 			$stmt->close();
 		}
+
+		public function mergeOrangization($firstId,$secondId) {
+			$res1 = $this->switchValue($firstId,$secondId,"proposal","InstID","i");
+			$res2 = $this->switchValue($firstId,$secondId,"proposal","InstOptID","i");
+			$res3 = $this->deleteRow($secondId,"institutes");
+			if($res1 === 1 && $res2 === 1 && $res3 === 1) return 1;
+			else return 0;
+		}
+
+		private function deleteRow($id,$table) {
+			$query = "DELETE FROM $table WHERE ID = ?";
+			if($stmt = $this->mysqli->prepare($query)) {
+				$stmt->bind_param("i",$id);
+				if($stmt->execute()) {
+					$stmt->close();
+					return 1;
+				} else return 0;
+			} else {
+			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+			    return -1;
+			}
+		}
+
+		private function switchValue($newValue,$oldValue,$table,$columName,$columeType) {
+			$query =
+			"UPDATE $table
+			SET $columName = ?
+			WHERE $columName = ? ";
+			if($stmt = $this->mysqli->prepare($query)) {
+				$stmt->bind_param($columeType . $columeType,$newValue,$oldValue);
+				if($stmt->execute()){
+					$stmt->close();
+					return 1;
+				} else {
+					return 0;
+				}
+			}
+			else {
+			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+			    return -1;
+			}
+		}
 	}
 ?>
