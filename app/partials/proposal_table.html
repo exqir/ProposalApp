@@ -13,7 +13,7 @@
     <td>Organization</td>
     <td>Erfasst am</td>
   </thead>
-  <tr ng-repeat="proposal in proposals | filter:search">
+  <tr ng-repeat="proposal in proposals">
     <td>{{proposal.ID}}</td>
     <td ng-bind-html="proposal.Raw | convertToStatus"></td>
     <td>{{proposal.Title}}</td>
@@ -27,8 +27,8 @@
       {{proposal.Tenure | convertTenure }}
     </td>
     <td>
-      <span class="label label-default">{{proposal.instAbbrev}}</span>
-      {{proposal.instName}}
+      <span class="label label-default">{{proposal.orgAbbrev}}</span>
+      {{proposal.orgName}}
     </td>
     <td>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</td>
     <td><a href=".#/proposals/{{proposal.ID}}/">Bearbeiten</a></td>

@@ -366,10 +366,10 @@
 		public function getProposals()
 		{
 			$query =
-			"SELECT proposal.*, institutes.Abbrev AS instAbbrev, institutes.Institute AS instName
+			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName
 			FROM proposal
-			INNER JOIN institutes
-			ON proposal.InstID = institutes.ID
+			INNER JOIN organizations
+			ON proposal.OrgID = organizations.ID
 			ORDER BY id
 			DESC LIMIT 100";
 			if($stmt = $this->mysqli->query($query)){
@@ -389,10 +389,10 @@
 		public function getProposal($id)
 		{
 			$query =
-			"SELECT proposal.*, institutes.Abbrev AS instAbbrev, institutes.Institute AS instName
+			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName
 			FROM proposal
-			INNER JOIN institutes
-			ON proposal.InstID = institutes.ID
+			INNER JOIN organizations
+			ON proposal.OrgID = organizations.ID
 			WHERE proposal.ID = $id";
 			echo $query;
 			if($stmt = $this->mysqli->query($query)) {
