@@ -10,9 +10,9 @@
     <td>Status</td>
     <td>Title</td>
     <td>Besoldung</td>
-    <td>
-      <div id="orgDD" class="dropdown btn-group" uib-dropdown auto-close="disabled">
-        <a class="btn btn-default dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+    <td class="smartFilter">
+      <div id="orgDD" class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
             Organization
             <span class="caret"></span>
         </a>
@@ -23,8 +23,8 @@
           <li>
             <span></span>
           </li>
-          <li ng-repeat="proposal in proposals | unique: 'orgName' | filter:smartSearchOrg" class="list-group-item">
-              <input type="checkbox" ng-model="search">
+          <li ng-repeat="proposal in proposals | unique: 'orgName' | filterBy: ['orgName']:smartSearchOrg" class="list-group-item">
+              <input type="checkbox" ng-click="includeOrg(proposal.orgName)">
               {{proposal.orgName}}
           </li>
         </ul>
@@ -32,7 +32,7 @@
     </td>
     <td>Erfasst am</td>
   </thead>
-  <tr ng-repeat="proposal in proposals | filter:search">
+  <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter">
     <td>{{proposal.ID}}</td>
     <td ng-bind-html="proposal.Raw | convertToStatus"></td>
     <td>{{proposal.Title}}</td>

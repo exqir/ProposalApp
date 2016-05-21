@@ -59,6 +59,25 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
       $scope.proposals = response.data;
     });
   $scope.search = searchTerm;
+  $scope.org = [];
+
+  $scope.includeOrg = function(orgName) {
+      var i = $scope.org.indexOf(orgName);
+      if (i > -1) {
+          $scope.org.splice(i, 1);
+      } else {
+          $scope.org.push(orgName);
+      }
+  };
+
+  $scope.orgFilter = function(proposal) {
+      if ($scope.org.length > 0) {
+          if ($scope.org.indexOf(proposal.orgName) < 0)
+              return;
+      }
+
+      return proposal;
+  };
 })
 .controller('proposalDetailCtrl', function($scope, $http, $routeParams){
   var proposalID = $routeParams.id;
