@@ -13,5 +13,8 @@ Thumbs.db
 # DB config
 db.php
 
-# Node
+# Node Modules
 /node_modules
+
+# SCSS
+/app/scss
