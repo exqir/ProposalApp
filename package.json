@@ -1,0 +1,25 @@
+{
+  "name": "proposal-app",
+  "version": "1.0.0",
+  "description": "cooming soon",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.9.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/exqir/ProposalApp.git"
+  },
+  "author": "Malte Sellmer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/exqir/ProposalApp/issues"
+  },
+  "homepage": "https://github.com/exqir/ProposalApp#readme"
+}

@@ -12,3 +12,6 @@ Thumbs.db
 
 # DB config
 db.php
+
+# Node
+/node_modules
