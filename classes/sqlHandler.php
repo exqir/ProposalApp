@@ -405,8 +405,8 @@
 		}
 
 		public function mergeOrangization($firstId,$secondId) {
-			$res1 = $this->switchValue($firstId,$secondId,"proposal","InstID","i");
-			$res2 = $this->switchValue($firstId,$secondId,"proposal","InstOptID","i");
+			$res1 = $this->switchValue($firstId,$secondId,"proposal","OrgID","i");
+			$res2 = $this->switchValue($firstId,$secondId,"proposal","OrgOptID","i");
 			//TODO change to setAlias($firstId,$secondId)
 			//setting $firstId as AliasOf for $secondId
 			$res3 = $this->setAliasOf($secondId,$firstId);
