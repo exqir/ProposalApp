@@ -156,7 +156,7 @@
 				$typeId = $this->checkType($name);
 				if($typeId >= 0) $organization->setTypeId($typeId);
 				$abbrev = $this->getAbbrev($typeId);
-				if($abbrev !== -1) $organization->setAbbrev($abbrev)
+				if($abbrev !== -1) $organization->setAbbrev($abbrev);
 				else $organization->setAbbrev("");
 				$pushResponse = $this->pushOrganizationToDB($organization);
 				return $pushResponse;
