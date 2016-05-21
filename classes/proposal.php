@@ -1,5 +1,5 @@
 <?php
-require_once 'institut.php';
+require_once 'organization.php';
 
 class Proposal
 {
@@ -7,9 +7,9 @@ class Proposal
     private $typeId;
     private $title;
     private $description;
-    private $institut;
-    private $institutOptional;
-    private $instOpt = 0;
+    private $organization;
+    private $organizationOptional;
+    private $orgOpt = 0;
     private $enddate;
     private $link;
     private $titleAdditions;
@@ -63,34 +63,34 @@ class Proposal
         return $this->description;
     }
 
-    public function setInstitut(Institut $institut)
+    public function setOrganization(Organization $organization)
     {
-        $this->institut = $institut;
+        $this->organization = $organization;
     }
 
-    public function getInstitut()
+    public function getOrganization()
     {
-        return $this->institut;
+        return $this->organization;
     }
 
-    public function setInstitutOptional(Institut $institut)
+    public function setOrganizationOptional(organization $organization)
     {
-        $this->institutOptional = $institut;
+        $this->organizationOptional = $organization;
     }
 
-    public function getInstitutOptional()
+    public function getOrganizationOptional()
     {
-        return $this->institutOptional;
+        return $this->organizationOptional;
     }
 
-    public function setInstOpt($int)
+    public function setOrgOpt($int)
     {
-	    $this->instOpt = $int;
+	    $this->orgOpt = $int;
     }
 
-    public function getInstOpt()
+    public function getOrgOpt()
     {
-	    return $this->instOpt;
+	    return $this->orgOpt;
     }
 
     public function setEnddate($enddate)

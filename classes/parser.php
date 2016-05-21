@@ -62,48 +62,48 @@ class Parser
 		if(strpos($employer[0],"/") !== false)
 		{
 			$instTmp = explode("/", $employer[0]);
-			$institut = new Institut($instTmp[0]);
-			$institutOptional = new Institut($instTmp[1]);
+			$organization = new Organization($instTmp[0]);
+			$organizationOptional = new Organization($instTmp[1]);
 			$proposal->setInstOpt(1);
 
 			if($count > 3)
 			{
-				$this->parseCity($institut, $employer[1]);
-				$this->parseCity($institutOptional, $employer[2]);
+				$this->parseCity($organization, $employer[1]);
+				$this->parseCity($organizationOptional, $employer[2]);
 				$proposal->setEnddate(implode('-', array_reverse(explode('.', trim($employer[$count-1])))));
 			}
 			else
 			{
-				$this->parseCity($institut, $employer[1]);
-				$this->parseCity($institutOptional, $employer[1]);
+				$this->parseCity($organization, $employer[1]);
+				$this->parseCity($organizationOptional, $employer[1]);
 				$proposal->setEnddate(implode('-', array_reverse(explode('.', trim($employer[$count-1])))));
 			}
-			$proposal->setInstitut($institut);
-			$proposal->setInstitutOptional($institutOptional);
+			$proposal->setOrganization($organization);
+			$proposal->setOrganizationOptional($organizationOptional);
 		}
 		else
 		{
-			$institut = new Institut($employer[0]);
-			$this->parseCity($institut, $employer[1]);
+			$organization = new Organization($employer[0]);
+			$this->parseCity($organization, $employer[1]);
 
-			$proposal->setInstitut($institut);
+			$proposal->setOrganization($organization);
 			$proposal->setEnddate(implode('-', array_reverse(explode('.', trim($employer[$count-1])))));
 		}
 	}
 
-	private function parseCity(Institut &$institut, $string)
+	private function parseCity(Organization &$organization, $string)
 	{
 		if(strpos($string,"(") !== false)
 		{
 			$temp = explode("(", $string);
 			$city = $temp[0];
 			$country = explode(")", $temp[1])[0];
-			$institut->setCity($city);
-			$institut->setCountry($country);
+			$organization->setCity($city);
+			$organization->setCountry($country);
 		}
 		else
 		{
-			$institut->setCity($string);
+			$organization->setCity($string);
 		}
 	}
 }

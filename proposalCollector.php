@@ -6,6 +6,7 @@
 	require_once 'config.php';
 	require_once 'db.php';
 
+	error_reporting(E_ERROR | E_PARSE);
 	$proposals = array();
 
 	$domResponse = new DomDocument();
@@ -19,37 +20,9 @@
 	foreach($jobItems as $job)
 	{
 		$proposal = new Proposal();
-
 		$parser->parseTitle($proposal, $job);
-
 		$parser->parseEmployer($proposal, $job);
-		$proposalCheck = $sql->checkProposalExistance($proposal);
-		echo "Proposal Existance: " . $proposalCheck ."</br>";
-		if($proposalCheck == 0)
-		{
-			$desc = $proposal->getLink();
-			$proposal->setDescription($desc);
-			$institutCheck = $sql->checkInstituteExistance($proposal->getInstitut());
-			echo $test;
-			if($proposal->getInstOpt() == 1)
-			{
-				$instOptCheck = $sql->checkInstituteExistance($proposal->getInstitutOptional());
-				echo "Institut Optional Existance: " . $instOptCheck ."</br>";
-				echo "Type ID: " . $proposal->getInstitutOptional()->getTypeId() . "</br>";
-				echo "Inst ID: " . $proposal->getInstitutOptional()->getId() . "</br>";
-			}
-			echo "Institut Existance: " . $institutCheck ."</br>";
-
-			echo "Type ID: " . $proposal->getInstitut()->getTypeId() . "</br>";
-			echo "Inst ID: " . $proposal->getInstitut()->getId() . "</br>";
-
-			$proposalSave = $sql->saveProposal($proposal);
-			if($proposalSave == 1)
-			{
-				echo "Proposal saved </br>";
-			}
-
-		}
+		$sql->handleProposal($proposal);
 
 		array_push($proposals, $proposal);
 		echo $proposal->getTitle() . " / " . $proposal->getLink() . "</br>";

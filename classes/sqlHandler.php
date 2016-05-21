@@ -1,5 +1,5 @@
 <?php
-	require_once 'institut.php';
+	require_once 'organization.php';
 
 	/**
 	* Provides functions to check and save entries via SQL Queries
@@ -37,274 +37,249 @@
 		}
 
 		/**
-		* Checks if there already exists a proposal with the given $title and $enddate, return 0 if not
-		* If there already exists such an entry, checks if on of those has the same institute given in $institute, returns 1 if thats the case
+		*
 		**/
-		public function checkProposalExistance(Proposal $proposal)
-		{
+		public function handleProposal(Proposal &$proposal){
+			$proposalExistance = $this->checkProposalExistance($proposal);
+			if($proposalExistance === 1) {
+				// Proposal already exists
+				printf("Proposal already exists");
+				return 0;
+			} else if ($proposalExistance === 0) {
+				//Proposal doesn't exist
+				printf("New proposal");
+				$desc = $proposal->getLink();
+				$proposal->setDescription($desc);
+				$proposalResult = $this->saveProposal($proposal);
+				// $organisation = $proposal->getOrganization();
+				// $organizationExistance = $this->checkOrganizationExistance($organization);
+				// if($organizationExistance === 1) {
+				//
+				// }
+				if($proposalResult === 1) return 1;
+				else return 0;
+			} else return -1;
+		}
+
+		private function checkProposalExistance(Proposal &$proposal){
 			$title = $proposal->getTitle();
-			$institut = $proposal->getInstitut()->getName();
+			$organization = $proposal->getOrganization();
 			$enddate = $proposal->getEnddate();
-			$query = "SELECT InstID, InstOptID FROM proposal WHERE Title=? AND Enddate=?";
-			//STR_TO_DATE(?, '%Y-%m-%d')
-			if($stmt = $this->mysqli->prepare($query))
-			{
-				$title = trim($title);
-				$stmt->bind_param("ss", $title, $enddate);
-				if($stmt->execute())
-				{
+			$query = "SELECT `OrgID`, `OrgOptID` FROM proposal
+			WHERE Title = ? AND Enddate = ?";
+			if($stmt = $this->mysqli->prepare($query)) {
+				$stmt->bind_param("ss",$title,$enddate);
+				if($stmt->execute()) {
 					$stmt->store_result();
-					$instId;
-					$stmt->bind_result($instId, $instOptId);
-
-					if($stmt->num_rows == 0)
-					{
-						echo "|" . $title . "| = |" . $enddate . "|</br>";
-						$stmt->close();
-						return 0;
-					}
-					else
-					{
-						if($proposal->getInstOpt() == 1)
-						{
-							echo "InstOpt: 1 </br>";
-							$instOptional = $proposal->getInstitutOptional()->getName();
-							$innerQuery = "SELECT Institute FROM institutes WHERE ID=?";
-							while($stmt->fetch())
-							{
-								$tmp = 0;
-								if($innerStmt = $this->mysqli->prepare($innerQuery))
-								{
-									$innerStmt->bind_param("i", $instId);
-									if($innerStmt->execute())
-									{
-										$innerStmt->store_result();
-										$instName;
-										$innerStmt->bind_result($instName);
-										while($innerStmt->fetch())
-										{
-											echo "|" . $instName . "| = |" . $institut . "|</br>";
-											$output = strcmp($instName,$institut);
-											echo $output;
-											if(trim($instName) === trim($institut))
-											{
-												echo "Inst 1: Match </br>";
-												if($scdStmt = $this->mysqli->prepare($innerQuery))
-												{
-													$scdStmt->bind_param("i",$instOptId);
-													if($scdStmt->execute())
-													{
-														$scdStmt->store_result();
-														$instOptName;
-														$scdStmt->bind_result($instOptName);
-														while($scdStmt->fetch())
-														{
-															echo $instOptName . " = " . $instOptional . "</br>";
-															if(trim($instOptName) === trim($instOptional))
-															{
-																echo "Inst 2: Match </br>";
-																$scdStmt->close();
-																$innerStmt->close();
-																$stmt->close();
-																return 1;
-															}
-														}
-													}
-												}
-											}
-										}
-										$innerStmt->close();
-									}
-								}
-								if ( !$innerStmt )
-								{
-								    printf('errno: %d, error: %s', $mysqli->errno, $mysqli->error);
-								    die;
-								}
-							}
-							return 0;
-
-						}
-
-						$innerQuery = "SELECT Institute FROM institutes WHERE ID=?";
-						while($stmt->fetch())
-						{
-							if($innerStmt = $this->mysqli->prepare($innerQuery))
-							{
-								$innerStmt->bind_param("i", $instId);
-								if($innerStmt->execute())
-								{
-									$innerStmt->store_result();
-									$instName;
-									$innerStmt->bind_result($instName);
-									while($innerStmt->fetch())
-									{
-										echo $instName . " = " . $institut . "</br>";
-										if(trim($instName) === trim($institut))
-										{
-											$innerStmt->close();
-											$stmt->close();
-											return 1;
-										}
-									}
-									$innerStmt->close();
-								}
-							}
-							if ( !$innerStmt ) {
-							    printf('errno: %d, error: %s', $mysqli->errno, $mysqli->error);
-							    die;
-							}
-						}
-						$innerStmt->close();
-						$stmt->close();
-						return 0;
-					}
-				}
-			}
-			if ( !$stmt ) {
-			    printf('errno: %d, error: %s', $mysqli->errno, $mysqli->error);
-			    die;
-			}
-
-		}
-
-		/**
-		* Checks if a $institut with the name already exists, returns a 0 if not otherwise returns a 1
-		* and sets the ID and TypeID of the transmitted $institut to those from the db
-		**/
-		public function checkInstituteExistance(Institut &$institut)
-		{
-			$query = "SELECT ID, TypeID FROM institutes WHERE Institute=?";
-
-			if($stmt = $this->mysqli->prepare($query))
-			{
-				$instName = $institut->getName();
-				$stmt->bind_param("s",$instName);
-
-				if($stmt->execute())
-				{
-					$stmt->store_result();
-					$stmt->bind_result($id, $typeId);
-
-					if($stmt->num_rows == 0)
-					{
-						$stmt->close();
-						$this->saveInstitute($institut);
-						return 0;
-					}
-					else if($stmt->num_rows == 1)
-					{
+					$stmt->bind_result($orgId,$orgOptId);
+					if($stmt->num_rows === 0) {
+						//Found no proposal with the given title and enddate
+						echo "No such proposal found</br>";
+						$res = 0;
+					} else {
+						//Found a proposal with the given title and enddate
 						$stmt->fetch();
-						$institut->setId($id);
-						$institut->setTypeId($typeId);
-						$stmt->close();
-
-						return 1;
+						echo "Found such proposal, checking Organization: ";
+						$res = -3;
+						if($proposal->getOrgOpt() === 1) {
+							//The parsed propsal has an optional organization
+							echo "Optional organization found:";
+							if($this->checkProposalOrganizationConnection($orgId,$organization->getName()) === 1
+							&& $this->checkProposalOrganizationConnection($orgOptId,$organization->getName()) === 1){
+								//Both organizations match, it's the same proposal
+								$res = 1;
+							}
+						} else {
+								//The parsed proposal has only one organization
+								echo "No optional organization found: ";
+								if($this->checkProposalOrganizationConnection($orgId,$organization->getName()) === 1) {
+									//The organization matches, it's the same proposal
+									$res = 1;
+								}
+							}
 					}
-					else
-					{
-						echo "Too many Insitutes";
-						return 1;
-					}
-				}
+					echo $res . "</br>";
+					$stmt->close();
+					return $res;
+				} else return -2;
+			} else {
+			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+			    return -1;
 			}
 		}
 
-		/**
-		* Selects the $abbrev from the db matching the trasmitted $typeId, returns the abbrev when found otherwise returns an empty string
-		**/
-		public function checkType(int $typeId)
-		{
-			$query = "SELECT Abbrev FROM types WHERE ID=?";
+		private function checkProposalOrganizationConnection($id,$orgName){
+			$query = "SELECT Name FROM organizations WHERE ID = ?";
+			if($stmt = $this->mysqli->prepare($query)) {
+				$stmt->bind_param("i",$id);
+				if($stmt->execute()) {
+					$stmt->store_result();
+					$stmt->bind_result($orgNameList);
+					$stmt->fetch();
+					$orgNamesFromTable = explode(";",$orgNameList);
+					echo $id . " : ";
+					echo $orgNameList;
+					var_dump($orgNamesFromTable);
+					$res = 0;
+					foreach ($orgNamesFromTable as $orgNameTable) {
+						//Compares every organization name from the table with the name given as paramter
+						if(trim($orgName) === trim($orgNameTable)) {
+							//The name frome the table and the paramter name match, it's the same organization
+							echo "Proposal, Organization combination found </br>";
+							$res = 1;
+						}
+					}
+					$stmt->close();
+					echo $res . "</br>";
+					return $res;
+				} else return -2;
+			} else {
+			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+			    return -1;
+			}
+		}
 
-			if($stmt = $this->mysqli->prepare($query))
-			{
+		private function saveProposal(Proposal &$proposal) {
+			$organization = $proposal->getOrganization();
+			$saveResponse = $this->saveOrganization($organization);
+			$pushResponse = $this->pushProposalToDb($proposal);
+			if($saveResponse === 1 && $pushResponse === 1) return 1;
+			else return 0;
+		}
+
+		private function saveOrganization(Organization &$organization) {
+			$organizationExistance = $this->checkOrganizationExistance($organization);
+			if($organizationExistance === 0) {
+				//Organization doesn't exist
+				echo "New Organization";
+				$name = $organization->getName();
+				$typeId = $this->checkType($name);
+				if($typeId >= 0) $organization->setTypeId($typeId);
+				$abbrev = $this->getAbbrev($typeId);
+				if($abbrev !== -1) $organization->setAbbrev($abbrev)
+				else $organization->setAbbrev("");
+				$pushResponse = $this->pushOrganizationToDB($organization);
+				return $pushResponse;
+			} else if($organizationExistance === 1) {
+				//Organization already exists
+				echo "Organization already exists";
+				return 1;
+				}
+			else return -1;
+		}
+
+		private function checkOrganizationExistance(Organization &$organization){
+			$name = $organization->getName();
+			$query = "SELECT ID, TypeID, AliasOf FROM organizations WHERE Name = ?";
+			if($stmt = $this->mysqli->prepare($query)) {
+				$stmt->bind_param("s",$name);
+				if($stmt->execute()) {
+					$stmt->store_result();
+					$stmt->bind_result($id,$typeId,$aliasId);
+					if($stmt->num_rows === 0) {
+						//Found no organization with the given name
+						$res = 0;
+					} else if($stmt->num_rows === 1){
+						//Found a organization with the given name
+						$stmt->fetch();
+						if($aliasId !== NULL) {
+							//Found organization is an alias of another organization
+							//Sets the id to the id of the main organization
+							//TODO Change name to the name of the main organization
+							$organization->setId($aliasId);
+							$organization->setTypeId($typeId);
+							$res = 1;
+						} else {
+							//Found organization is the main organization
+							$organization->setId($id);
+							$organization->setTypeId($typeId);
+							$res = 1;
+						}
+					} else $res = -3;
+					$stmt->close();
+					return $res;
+				} else return -2;
+			} else {
+			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+			    return -1;
+			}
+		}
+
+		private function checkType($name) {
+			$query = "SELECT TypeID, Keyword, Strict FROM keywords";
+			if($stmt = $this->mysqli->prepare($query)){
+				if($stmt->execute()) {
+					$stmt->store_result();
+					$stmt->bind_result($typeId, $keyword, $strict);
+					$res = 0;
+					while($stmt->fetch()){
+						if($strict === 1) {
+							//Compares the name and keyword stricly per regex, only when keyword is a single word it matches
+							if(preg_match("/\b" . preg_quote($keyword, '/') . "\b/i", $name)) $res = $typeId;
+						}
+						else {
+							//Compares the name name and keyword, keyword can also be a substring of name
+							if(stripos($name,$keyword) !== false) $res = $typeId;
+						}
+					}
+					$stmt->close();
+					return $res;
+				} else return -2;
+			} else {
+			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+			    return -1;
+			}
+		}
+
+		private function getAbbrev(int $typeId) {
+			$query = "SELECT Abbrev FROM types WHERE ID=?";
+			if($stmt = $this->mysqli->prepare($query)){
 				$stmt->bind_param("i", $typeId);
-				if($stmt->execute())
-				{
+				if($stmt->execute()) {
 					$stmt->store_result();
 					$stmt->bind_result($abbrev);
 					$stmt->fetch();
-					if($stmt->num_rows != 1) return "";
-					return $abbrev;
+					if($stmt->num_rows != 1) $res = -1;
+					//If only one abbrev is found, returns the abbrev
+					else $res = $abbrev;
+					$stmt->close();
+					return $res;
+				} else {
+				    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				    return -1;
 				}
-			}
-			if ( !$stmt ) {
-			    printf('errno: %d, error: %s', $mysqli->errno, $mysqli->error);
-			    die;
 			}
 		}
 
-		public function saveInstitute(Institut $institut)
-		{
-			$instName = $institut->getName();
-
-			$institut->setTypeId(0);
-
-			$query = "SELECT TypeID, Keyword, Strict FROM keywords";
-
-			if($stmt = $this->mysqli->prepare($query))
-			{
-				if($stmt->execute())
-				{
-					$stmt->store_result();
-					$stmt->bind_result($typeId, $keyword, $strict);
-
-					while($stmt->fetch())
-					{
-						if($strict == 1)
-						{
-							if(preg_match("/\b" . preg_quote($keyword, '/') . "\b/i", $instName)) $institut->setTypeId($typeId);
-						}
-						else
-						{
-							if(stripos($instName,$keyword) !== false) $institut->setTypeId($typeId);
-						}
-					}
+		private function pushOrganizationToDB(Organization &$organization) {
+			$query = "INSERT INTO organizations (TypeID, Abbrev, Name, City, State, Country) VALUES (?,?,?,?,?,?)";
+			if($stmt = $this->mysqli->prepare($query)) {
+				$stmt->bind_param("isssss", $organization->getTypeId(), $organization->getAbbrev(),
+				$organization->getName(), $organization->getCity(),
+				$organization->getState(), $organization->getCountry());
+				if($stmt->execute()){
+					$orgDbId = $this->mysqli->insert_id;
+					$organization->setId($orgDbId);
 					$stmt->close();
-				}
+					$res = 1;
+				} else $res = 0;
+				return $res;
+			} else {
+					printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+					return -1;
 			}
-
-			$typeId = $institut->getTypeId();
-			$abbrev = $this->checkType($typeId);
-			$institut->setAbbrev($abbrev);
-
-			$query = "INSERT INTO institutes (TypeID, Abbrev, Institute, City, State, Country) VALUES (?,?,?,?,?,?)";
-
-			if($stmt = $this->mysqli->prepare($query))
-			{
-				$stmt->bind_param("isssss", $institut->getTypeId(), $institut->getAbbrev(), $institut->getName(), $institut->getCity(), $institut->getState(), $institut->getCountry());
-
-				if($stmt->execute())
-				{
-					$instId = $this->mysqli->insert_id;
-					$institut->setId($instId);
-					$stmt->close();
-					return 1;
-				}
-				$stmt->close();
-				return 0;
-			}
-			if ( !$stmt ) {
-			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
-			    die;
-			}
-
 		}
 
-		public function saveProposal(Proposal $proposal)
-		{
+		private function pushProposalToDb(Proposal &$proposal) {
 			$colums = "(";
-			foreach(array_keys(DB_PROPOSAL) as $key)
-			{
+			foreach(array_keys(DB_PROPOSAL) as $key) {
 				if($key === end(array_keys(DB_PROPOSAL))) $colums .= $key;
 				else $colums .= $key . ", ";
 			}
 			$colums .= ")";
 			$values = "(";
 			$i = 0;
-			foreach(DB_PROPOSAL as $value)
-			{
+			foreach(DB_PROPOSAL as $value) {
 				if(++$i === count(DB_PROPOSAL)) $values .= $value;
 				else $values .= $value . ", ";
 			}
@@ -314,35 +289,27 @@
 			$n = count(DB_PARAM_TYPES);
 			$a_param_var = Config::getParam($proposal);
 			$a_param_types = DB_PARAM_TYPES;
-			for($i = 0; $i < $n; $i++)
-			{
+			for($i = 0; $i < $n; $i++) {
 				$param_type .= $a_param_types[$i];
 			}
 			$a_params[] = &$param_type;
-			for($i = 0; $i < $n; $i++)
-			{
+			for($i = 0; $i < $n; $i++) {
 					$a_params[] = &$a_param_var[$i];
 			}
-
 			$query = "INSERT INTO proposal " . $colums . " VALUES " . $values . "";
-
-			if($stmt = $this->mysqli->prepare($query))
-			{
+			if($stmt = $this->mysqli->prepare($query)) {
 				$addition = $proposal->getTitleAdditions();
 				call_user_func_array(array($stmt,'bind_param'), $a_params);
 
-				if($stmt->execute())
-				{
+				if($stmt->execute()){
 					$stmt->close();
 					return 1;
 				}
 				$stmt->close();
 				return 0;
-			}
-			if ( !$stmt )
-			{
-			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
-			    die;
+			} else {
+					printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+					return -1;
 			}
 		}
 
@@ -440,6 +407,8 @@
 		public function mergeOrangization($firstId,$secondId) {
 			$res1 = $this->switchValue($firstId,$secondId,"proposal","InstID","i");
 			$res2 = $this->switchValue($firstId,$secondId,"proposal","InstOptID","i");
+			//TODO change to setAlias($firstId,$secondId)
+			//setting $firstId as AliasOf for $secondId
 			$res3 = $this->deleteRow($secondId,"institutes");
 			if($res1 === 1 && $res2 === 1 && $res3 === 1) return 1;
 			else return 0;
