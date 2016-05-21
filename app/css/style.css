@@ -11,6 +11,10 @@ header {
 .content {
   padding: 5px;
 }
+header .main-logo {
+  margin-left: 50px;
+  width: 250px;
+}
 header .input-group.search {
   width: 30%;
   min-width: 200px;

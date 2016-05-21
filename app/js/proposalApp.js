@@ -1,4 +1,4 @@
-angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate'])
+angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap','angular.filter'])
 .config(['$routeProvider',
   function($routeProvider){
     $routeProvider.
