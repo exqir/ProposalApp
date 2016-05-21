@@ -409,9 +409,23 @@
 			$res2 = $this->switchValue($firstId,$secondId,"proposal","InstOptID","i");
 			//TODO change to setAlias($firstId,$secondId)
 			//setting $firstId as AliasOf for $secondId
-			$res3 = $this->deleteRow($secondId,"institutes");
+			$res3 = $this->setAliasOf($secondId,$firstId);
 			if($res1 === 1 && $res2 === 1 && $res3 === 1) return 1;
 			else return 0;
+		}
+
+		private function setAliasOf($id,$alias) {
+			$query = "UPDATE organizations SET AliasOf = ? WHERE ID = ?";
+			if($stmt = $this->mysqli->prepare($query)) {
+				$stmt->bind_param("ii",$alias ,$id);
+				if($stmt->execute()) {
+					$stmt->close();
+					return 1;
+				} else return 0;
+			} else {
+			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+			    return -1;
+			}
 		}
 
 		private function deleteRow($id,$table) {
