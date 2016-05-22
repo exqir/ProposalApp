@@ -64,7 +64,7 @@ class Parser
 			$instTmp = explode("/", $employer[0]);
 			$organization = new Organization($instTmp[0]);
 			$organizationOptional = new Organization($instTmp[1]);
-			$proposal->setInstOpt(1);
+			$proposal->setOrgOpt(1);
 
 			if($count > 3)
 			{
