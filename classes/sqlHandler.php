@@ -142,6 +142,12 @@
 		private function saveProposal(Proposal &$proposal) {
 			$organization = $proposal->getOrganization();
 			$saveResponse = $this->saveOrganization($organization);
+			if($proposal->getOrgOpt() === 1) {
+				echo "saving Optional Organization: ";
+				$optOrganization = $proposal->getOrganizationOptional();
+				$optSaveResponse = $this->saveOrganization($optOrganization);
+				echo $optOrganization->getId();
+			}
 			$pushResponse = $this->pushProposalToDb($proposal);
 			if($saveResponse === 1 && $pushResponse === 1) return 1;
 			else return 0;

@@ -15,7 +15,7 @@ define("TITLEADDITIONS", [
 		]);
 
 define("TITLEEXPRESSIONS", [
-	"W1" => ["W1","Juniorprofessor","Jun.-Prof."],
+	"W1" => ["W1","Juniorprofessor","Jun.-Prof.","Juniorprofessur"],
 	"W2" => ["W2","Assoc. Prof","Associate Professor"],
 	"W3" => ["W3","Full Professor"],
 	"C1" => ["C1"],
