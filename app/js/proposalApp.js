@@ -60,6 +60,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     });
   $scope.search = searchTerm;
   $scope.org = [];
+  $scope.raw = [];
 
   $scope.includeOrg = function(orgName) {
       var i = $scope.org.indexOf(orgName);
@@ -73,6 +74,24 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   $scope.orgFilter = function(proposal) {
       if ($scope.org.length > 0) {
           if ($scope.org.indexOf(proposal.orgName) < 0)
+              return;
+      }
+
+      return proposal;
+  };
+
+  $scope.includeRaw = function(raw) {
+      var i = $scope.raw.indexOf(raw);
+      if (i > -1) {
+          $scope.raw.splice(i, 1);
+      } else {
+          $scope.raw.push(raw);
+      }
+  };
+
+  $scope.rawFilter = function(proposal) {
+      if ($scope.raw.length > 0) {
+          if ($scope.raw.indexOf(proposal.Raw) < 0)
               return;
       }
 

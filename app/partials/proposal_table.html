@@ -7,8 +7,20 @@
 <table class="table table-bordered">
   <thead>
     <td>ID</td>
-    <td>Status</td>
-    <td>Title</td>
+    <td class="smartFilter">
+      <div id="rawDD" class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+            Status
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="rawDD">
+          <li ng-repeat="proposal in proposals | unique: 'Raw' | orderBy: 'Raw' " class="list-item">
+              <input type="checkbox" ng-click="includeRaw(proposal.Raw)">
+              <span ng-bind-html="proposal.Raw | convertToStatus"></span>
+          </li>
+        </ul>
+      </div>
+    </td>    <td>Title</td>
     <td>Besoldung</td>
     <td class="smartFilter">
       <div id="orgDD" class="dropdown" uib-dropdown auto-close="disabled">
@@ -16,14 +28,12 @@
             Organization
             <span class="caret"></span>
         </a>
-        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="usersDD">
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="orgDD">
           <li>
             <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchOrg">
           </li>
-          <li>
-            <span></span>
-          </li>
-          <li ng-repeat="proposal in proposals | unique: 'orgName' | filterBy: ['orgName']:smartSearchOrg" class="list-group-item">
+          <li id="test" role="separator" class="divider filter"></li>
+          <li ng-repeat="proposal in proposals | unique: 'orgName' | filterBy: ['orgName']:smartSearchOrg | orderBy: 'orgName' " class="list-item">
               <input type="checkbox" ng-click="includeOrg(proposal.orgName)">
               {{proposal.orgName}}
           </li>
@@ -32,7 +42,7 @@
     </td>
     <td>Erfasst am</td>
   </thead>
-  <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter">
+  <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter | filter: rawFilter">
     <td>{{proposal.ID}}</td>
     <td ng-bind-html="proposal.Raw | convertToStatus"></td>
     <td>{{proposal.Title}}</td>

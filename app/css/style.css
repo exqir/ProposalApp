@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*! normalize.css http://github.com/necolas/normalize.css */
 /* =============================================================================
    HTML5 display definitions
@@ -481,6 +482,17 @@ nav.main-navigation ul li:hover {
       color: #333; }
       .table > thead > tr > td.smartFilter div.dropdown a.btn.dropdown-toggle:hover {
         color: #428bca; }
+
+.dropdown-menu.list-group #test  {
+  margin: 15px 0 0 0; }
+
+.open > .dropdown-menu {
+  padding: 8px; }
+  .open > .dropdown-menu li.list-item {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 10px 0; }
+    .open > .dropdown-menu li.list-item:last-child {
+      border-bottom: 0; }
 
 form select.form-control.select-inline {
   display: inline-block;
