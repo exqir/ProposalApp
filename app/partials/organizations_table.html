@@ -1,0 +1,57 @@
+<!-- <div class="input-group">
+  <input type="text" class="form-control" placeholder="Search for..." ng-model="search">
+  <span class="input-group-btn">
+    <button class="btn btn-default" type="button" ng-click="goSearch()">Go!</button>
+  </span>
+</div> -->
+<table class="table table-bordered">
+  <thead>
+    <td>ID</td>
+    <td class="smartFilter">
+      <div id="typeDD" class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+            Typ
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="typeDD">
+          <li ng-repeat="organization in organizations | unique: 'Abbrev' | orderBy: 'Abbrev' " class="list-item">
+              <input type="checkbox" ng-click="includeType(organization.Abbrev)">
+              <span class="label label-default">{{organization.Abbrev}}</span>
+          </li>
+        </ul>
+      </div>
+    </td>
+    <td>Name</td>
+    <td>Stadt</td>
+    <!-- <td class="smartFilter">
+      <div id="orgDD" class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+            Organization
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="orgDD">
+          <li>
+            <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchOrg">
+          </li>
+          <li id="test" role="separator" class="divider filter"></li>
+          <li ng-repeat="proposal in proposals | unique: 'orgName' | filterBy: ['orgName']:smartSearchOrg | orderBy: 'orgName' " class="list-item">
+              <input type="checkbox" ng-click="includeOrg(proposal.orgName)">
+              {{proposal.orgName}}
+          </li>
+        </ul>
+      </div>
+    </td> -->
+    <td>Land</td>
+  </thead>
+  <tr ng-repeat="organization in organizations | filter: typeFilter | orderBy: 'Name'">
+    <td>{{organization.ID}}</td>
+    <td>
+      <span class="label label-default">{{organization.Abbrev}}</span>
+    </td>
+    <td>{{organization.Name}}</td>
+    <td>{{organization.City}}</td>
+    <td>{{organization.State}}</td>
+    <td>{{organization.Country}}</td>
+    <td><a href=".#/organizations/{{organization.ID}}/">Bearbeiten</a></td>
+  </tr>
+</table>

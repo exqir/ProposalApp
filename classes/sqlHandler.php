@@ -410,6 +410,24 @@
 			$stmt->close();
 		}
 
+		public function getOrganizations()
+		{
+			$query =
+			"SELECT * FROM organizations";
+			if($stmt = $this->mysqli->query($query)){
+				$res = array();
+				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+					$res[] = $row;
+				}
+				$stmt->free();
+				return $res;
+			} else {
+				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				die;
+			}
+			$stmt->close();
+		}
+
 		public function mergeOrangization($firstId,$secondId) {
 			$res1 = $this->switchValue($firstId,$secondId,"proposal","OrgID","i");
 			$res2 = $this->switchValue($firstId,$secondId,"proposal","OrgOptID","i");

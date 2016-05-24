@@ -26,14 +26,6 @@ Flight::route('GET /proposals/@id/', function($id){
   $sql->closeConnection();
 });
 
-Flight::route('GET /organisation/@id/merge/@secId', function($id,$secId){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-  echo 'GET MERGE';
-  $res = $sql->mergeOrangization($id,$secId);
-  echo 'RESULT: '. $res;
-  $sql->closeConnection();
-});
-
 Flight::route('PUT /proposals/@id', function(){
     $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
     echo 'PUT proposal';
@@ -45,6 +37,21 @@ Flight::route('PUT /proposals/@id', function(){
     $proposal->setProposalByArray($payload);
     $sql->editProposal($proposal);
     echo $proposal->getTitle();
+});
+
+Flight::route('GET /organizations/', function(){
+  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  Flight::json($sql->getOrganizations());
+  $sql->closeConnection();
+});
+
+Flight::route('PUT /organisation/@id/merge/@secId', function($id,$secId){
+  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  echo 'GET MERGE';
+  $res = $sql->mergeOrangization($id,$secId);
+  echo 'RESULT: '. $res;
+  $sql->closeConnection();
 });
 
 Flight::start();

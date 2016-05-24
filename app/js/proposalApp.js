@@ -13,6 +13,10 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
       templateUrl: 'partials/proposal_detail.html',
       controller: 'proposalDetailCtrl'
     })
+    .when('/organizations', {
+      templateUrl: 'partials/organizations_table.html',
+      controller: 'organizationListCtrl'
+    })
     .otherwise({redirectTo: '/'});
   }
 ])
@@ -110,4 +114,29 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
       console.log(response);
     });
   };
+})
+.controller('organizationListCtrl', function($scope, $http){
+  $http.get("./../restEndpoint/organizations")
+    .then(function (response) {
+      $scope.organizations = response.data;
+    });
+
+    $scope.type = [];
+    $scope.includeType = function(type) {
+        var i = $scope.type.indexOf(type);
+        if (i > -1) {
+            $scope.type.splice(i, 1);
+        } else {
+            $scope.type.push(type);
+        }
+    };
+
+    $scope.typeFilter = function(organization) {
+        if ($scope.type.length > 0) {
+            if ($scope.type.indexOf(organization.Abbrev) < 0)
+                return;
+        }
+
+        return organization;
+    };
 });
