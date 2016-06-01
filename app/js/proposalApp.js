@@ -57,7 +57,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     searchTerm = $scope.search;
   };
 })
-.controller('proposalListCtrl', function($scope, $http, searchTerm){
+.controller('proposalListCtrl', function($scope, $http, filterFilter,searchTerm){
   $http.get("./../restEndpoint/proposals")
     .then(function (response) {
       $scope.proposals = response.data;
@@ -100,6 +100,14 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
       }
 
       return proposal;
+  };
+
+  $scope.getCountOrg = function(exp){
+    return filterFilter( $scope.proposals, {orgName:exp}).length;
+  };
+
+  $scope.getCountRaw = function(exp){
+    return filterFilter( $scope.proposals, {Raw:exp}).length;
   };
 })
 .controller('proposalDetailCtrl', function($scope, $http, $routeParams){

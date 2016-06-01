@@ -378,10 +378,16 @@
 		public function getProposals()
 		{
 			$query =
-			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName
+			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
 			FROM proposal
 			INNER JOIN organizations
-			ON proposal.OrgID = organizations.ID
+				ON proposal.OrgID = organizations.ID
+      LEFT OUTER JOIN subject_culture
+      	ON proposal.subject_culture = subject_culture.ID
+      LEFT OUTER JOIN subject_area
+      	ON proposal.subject_area = subject_area.ID
+      LEFT OUTER JOIN subject
+      	ON proposal.subject = subject.ID
 			ORDER BY id
 			DESC LIMIT 100";
 			if($stmt = $this->mysqli->query($query)){
@@ -401,10 +407,16 @@
 		public function getProposal($id)
 		{
 			$query =
-			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName
+			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
 			FROM proposal
 			INNER JOIN organizations
-			ON proposal.OrgID = organizations.ID
+				ON proposal.OrgID = organizations.ID
+      LEFT OUTER JOIN subject_culture
+      	ON proposal.subject_culture = subject_culture.ID
+      LEFT OUTER JOIN subject_area
+      	ON proposal.subject_area = subject_area.ID
+      LEFT OUTER JOIN subject
+      	ON proposal.subject = subject.ID
 			WHERE proposal.ID = $id";
 			echo $query;
 			if($stmt = $this->mysqli->query($query)) {

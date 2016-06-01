@@ -6,7 +6,6 @@
 </div> -->
 <table class="table table-bordered">
   <thead>
-    <td>ID</td>
     <td class="smartFilter">
       <div id="rawDD" class="dropdown" uib-dropdown auto-close="disabled">
         <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
@@ -16,11 +15,12 @@
         <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="rawDD">
           <li ng-repeat="proposal in proposals | unique: 'Raw' | orderBy: 'Raw' " class="list-item">
               <input type="checkbox" ng-click="includeRaw(proposal.Raw)">
-              <span ng-bind-html="proposal.Raw | convertToStatus"></span>
+              <span ng-bind-html="proposal.Raw | convertToStatus"></span> ({{getCountRaw(proposal.Raw)}})
           </li>
         </ul>
       </div>
-    </td>    <td>Title</td>
+    </td>
+    <td>Title</td>
     <td>Besoldung</td>
     <td class="smartFilter">
       <div id="orgDD" class="dropdown" uib-dropdown auto-close="disabled">
@@ -35,15 +35,18 @@
           <li id="test" role="separator" class="divider filter"></li>
           <li ng-repeat="proposal in proposals | unique: 'orgName' | filterBy: ['orgName']:smartSearchOrg | orderBy: 'orgName' " class="list-item">
               <input type="checkbox" ng-click="includeOrg(proposal.orgName)">
-              {{proposal.orgName}}
+              {{proposal.orgName}} ({{getCountOrg(proposal.orgName)}})
           </li>
         </ul>
       </div>
     </td>
+    <td>Fachkultur</td>
+    <td>Fachbereich</td>
+    <td>Fach</td>
     <td>Erfasst am</td>
   </thead>
+  <!-- <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter as results"> -->
   <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter | filter: rawFilter">
-    <td>{{proposal.ID}}</td>
     <td ng-bind-html="proposal.Raw | convertToStatus"></td>
     <td>{{proposal.Title}}</td>
     <td>
@@ -59,6 +62,9 @@
       <span class="label label-default">{{proposal.orgAbbrev}}</span>
       {{proposal.orgName}}
     </td>
+    <td>{{proposal.Culture}}</td>
+    <td>{{proposal.Area}}</td>
+    <td>{{proposal.Subject}}</td>
     <td>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</td>
     <td><a href=".#/proposals/{{proposal.ID}}/">Bearbeiten</a></td>
   </tr>
