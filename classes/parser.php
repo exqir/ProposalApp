@@ -1,4 +1,6 @@
 <?php
+
+use Symfony\Component\CssSelector\CssSelectorConverter;
 /**
 * Provides functions to parse a DOM element
 **/
@@ -108,21 +110,28 @@ class Parser
 	}
 
   public function parseSubjects($domObject) {
-    private $subjects = new Array();
-    //$tableBox = get...
+    $subjects = array();
+		//$tableBox = get...
+		$expression = "(//div)[contains(concat(' ', normalize-space(@class), ' '), concat(' ', 'tabellenBox', ' '))]/table";
+		$tableBox = $domObject->query($expression);
     foreach($tableBox as $subject1) {
-      $name = $subject1->getElementsByTagName('caption')->item(0)->nodeValue;
-      $name = trim(explode('(',$name)[0]);
+			$tmp = $subject1->firstChild->nodeValue;
+			$name = trim(explode('(',$tmp)[0]);
+			echo $name . "<br>";
       $sub = new SubjectGroup($name);
 
-      $subSubjects = get...
+			$exp1 = "tbody/tr/td[2]";
+      $subSubjects = $domObject->query($exp1,$subject1);
       foreach($subSubjects as $subject2) {
-        $sname = $subject2->nodeValue;
+        $sname = $subject2->firstChild->nodeValue;
+				echo "--" . $sname . "<br>";
         $ssub = new SubjectGroup($sname);
-        
-        $subKats = get...
+
+				$exp2 = "div[contains(concat(' ', normalize-space(@class), ' '), concat(' ', 'fachInhalt', ' '))]/span[contains(concat(' ', normalize-space(@class), ' '), concat(' ', 'subKat', ' '))]/a";
+        $subKats = $domObject->query($exp2,$subject2);
         foreach($subKats as $subject3) {
           $ssname = $subject3->nodeValue;
+					echo "----" . $ssname . "<br>";
           $ssub->addSubjectChildren($ssname);
         }
         $sub->addSubjectChildren($ssub);

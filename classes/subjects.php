@@ -24,5 +24,4 @@ class SubjectGroup {
    return $this->subjectChildren;
   }
 }
-
 ?>
