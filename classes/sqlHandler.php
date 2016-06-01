@@ -92,13 +92,14 @@
 						} else {
 								//The parsed proposal has only one organization
 								echo "No optional organization found: ";
+								echo "<br />OrgID: " . $orgId . "<br />";
 								if($this->checkProposalOrganizationConnection($orgId,$organization->getName()) === 1) {
 									//The organization matches, it's the same proposal
 									$res = 1;
 								}
 							}
 					}
-					echo $res . "</br>";
+					echo "CheckingProposalExistance: " . $res . "</br>";
 					$stmt->close();
 					return $res;
 				} else return -2;
@@ -169,6 +170,7 @@
 			} else if($organizationExistance === 1) {
 				//Organization already exists
 				echo "Organization already exists";
+				echo $organization->getId() . "<br />";
 				return 1;
 				}
 			else return -1;
@@ -192,17 +194,21 @@
 							//Found organization is an alias of another organization
 							//Sets the id to the id of the main organization
 							//TODO Change name to the name of the main organization
+							echo "WRONG TURN" . $id . " <br />";
 							$organization->setId($aliasId);
 							$organization->setTypeId($typeId);
 							$res = 1;
 						} else {
 							//Found organization is the main organization
+							echo "Setting ID to: " . $id . "<br />";
 							$organization->setId($id);
 							$organization->setTypeId($typeId);
 							$res = 1;
 						}
 					} else $res = -3;
 					$stmt->close();
+					echo "checkOrganizationExistance Intern: " . $res . "<br />";
+					echo "checkIntern ID: " . $organization->getId() . "<br />";
 					return $res;
 				} else return -2;
 			} else {
@@ -486,33 +492,47 @@
 			}
 		}
 
-		public function saveSubjects($subjects) {
+		public function saveSubjects(&$subjects) {
 			$res = 0;
 			foreach ($subjects as $sub) {
 				$cultureID = $this->pushSubjectCultureToDB($sub);
-				if($cultureID > 0) $res += $this->saveSubjectChildren($sub->getSubjectGroup(),$cultureID);
+				//echo "cultureID: " . $cultureID . "<br />";
+				if($cultureID > 0) {
+					$sub->setId($cultureID);
+					$res += $this->saveSubjectChildren($sub->getSubjectGroup(),$cultureID);
+					//echo "saveChildRes:" . $res . "<br />";
+				}
 				else return -1;
 			}
 			return $res;
 		}
 
-		private function saveSubjectChildren($subs, $parentID) {
+		private function saveSubjectChildren(&$subs, $parentID) {
 			$res = 0;
 			foreach ($subs as $sub) {
-				if($sub instanceof SubjectGroup) {
-					$pID = $this->pushSubjectChildToDB($sub->getName(),$parentID,"subject_area");
-					if($pID > 0) $res = $this->saveSubjectChildren($sub->getSubjectGroup(),$pID);
+				$l = sizeof($sub->getSubjectGroup());
+				//echo "length: " . $l . "<br />";
+				if(sizeof($sub->getSubjectGroup()) > 0) {
+					//echo "Subject_Area: " . $sub->getName() . "<br />";
+					$pID = $this->pushSubjectChildToDB($sub,$parentID,"subject_area");
+					//echo "Subject_Area ID: " . $pID . "<br />";
+					if($pID > 0) {
+						$sub->setId($pID);
+						$res = $this->saveSubjectChildren($sub->getSubjectGroup(),$pID);
+					}
 				}
 				else {
-					$res += $this->pushSubjectChildToDB($sub, $parentID, "subject");
+					//echo "Subject: " . $sub->getName() . "<br />";
+					$pID = $this->pushSubjectChildToDB($sub, $parentID, "subject");
+					if($pID > 0) $sub->setId($pID);
+					$res += $pID;
 				}
 			}
 			return $res;
 		}
 
-		private function pushSubjectCultureToDB($sub) {
+		private function pushSubjectCultureToDB(&$sub) {
 			$existance = $this->checkSubjectExistence($sub->getName(),"subject_culture");
-			echo $existance;
 			if($existance === 0) {
 				$query = "INSERT INTO subject_culture (Name) VALUES (?)";
 				if($stmt = $this->mysqli->prepare($query)) {
@@ -529,15 +549,17 @@
 			} else return $existance;
 		}
 
-		private function pushSubjectChildToDB($sub, $parentID, $table) {
-			$existance = $this->checkSubjectExistence($sub,$table);
+		private function pushSubjectChildToDB(&$sub, $parentID, $table) {
+			$existance = $this->checkSubjectExistence($sub->getName(),$table);
+			//echo "childID: " . $existance . "<br>";
 			if($existance === 0) {
 				$query = "INSERT INTO $table (Name, ParentID) VALUES (?,?)";
 				if($stmt = $this->mysqli->prepare($query)) {
-				    $stmt->bind_param("si",$sub,$parentID);
+				    $stmt->bind_param("si",$sub->getName(),$parentID);
 				    if($stmt->execute()) {
 							$parentID = $this->mysqli->insert_id;
 			        $stmt->close();
+							//echo "ParentID: " . $parentID ."<br />";
 			        return $parentID;
 				    } else return 0;
 				} else {
@@ -548,7 +570,7 @@
 		}
 
 		private function checkSubjectExistence($subName,$table) {
-			echo "cheking";
+			//echo "checking " . $subName . "<br />";
 			$query = "SELECT ID FROM $table WHERE Name = ?";
 			if($stmt = $this->mysqli->prepare($query)) {
 			    $stmt->bind_param("s",$subName);
@@ -557,7 +579,7 @@
 						$stmt->bind_result($id);
 						if($stmt->num_rows === 0) {
 							//Found no subject with the given name
-							echo $table . "new subject:" . $stmt->num_rows . "<br>";
+							//echo $table . " new subject: num_rows -> " . $stmt->num_rows . "<br>";
 							$res = 0;
 						} else {
 						$stmt->fetch();

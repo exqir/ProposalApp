@@ -72,9 +72,9 @@ define("DB_PROPOSAL", [
 			"Pyear4" => "''",
 			"Link" => "?",
 			"SaveTime" => "Null",
-			"subject_culture",
-			"subject_area",
-			"subject"
+			"subject_culture" => "?",
+			"subject_area" => "?",
+			"subject" => "?"
 		]);
 
 // i = integer, s = string, d = double, b = blob
@@ -123,9 +123,9 @@ class Config
 		$tenure = $proposal->getTitleAdditions()['Tenure']; // Tenure
 		$enddate = $proposal->getEnddate(); // Enddate
 		$link = $proposal->getLink(); // Link
-		$subject_culture = $proposal->getSubjectCulture(); // Subject cultureID
-		$subject_area = $proposal->getSubjectArea(); // Subject Area
-		$subject = $proposal->getSubject(); // Subject
+		$subject_culture = ($proposal->getSubjectCulture() !== NULL ? $proposal->getSubjectCulture() : 0); // Subject cultureID
+		$subject_area = ($proposal->getSubjectArea() !== NULL ? $proposal->getSubjectArea() : 0); // Subject Area
+		$subject = ($proposal->getSubject() !== NULL ? $proposal->getSubject() : 0); // Subject
 
 		$array = array();
 		array_push($array, $orgID);

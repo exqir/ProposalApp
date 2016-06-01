@@ -11,7 +11,12 @@
 
 	$domResponse = new DomDocument();
 	$domResponse->loadHTMLFile(URL);
-
+//////////
+	$url = "http://www.dfg.de/dfg_profil/gremien/fachkollegien/faecher/";
+  $domRes = new DomDocument();
+  $domRes->loadHTMLFile($url);
+  $xpath = new DOMXPath($domRes);
+//////////
 	$resultBox = Util::getParentElementByClass($domResponse, 'div', 'result-box');
 
 	$jobItems = Util::getElementsByClass($resultBox, 'div', 'job-item');
@@ -22,10 +27,11 @@
 		$proposal = new Proposal();
 		$parser->parseTitle($proposal, $job);
 		$parser->parseEmployer($proposal, $job);
+		$parser->gatherSubjects($xpath, $proposal);
 		$sql->handleProposal($proposal);
 
 		array_push($proposals, $proposal);
-		echo $proposal->getTitle() . " / " . $proposal->getLink() . "</br>";
+		echo $proposal->getTitle() . " / " . $proposal->getLink() . " | " . $proposal->getSubjectCulture() . " : " . $proposal->getSubjectArea() . " : " . $proposal->getSubject() . "</br>";
 		//echo $proposal->getInstitut()->getName() . " / " . $proposal->getInstitut()->getCity() . " / " . $proposal->getInstitut()->getCountry() . " / " . $proposal->getEnddate() . "</br>";
 		//var_dump($proposal->getTitleAdditions());
 		echo "</br>";
