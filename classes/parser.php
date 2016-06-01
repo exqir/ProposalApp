@@ -106,5 +106,30 @@ class Parser
 			$organization->setCity($string);
 		}
 	}
+
+  public function parseSubjects($domObject) {
+    private $subjects = new Array();
+    //$tableBox = get...
+    foreach($tableBox as $subject1) {
+      $name = $subject1->getElementsByTagName('caption')->item(0)->nodeValue;
+      $name = trim(explode('(',$name)[0]);
+      $sub = new SubjectGroup($name);
+
+      $subSubjects = get...
+      foreach($subSubjects as $subject2) {
+        $sname = $subject2->nodeValue;
+        $ssub = new SubjectGroup($sname);
+        
+        $subKats = get...
+        foreach($subKats as $subject3) {
+          $ssname = $subject3->nodeValue;
+          $ssub->addSubjectChildren($ssname);
+        }
+        $sub->addSubjectChildren($ssub);
+      }
+      $subjects[] = $sub;
+    }
+    return $subjects;
+  }
 }
 ?>
