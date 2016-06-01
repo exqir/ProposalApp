@@ -485,5 +485,91 @@
 			    return -1;
 			}
 		}
+
+		public function saveSubjects($subjects) {
+			$res = 0;
+			foreach ($subjects as $sub) {
+				$cultureID = $this->pushSubjectCultureToDB($sub);
+				if($cultureID > 0) $res += $this->saveSubjectChildren($sub->getSubjectGroup(),$cultureID);
+				else return -1;
+			}
+			return $res;
+		}
+
+		private function saveSubjectChildren($subs, $parentID) {
+			$res = 0;
+			foreach ($subs as $sub) {
+				if($sub instanceof SubjectGroup) {
+					$pID = $this->pushSubjectChildToDB($sub->getName(),$parentID,"subject_area");
+					if($pID > 0) $res = $this->saveSubjectChildren($sub->getSubjectGroup(),$pID);
+				}
+				else {
+					$res += $this->pushSubjectChildToDB($sub, $parentID, "subject");
+				}
+			}
+			return $res;
+		}
+
+		private function pushSubjectCultureToDB($sub) {
+			$existance = $this->checkSubjectExistence($sub->getName(),"subject_culture");
+			echo $existance;
+			if($existance === 0) {
+				$query = "INSERT INTO subject_culture (Name) VALUES (?)";
+				if($stmt = $this->mysqli->prepare($query)) {
+				    $stmt->bind_param("s",$sub->getName());
+				    if($stmt->execute()) {
+							$parentID = $this->mysqli->insert_id;
+			        $stmt->close();
+			        return $parentID;
+				    } else return 0;
+				} else {
+				    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				    return -1;
+				}
+			} else return $existance;
+		}
+
+		private function pushSubjectChildToDB($sub, $parentID, $table) {
+			$existance = $this->checkSubjectExistence($sub,$table);
+			if($existance === 0) {
+				$query = "INSERT INTO $table (Name, ParentID) VALUES (?,?)";
+				if($stmt = $this->mysqli->prepare($query)) {
+				    $stmt->bind_param("si",$sub,$parentID);
+				    if($stmt->execute()) {
+							$parentID = $this->mysqli->insert_id;
+			        $stmt->close();
+			        return $parentID;
+				    } else return 0;
+				} else {
+				    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				    return -1;
+				}
+			} else return $existance;
+		}
+
+		private function checkSubjectExistence($subName,$table) {
+			echo "cheking";
+			$query = "SELECT ID FROM $table WHERE Name = ?";
+			if($stmt = $this->mysqli->prepare($query)) {
+			    $stmt->bind_param("s",$subName);
+			    if($stmt->execute()) {
+						$stmt->store_result();
+						$stmt->bind_result($id);
+						if($stmt->num_rows === 0) {
+							//Found no subject with the given name
+							echo $table . "new subject:" . $stmt->num_rows . "<br>";
+							$res = 0;
+						} else {
+						$stmt->fetch();
+						$res = $id;
+						}
+						$stmt->close();
+		        return $res;
+			    } else return -2;
+			} else {
+			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+			    return -1;
+			}
+		}
 	}
 ?>
