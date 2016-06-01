@@ -71,7 +71,10 @@ define("DB_PROPOSAL", [
 			"Pissue4" => "''",
 			"Pyear4" => "''",
 			"Link" => "?",
-			"SaveTime" => "Null"
+			"SaveTime" => "Null",
+			"subject_culture",
+			"subject_area",
+			"subject"
 		]);
 
 // i = integer, s = string, d = double, b = blob
@@ -92,7 +95,10 @@ define("DB_PARAM_TYPES", [
 			"i", // C4
 			"i", // Tenure
 			"s", // Enddate
-			"s" // Link
+			"s", // Link
+			"i", // Subject_culture ID
+			"i", // Subject_area ID
+			"i"  // Subject ID
 		]);
 
 class Config
@@ -117,6 +123,9 @@ class Config
 		$tenure = $proposal->getTitleAdditions()['Tenure']; // Tenure
 		$enddate = $proposal->getEnddate(); // Enddate
 		$link = $proposal->getLink(); // Link
+		$subject_culture = $proposal->getSubjectCulture(); // Subject cultureID
+		$subject_area = $proposal->getSubjectArea(); // Subject Area
+		$subject = $proposal->getSubject(); // Subject
 
 		$array = array();
 		array_push($array, $orgID);
@@ -136,6 +145,9 @@ class Config
 		array_push($array, $tenure);
 		array_push($array, $enddate);
 		array_push($array, $link);
+		array_push($array, $subject_culture);
+		array_push($array, $subject_area);
+		array_push($array, $subject);
 
 		return $array;
 	}

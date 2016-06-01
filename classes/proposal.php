@@ -13,6 +13,9 @@ class Proposal
     private $enddate;
     private $link;
     private $titleAdditions;
+    private $subject_culture;
+    private $subject_area;
+    private $subject;
 
     public function __construct()
     {
@@ -121,6 +124,36 @@ class Proposal
     public function getTitleAdditions()
     {
 	    return $this->titleAdditions;
+    }
+
+    public function setSubjectCulture($id)
+    {
+	    $this->subject_culture = $id;
+    }
+
+    public function getSubjectCulture()
+    {
+	    return $this->subject_culture;
+    }
+
+    public function setSubjectArea($id)
+    {
+	    $this->subject_area = $id;
+    }
+
+    public function getSubjectArea()
+    {
+	    return $this->subject_area;
+    }
+
+    public function setSubject($id)
+    {
+	    $this->subject = $id;
+    }
+
+    public function getSubject()
+    {
+	    return $this->subject;
     }
 
     public function setProposalByArray(array $array)
