@@ -502,3 +502,19 @@ form input.form-control.input-inline {
   display: inline-block;
   width: 89%;
   float: right; }
+
+table.table {
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px; }
+  table.table tr.table-clickable {
+    margin: 4px 0;
+    padding: 2px 0;
+    background-color: #fff;
+    background-image: -webkit-linear-gradient(#fff, #ecf0f1);
+    background-image: linear-gradient(#fff, #ecf0f1); }
+    table.table tr.table-clickable td {
+      border-right: 1px solid #e5e5e5; }
+      table.table tr.table-clickable td:last-child {
+        border-right: 0; }

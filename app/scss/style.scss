@@ -1,4 +1,5 @@
 @import "normalize";
+@import "bourbon/bourbon";
 * {
   font-size: 1em;
 }
@@ -89,4 +90,23 @@ form input.form-control.input-inline {
   display: inline-block;
   width: 89%;
   float: right;
+}
+
+table.table {
+  border-collapse:separate;
+  border-spacing:0 5px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  tr.table-clickable {
+
+    margin: 4px 0;
+    padding: 2px 0;
+    @include linear-gradient(#fff, #ecf0f1);
+    td {
+      border-right: 1px solid #e5e5e5;
+      &:last-child {
+        border-right: 0;
+      }
+    }
+  }
 }
