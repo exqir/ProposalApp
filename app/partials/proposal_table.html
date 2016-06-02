@@ -4,7 +4,7 @@
     <button class="btn btn-default" type="button" ng-click="goSearch()">Go!</button>
   </span>
 </div> -->
-<table class="table">
+<table class="table table-bordered">
   <thead>
     <td class="smartFilter">
       <div id="rawDD" class="dropdown" uib-dropdown auto-close="disabled">
@@ -45,6 +45,28 @@
     <td>Fach</td>
     <td>Erfasst am</td>
   </thead>
+<!-- </table>
+<div class="table-clickable" ng-repeat="proposal in proposals | filter:search | filter: orgFilter | filter: rawFilter" ng-click="open(proposal.ID)">
+  <span ng-bind-html="proposal.Raw | convertToStatus"></span>
+  <span>{{proposal.Title}}</span>
+  <span>
+    {{proposal.W1 | convertToName: 'W1' }}
+    {{proposal.W2 | convertToName: 'W2' }}
+    {{proposal.W3 | convertToName: 'W3' }}
+    {{proposal.C1 | convertToName: 'C1' }}
+    {{proposal.C2 | convertToName: 'C2' }}
+    {{proposal.C3 | convertToName: 'C3' }}
+    {{proposal.Tenure | convertTenure }}
+  </span>
+  <span>
+    <span class="label label-default">{{proposal.orgAbbrev}}</span>
+    {{proposal.orgName}}
+  </span>
+  <span>{{proposal.Culture}}</span>
+  <span>{{proposal.Area}}</span>
+  <span>{{proposal.Subject}}</span>
+  <span>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</span>
+</div> -->
   <!-- <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter as results"> -->
   <tr class="table-clickable" ng-repeat="proposal in proposals | filter:search | filter: orgFilter | filter: rawFilter" ng-click="open(proposal.ID)">
     <td ng-bind-html="proposal.Raw | convertToStatus"></td>

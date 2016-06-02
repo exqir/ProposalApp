@@ -503,18 +503,29 @@ form input.form-control.input-inline {
   width: 89%;
   float: right; }
 
-table.table {
-  border-collapse: separate;
-  border-spacing: 0 5px;
+table.table.table-bordered tr.table-clickable {
+  background-color: #fff;
+  background-image: -webkit-linear-gradient(#fff, #ecf0f1);
+  background-image: linear-gradient(#fff, #ecf0f1); }
+  table.table.table-bordered tr.table-clickable:hover {
+    cursor: pointer; }
+
+div.table-clickable {
   border: 1px solid #e5e5e5;
-  border-radius: 3px; }
-  table.table tr.table-clickable {
-    margin: 4px 0;
-    padding: 2px 0;
-    background-color: #fff;
-    background-image: -webkit-linear-gradient(#fff, #ecf0f1);
-    background-image: linear-gradient(#fff, #ecf0f1); }
-    table.table tr.table-clickable td {
-      border-right: 1px solid #e5e5e5; }
-      table.table tr.table-clickable td:last-child {
-        border-right: 0; }
+  border-radius: 3px;
+  margin: 4px 0;
+  padding: 10px 5px;
+  background-color: #fff;
+  background-image: -webkit-linear-gradient(#fff, #ecf0f1);
+  background-image: linear-gradient(#fff, #ecf0f1);
+  width: 100%; }
+  div.table-clickable span {
+    padding-right: 5px;
+    margin-right: 5px;
+    border-right: 1px solid #e5e5e5; }
+    div.table-clickable span:last-child {
+      border-right: 0; }
+    div.table-clickable span:first-child {
+      width: 10%; }
+    div.table-clickable span:nth-child(2) {
+      width: 30%; }

@@ -92,21 +92,33 @@ form input.form-control.input-inline {
   float: right;
 }
 
-table.table {
-  border-collapse:separate;
-  border-spacing:0 5px;
+table.table.table-bordered {
+  tr.table-clickable {
+    @include linear-gradient(#fff, #ecf0f1);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+div.table-clickable {
   border: 1px solid #e5e5e5;
   border-radius: 3px;
-  tr.table-clickable {
-
-    margin: 4px 0;
-    padding: 2px 0;
-    @include linear-gradient(#fff, #ecf0f1);
-    td {
-      border-right: 1px solid #e5e5e5;
-      &:last-child {
-        border-right: 0;
-      }
+  margin: 4px 0;
+  padding: 10px 5px;
+  @include linear-gradient(#fff, #ecf0f1);
+  width: 100%;
+  span {
+    padding-right: 5px;
+    margin-right: 5px;
+    border-right: 1px solid #e5e5e5;
+    &:last-child {
+      border-right: 0;
+    }
+    &:first-child {
+      width: 10%;
+    }
+    &:nth-child(2) {
+      width: 30%;
     }
   }
 }
