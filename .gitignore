@@ -17,7 +17,7 @@ db.php
 /node_modules
 
 # CSS
-/app/css
+/app/css/style.css
 
 # Bourbon
 /app/scss/bourbon
