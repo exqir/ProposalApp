@@ -1,6 +1,7 @@
 <?php
 define("URL", "https://www.academics.de/wissenschaft/professur_37187.html?unpaged=true&amount=5");
 define("BASEURL", "https://www.academics.de");
+define("APIKEY", "AIzaSyDimV9AXKs7p5DsWNz1C1pWcoTkNi-bWqk");
 
 define("TITLEADDITIONS", [
 			"W1" => 0,
