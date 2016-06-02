@@ -57,7 +57,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     searchTerm = $scope.search;
   };
 })
-.controller('proposalListCtrl', function($scope, $http, filterFilter,searchTerm){
+.controller('proposalListCtrl', function($scope, $http, $uibModal, filterFilter,searchTerm){
   $http.get("./../restEndpoint/proposals")
     .then(function (response) {
       $scope.proposals = response.data;
@@ -109,9 +109,29 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   $scope.getCountRaw = function(exp){
     return filterFilter( $scope.proposals, {Raw:exp}).length;
   };
+
+  $scope.open = function(proposalID)
+  {
+      var modalInstance = $uibModal.open
+      ({
+          animation: true,
+          templateUrl: 'partials/proposalModal.html',
+          controller: 'proposalDetailCtrl',
+          size: 'lg',
+          resolve: { id: function() {return proposalID;}}
+      });
+
+      // modalInstance.result.then(function(resultV)
+      // {
+      //     $scope.chartTypes = resultV.chartTypes;
+      //     $scope.routeSelection = resultV.route;
+      //     $scope.chartType = $scope.chartTypes[0];
+      //     $scope.goTo(true);
+      // });
+  };
 })
-.controller('proposalDetailCtrl', function($scope, $http, $routeParams){
-  var proposalID = $routeParams.id;
+.controller('proposalDetailCtrl', function($scope, $http, $routeParams, $uibModalInstance, id){
+  var proposalID = id;
   $http.get("./../restEndpoint/proposals/" + proposalID)
     .then(function (response) {
       $scope.proposal = response.data;
@@ -121,6 +141,10 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     .then(function (response) {
       console.log(response);
     });
+  };
+  $scope.cancel = function()
+  {
+      $uibModalInstance.dismiss();
   };
 })
 .controller('organizationListCtrl', function($scope, $http){

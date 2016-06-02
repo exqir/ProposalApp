@@ -46,7 +46,7 @@
     <td>Erfasst am</td>
   </thead>
   <!-- <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter as results"> -->
-  <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter | filter: rawFilter">
+  <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter | filter: rawFilter" ng-click="open(proposal.ID)">
     <td ng-bind-html="proposal.Raw | convertToStatus"></td>
     <td>{{proposal.Title}}</td>
     <td>
