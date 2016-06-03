@@ -378,7 +378,7 @@
 		public function getProposals()
 		{
 			$query =
-			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
+			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, organizations.State AS State ,subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
 			FROM proposal
 			INNER JOIN organizations
 				ON proposal.OrgID = organizations.ID
@@ -407,7 +407,7 @@
 		public function getProposal($id)
 		{
 			$query =
-			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
+			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, organizations.State AS State, subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
 			FROM proposal
 			INNER JOIN organizations
 				ON proposal.OrgID = organizations.ID
