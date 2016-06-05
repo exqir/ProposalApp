@@ -64,11 +64,7 @@ class Parser
 		{
 			$instTmp = explode("/", $employer[0]);
 			$organization = new Organization($instTmp[0]);
-			$state = $this->findStateForOrganization($organization->getName());
-			if($state !== NULL) $organization->setState($state);
 			$organizationOptional = new Organization($instTmp[1]);
-			$state = $this->findStateForOrganization($organizationOptional->getName());
-			if($state !== NULL) $organizationOptional->setState($state);
 			$proposal->setOrgOpt(1);
 
 			if($count > 3)
@@ -89,8 +85,6 @@ class Parser
 		else
 		{
 			$organization = new Organization($employer[0]);
-			$state = $this->findStateForOrganization($organization->getName());
-			if($state !== NULL) $organization->setState($state);
 			$this->parseCity($organization, $employer[1]);
 
 			$proposal->setOrganization($organization);
@@ -112,34 +106,6 @@ class Parser
 		{
 			$organization->setCity($string);
 		}
-	}
-
-	private function findStateForOrganization($organisationName) {
-		$placeId = $this->getPlaceIdFromAPI($organisationName);
-		if($placeId !== NULL) return $this->getStateForPlaceId($placeId);
-		else return NULL;
-	}
-
-	private function getPlaceIdFromAPI($organizationName) {
-		$searchUrl = "https://maps.googleapis.com/maps/api/place/textsearch/xml?query=" . urlencode($organizationName) . "&key=" . APIKEY;
-		$s = file_get_contents($searchUrl);
-		$dom = new DomDocument();
-		$dom->loadXML($s);
-		$xpath = new DOMXPath($dom);
-		$place = $xpath->query("/PlaceSearchResponse/result/place_id");
-		$placeId = $place->item(0)->nodeValue;
-		return $placeId;
-	}
-
-	private function getStateForPlaceId($placeId) {
-		$detailUrl = "https://maps.googleapis.com/maps/api/place/details/xml?placeid=" . $placeId . "&key=" . APIKEY;
-		$s = file_get_contents($detailUrl);
-		$dom = new DomDocument();
-		$dom->loadXML($s);
-		$xpath = new DOMXPath($dom);
-		$details = $xpath->query("/PlaceDetailsResponse/result/address_component[6]/long_name");
-		$state = $details->item(0)->nodeValue;
-		return $state;
 	}
 
 	public function findSubjects (Proposal &$proposal, $subjectReference) {

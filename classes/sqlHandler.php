@@ -165,6 +165,8 @@
 				$abbrev = $this->getAbbrev($typeId);
 				if($abbrev !== -1) $organization->setAbbrev($abbrev);
 				else $organization->setAbbrev("");
+				$state = $this->findStateForOrganization($name);
+				if($state !== NULL) $organization->setState($state);
 				$pushResponse = $this->pushOrganizationToDB($organization);
 				return $pushResponse;
 			} else if($organizationExistance === 1) {
@@ -261,6 +263,34 @@
 				    return -1;
 				}
 			}
+		}
+
+		private function findStateForOrganization($organisationName) {
+			$placeId = $this->getPlaceIdFromAPI($organisationName);
+			if($placeId !== NULL) return $this->getStateForPlaceId($placeId);
+			else return NULL;
+		}
+
+		private function getPlaceIdFromAPI($organizationName) {
+			$searchUrl = "https://maps.googleapis.com/maps/api/place/textsearch/xml?query=" . urlencode($organizationName) . "&key=" . APIKEY;
+			$s = file_get_contents($searchUrl);
+			$dom = new DomDocument();
+			$dom->loadXML($s);
+			$xpath = new DOMXPath($dom);
+			$place = $xpath->query("/PlaceSearchResponse/result/place_id");
+			$placeId = $place->item(0)->nodeValue;
+			return $placeId;
+		}
+
+		private function getStateForPlaceId($placeId) {
+			$detailUrl = "https://maps.googleapis.com/maps/api/place/details/xml?placeid=" . $placeId . "&key=" . APIKEY;
+			$s = file_get_contents($detailUrl);
+			$dom = new DomDocument();
+			$dom->loadXML($s);
+			$xpath = new DOMXPath($dom);
+			$details = $xpath->query("/PlaceDetailsResponse/result/address_component[6]/long_name");
+			$state = $details->item(0)->nodeValue;
+			return $state;
 		}
 
 		private function pushOrganizationToDB(Organization &$organization) {
