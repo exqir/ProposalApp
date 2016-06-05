@@ -25,7 +25,7 @@
     <td class="smartFilter">
       <div id="orgDD" class="dropdown" uib-dropdown auto-close="disabled">
         <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
-            Organization
+            Organization ({{organizations.length}})
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="orgDD">
@@ -33,10 +33,17 @@
             <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchOrg">
           </li>
           <li id="test" role="separator" class="divider filter"></li>
-          <li ng-repeat="proposal in proposals | unique: 'orgName' | filterBy: ['orgName']:smartSearchOrg | orderBy: 'orgName' " class="list-item">
-              <input type="checkbox" ng-click="includeOrg(proposal.orgName)">
-              {{proposal.orgName}} ({{getCountOrg(proposal.orgName)}})
+          <li ng-repeat="org in organizations | filterBy: ['orgName']:smartSearchOrg" class="list-item">
+              <input type="checkbox" ng-click="includeOrg(org.orgName)">
+              {{org.orgName}}
+              <!-- ({{(proposals | filter: org.orgName | filter: rawFilter).length}}) -->
+              <!-- ({{getCountOrg(proposal.orgName)}}) -->
           </li>
+          <!-- <li ng-repeat="proposal in proposals | unique: 'orgName' | filterBy: ['orgName']:smartSearchOrg | orderBy: 'orgName' " class="list-item">
+              <input type="checkbox" ng-click="includeOrg(proposal.orgName)">
+              {{proposal.orgName}} ({{(proposals | filter: proposal.orgName | filter: rawFilter).length}})
+              //({{getCountOrg(proposal.orgName)}})
+          </li> -->
         </ul>
       </div>
     </td>

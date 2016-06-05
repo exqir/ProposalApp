@@ -57,10 +57,16 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     searchTerm = $scope.search;
   };
 })
-.controller('proposalListCtrl', function($scope, $http, $uibModal, filterFilter,searchTerm){
+.controller('proposalListCtrl', function($scope, $http, $uibModal, $filter, filterFilter,searchTerm){
   $http.get("./../restEndpoint/proposals")
     .then(function (response) {
       $scope.proposals = response.data;
+    })
+    .then(function () {
+      $scope.organizations = $filter('unique')($scope.proposals, 'orgName');
+      $scope.organizations = $filter('orderBy')($scope.organizations, 'orgName');
+      console.log($scope.organizations);
+
     });
   $scope.search = searchTerm;
   $scope.org = [];
@@ -109,6 +115,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   $scope.getCountRaw = function(exp){
     return filterFilter( $scope.proposals, {Raw:exp}).length;
   };
+
 
   $scope.open = function(proposalID)
   {
