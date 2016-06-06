@@ -430,7 +430,9 @@ header {
   display: block; }
 
 .content {
-  padding: 5px; }
+  padding: 5px;
+  background-color: #fafafa;
+  height: 100%; }
 
 header .main-logo {
   margin-left: 50px;
@@ -529,3 +531,35 @@ div.table-clickable {
       width: 10%; }
     div.table-clickable span:nth-child(2) {
       width: 30%; }
+
+div.wrapper {
+  height: 100%; }
+  div.wrapper div.dashboard div.dash {
+    min-height: 200px;
+    padding: 5px 5px;
+    margin: 10px 0;
+    border: 2px solid #ecf0f1;
+    background-color: #fff;
+    color: #7f8c8d;
+    border-radius: 5px;
+    font-size: 1.25em;
+    text-align: left; }
+    div.wrapper div.dashboard div.dash div.title {
+      border-bottom: 1px solid #ecf0f1;
+      padding-left: 10px; }
+      div.wrapper div.dashboard div.dash div.title p {
+        display: inline-block;
+        margin: 0; }
+      div.wrapper div.dashboard div.dash div.title p + p {
+        font-size: .75em; }
+    div.wrapper div.dashboard div.dash div.number {
+      font-size: 2.5em;
+      text-align: center;
+      margin-top: .5em; }
+      div.wrapper div.dashboard div.dash div.number span {
+        font-size: .75em;
+        display: inline-block; }
+        div.wrapper div.dashboard div.dash div.number span::before {
+          content: '/ '; }
+    div.wrapper div.dashboard div.dash span {
+      display: block; }

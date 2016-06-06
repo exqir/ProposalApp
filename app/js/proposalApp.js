@@ -3,7 +3,8 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   function($routeProvider){
     $routeProvider.
     when('/', {
-      redirectTo: '/'
+      templateUrl: 'partials/dashboard.html',
+      controller: 'dashboardCtrl'
     })
     .when('/proposals', {
       templateUrl: 'partials/proposal_table.html',
@@ -178,4 +179,72 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
 
         return organization;
     };
+})
+.controller('dashboardCtrl', function($scope,$http, $filter){
+  $http.get("./../restEndpoint/proposals")
+    .then(function (response) {
+      $scope.proposals = response.data;
+    })
+    .then(function () {
+      //// TOTAL AND GERMANY TOTAL
+      $scope.proposalsTotal = $scope.proposals.length;
+      var proposalsGermany = $filter('filter')($scope.proposals, {Country: 'Deutschland'});
+      $scope.proposalsGermanyTotal = proposalsGermany.length;
+      //// STATES
+      var stateNames = $filter('unique')(proposalsGermany, 'State');
+      $scope.states = [];
+      for (var i = 0; i < stateNames.length; i++) {
+        var state = {};
+        state.name = stateNames[i].State;
+        if(state.name === null || state.name === '') state.name = "Unbestimmt";
+        state.number = (($filter('filter')(proposalsGermany, {State: stateNames[i].State})).length);
+        state.percentage = Math.round((state.number / $scope.proposalsGermanyTotal) * 100);
+        $scope.states.push(state);
+      }
+      //// ORGANIZATIONS
+      $scope.organizationsTotal = ($filter('unique')($scope.proposals, 'orgName')).length;
+      var organizationTypes = $filter('unique')($scope.proposals, 'orgAbbrev');
+      $scope.orgas = [];
+      for (var n = 0; n < organizationTypes.length; n++) {
+        var org = {};
+        //TODO null handling
+        org.type = organizationTypes[n].orgAbbrev;
+        if(org.type === null) org.type = "Sonstige";
+        org.number = (($filter('filter')($scope.proposals, {orgAbbrev: organizationTypes[n].orgAbbrev}, true)).length);
+        org.percentage = Math.round((org.number / $scope.proposalsTotal) * 100);
+        $scope.orgas.push(org);
+      }
+      //// BESOLDUNG
+      $scope.besoldung = [];
+      $scope.besoldung.push({
+        type: 'W1',
+        number: (($filter('filter')($scope.proposals, {W1: 1})).length),
+        percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
+      });
+      $scope.besoldung.push({
+        type: 'W2',
+        number: (($filter('filter')($scope.proposals, {W2: 1})).length),
+        percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
+      });
+      $scope.besoldung.push({
+        type: 'W3',
+        number: (($filter('filter')($scope.proposals, {W3: 1})).length),
+        percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
+      });
+      $scope.besoldung.push({
+        type: 'C1',
+        number: (($filter('filter')($scope.proposals, {C1: 1})).length),
+        percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
+      });
+      $scope.besoldung.push({
+        type: 'C2',
+        number: (($filter('filter')($scope.proposals, {C2: 1})).length),
+        percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
+      });
+      $scope.besoldung.push({
+        type: 'C3',
+        number: (($filter('filter')($scope.proposals, {C3: 1})).length),
+        percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
+      });
+    });
 });

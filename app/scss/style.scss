@@ -12,6 +12,8 @@ header {
 }
 .content {
   padding: 5px;
+  background-color: #fafafa;
+  height: 100%;
 }
 header {
   .main-logo {
@@ -119,6 +121,48 @@ div.table-clickable {
     }
     &:nth-child(2) {
       width: 30%;
+    }
+  }
+}
+div.wrapper {
+  height: 100%;
+  div.dashboard {
+    div.dash {
+      min-height: 200px;
+      padding: 5px 5px;
+      margin: 10px 0;
+      border: 2px solid #ecf0f1;
+      background-color: #fff;
+      color: #7f8c8d;
+      border-radius: 5px;
+      font-size: 1.25em;
+      text-align: left;
+      div.title {
+        border-bottom: 1px solid #ecf0f1;
+        padding-left: 10px;
+        p {
+          display: inline-block;
+          margin: 0;
+        }
+        p + p {
+          font-size: .75em;
+        }
+      }
+      div.number {
+        font-size: 2.5em;
+        text-align: center;
+        margin-top: .5em;
+        span {
+          font-size: .75em;
+          display: inline-block;
+          &::before {
+            content: '/ ';
+          }
+        }
+      }
+      span {
+        display: block;
+      }
     }
   }
 }

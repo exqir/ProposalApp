@@ -164,7 +164,7 @@
 				if($typeId >= 0) $organization->setTypeId($typeId);
 				$abbrev = $this->getAbbrev($typeId);
 				if($abbrev !== -1) $organization->setAbbrev($abbrev);
-				else $organization->setAbbrev("");
+				else $organization->setAbbrev(NULL);
 				$state = $this->findStateForOrganization($name);
 				if($state !== NULL) $organization->setState($state);
 				$pushResponse = $this->pushOrganizationToDB($organization);
@@ -408,7 +408,7 @@
 		public function getProposals()
 		{
 			$query =
-			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, organizations.State AS State ,subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
+			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, organizations.State AS State , organizations.Country AS Country ,subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
 			FROM proposal
 			INNER JOIN organizations
 				ON proposal.OrgID = organizations.ID
@@ -437,7 +437,7 @@
 		public function getProposal($id)
 		{
 			$query =
-			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, organizations.State AS State, subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
+			"SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, organizations.State AS State, organizations.Country AS Country, subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
 			FROM proposal
 			INNER JOIN organizations
 				ON proposal.OrgID = organizations.ID
