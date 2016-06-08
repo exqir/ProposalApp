@@ -289,8 +289,14 @@
 			$dom = new DomDocument();
 			$dom->loadXML($s);
 			$xpath = new DOMXPath($dom);
-			$details = $xpath->query("/PlaceDetailsResponse/result/address_component[6]/long_name");
-			$state = $details->item(0)->nodeValue;
+			$componentList = $xpath->query("/PlaceDetailsResponse/result/address_component");
+		  $state = null;
+		  foreach ($componentList as $comp) {
+		     $type = $comp->getElementsByTagName('type')->item(0)->nodeValue;
+		     if(stripos($type,"administrative_area_level_1") !== false) {
+		       $state = $comp->getElementsByTagName('long_name')->item(0)->nodeValue;
+		     }
+		  }
 			return $state;
 		}
 

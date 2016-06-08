@@ -5,7 +5,7 @@
  require_once 'config.php';
  require_once 'db.php';
 
- define("APIKEY", "AIzaSyDimV9AXKs7p5DsWNz1C1pWcoTkNi-bWqk");
+ //define("APIKEY", "AIzaSyDimV9AXKs7p5DsWNz1C1pWcoTkNi-bWqk");
  $organization = "HSD Hochschule Döpfer";
  $searchUrl = "https://maps.googleapis.com/maps/api/place/textsearch/xml?query=" . urlencode($organization) . "&key=" . APIKEY;
  $string = file_get_contents($searchUrl);
@@ -25,7 +25,13 @@
  $dom = new DomDocument();
  $dom->loadXML($string);
  $xpath = new DOMXPath($dom);
- $details = $xpath->query("/PlaceDetailsResponse/result/address_component[6]/long_name");
- $state = $details->item(0)->nodeValue;
+ $componentList = $xpath->query("/PlaceDetailsResponse/result/address_component");
+ $state = null;
+ foreach ($componentList as $comp) {
+    $type = $comp->getElementsByTagName('type')->item(0)->nodeValue;
+    if(stripos($type,"administrative_area_level_1") !== false) {
+      $state = $comp->getElementsByTagName('long_name')->item(0)->nodeValue;
+    }
+ }
  echo $state;
 ?>
