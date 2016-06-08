@@ -235,20 +235,5 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
         number: (($filter('filter')($scope.proposals, {W3: 1})).length),
         percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
       });
-      $scope.besoldung.push({
-        type: 'C1',
-        number: (($filter('filter')($scope.proposals, {C1: 1})).length),
-        percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
-      });
-      $scope.besoldung.push({
-        type: 'C2',
-        number: (($filter('filter')($scope.proposals, {C2: 1})).length),
-        percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
-      });
-      $scope.besoldung.push({
-        type: 'C3',
-        number: (($filter('filter')($scope.proposals, {C3: 1})).length),
-        percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
-      });
     });
 });

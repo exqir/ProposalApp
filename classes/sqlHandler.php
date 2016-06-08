@@ -683,5 +683,38 @@
 			    return -1;
 			}
 		}
+
+		public function historyStates() {
+			$query = "SELECT ID, Name FROM organizations WHERE ID > 400";
+			if($stmt = $this->mysqli->prepare($query)) {
+					$stmt->bind_result($id,$name);
+					if($stmt->execute()) {
+						$stmt->store_result();
+						while($stmt->fetch()) {
+							$state = $this->findStateForOrganization($name);
+							$this->pushHistoryStatesToDB($id,$state);
+						}
+						$stmt->close();
+						return 1;
+					} else return 0;
+			} else {
+					printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+					return -1;
+			}
+		}
+
+		private function pushHistoryStatesToDB($id, $name) {
+			$query = "UPDATE organizations SET State = ? WHERE ID = ?";
+			if($stmt = $this->mysqli->prepare($query)) {
+					$stmt->bind_param("si",$name,$id);
+					if($stmt->execute()) {
+							$stmt->close();
+							return 1;
+					} else return 0;
+			} else {
+					printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+					return -1;
+			}
+		}
 	}
 ?>
