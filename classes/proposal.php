@@ -61,6 +61,10 @@ class Proposal
         $this->description = trim($jwWrapper->nodeValue);
     }
 
+    public function setDescriptionManually(string $desc) {
+      $this->desc = $desc;
+    }
+
     public function getDescription()
     {
         return $this->description;

@@ -6,6 +6,10 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
       templateUrl: 'partials/dashboard.html',
       controller: 'dashboardCtrl'
     })
+    .when('/dashboard', {
+      templateUrl: 'partials/dashboard.html',
+      controller: 'dashboardCtrl'
+    })
     .when('/proposals', {
       templateUrl: 'partials/proposal_table.html',
       controller: 'proposalListCtrl'

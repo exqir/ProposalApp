@@ -113,12 +113,11 @@ class Parser
 		$this->searchSubjects($subjectReference,$proposal,$proposal->getTitle());
 		if($proposal->getSubject() === NULL || $proposal->getSubjectArea === NULL) {
 			echo "searching desc <br>";
-			$this->searchSubjects($subjects,$proposal,$proposal->getDescription());
+			$this->searchSubjects($subjectReference,$proposal,$proposal->getDescription());
 		}
 	}
 
 	private function searchSubjects($subjectCultures, &$proposal,$searchIn) {
-		echo "searchSubjects";
 		foreach ($subjectCultures as $subjectCulture) {
 			$subjectAreas = $subjectCulture->getSubjectGroup();
 			foreach ($subjectAreas as $subjectArea) {

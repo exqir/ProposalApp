@@ -290,7 +290,7 @@
 			$dom->loadXML($s);
 			$xpath = new DOMXPath($dom);
 			$componentList = $xpath->query("/PlaceDetailsResponse/result/address_component");
-		  $state = null;
+		  $state = "";
 		  foreach ($componentList as $comp) {
 		     $type = $comp->getElementsByTagName('type')->item(0)->nodeValue;
 		     if(stripos($type,"administrative_area_level_1") !== false) {
@@ -637,6 +637,47 @@
 						$stmt->close();
 		        return $res;
 			    } else return -2;
+			} else {
+			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+			    return -1;
+			}
+		}
+
+		public function historySubjects($domObject) {
+			$query = "SELECT ID, Title, Description FROM proposal";
+			if($stmt = $this->mysqli->prepare($query)) {
+			    $stmt->bind_result($id,$title,$desc);
+			    if($stmt->execute()) {
+						$stmt->store_result();
+						while($stmt->fetch()) {
+							$proposal = new Proposal();
+							$proposal->setId($id);
+							$proposal->setTitle($title);
+							$proposal->setDescriptionManually($desc);
+							$parser = new Parser();
+							$parser->gatherSubjects($domObject, $proposal);
+							echo $proposal->getSubjectCulture();
+							echo "<br />";
+							echo "to" . $proposal->getId();
+							$this->pushHistorySubjectsToDB($proposal);
+						}
+			      $stmt->close();
+			      return 1;
+			    } else return 0;
+			} else {
+			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+			    return -1;
+			}
+		}
+
+		private function pushHistorySubjectsToDB($proposal) {
+			$query = "UPDATE proposal SET subject_culture = ?, subject_area = ?, subject = ? WHERE ID = ?";
+			if($stmt = $this->mysqli->prepare($query)) {
+			    $stmt->bind_param("iiii",$proposal->getSubjectCulture(),$proposal->getSubjectArea(),$proposal->getSubject(),$proposal->getId());
+			    if($stmt->execute()) {
+			        $stmt->close();
+			        return 1;
+			    } else return 0;
 			} else {
 			    printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
 			    return -1;
