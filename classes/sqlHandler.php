@@ -167,7 +167,7 @@
 				else $organization->setAbbrev(NULL);
 				$state = $this->findStateForOrganization($name);
 				if($state !== NULL) $organization->setState($state);
-				if($organization->getCountry() === NULL) $organization->setCountry("Deutschland");
+				if($organization->getCountry() === NULL || $organization->getCountry() === "") $organization->setCountry("Deutschland");
 				$pushResponse = $this->pushOrganizationToDB($organization);
 				return $pushResponse;
 			} else if($organizationExistance === 1) {
