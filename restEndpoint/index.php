@@ -68,5 +68,19 @@ Flight::route('GET /subjects-lists/cultures/', function(){
   $sql->closeConnection();
 });
 
+Flight::route('GET /subjects-lists/areas/', function(){
+  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  Flight::json($sql->getSubjectAreas());
+  $sql->closeConnection();
+});
+
+Flight::route('GET /subjects-lists/subjects/', function(){
+  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  Flight::json($sql->getSubjects());
+  $sql->closeConnection();
+});
+
 Flight::start();
 ?>

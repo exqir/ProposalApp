@@ -58,7 +58,7 @@
             <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchState">
           </li>
           <li role="separator" class="divider filter"></li>
-          <li ng-repeat="state in states | filterBy: smartSearchState" class="list-item">
+          <li ng-repeat="state in states | filter: smartSearchState" class="list-item">
               <input type="checkbox" ng-click="includeState(state)">
               {{state}}
           </li>
@@ -79,8 +79,42 @@
         </ul>
       </div>
     </td>
-    <td>Fachbereich</td>
-    <td>Fach</td>
+    <td class="smartFilter">
+      <div id="areaDD" class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+            Fachbereich
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="areaDD">
+          <li>
+            <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchArea">
+          </li>
+          <li role="separator" class="divider filter"></li>
+          <li ng-repeat="area in areas | filterBy: ['Name']:smartSearchArea" class="list-item">
+              <input type="checkbox" ng-click="includeSubjectArea(area.Name)">
+              {{area.Name}}
+          </li>
+        </ul>
+      </div>
+    </td>
+    <td class="smartFilter">
+      <div id="subjectDD" class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+            Fachkultur
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="subjectDD">
+          <li>
+            <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchSubject">
+          </li>
+          <li role="separator" class="divider filter"></li>
+          <li ng-repeat="subject in subjects | filterBy: ['Name']:smartSearchSubject" class="list-item">
+              <input type="checkbox" ng-click="includeSubject(subject.Name)">
+              {{subject.Name}}
+          </li>
+        </ul>
+      </div>
+    </td>
     <td>Erfasst am</td>
   </thead>
 <!-- </table>

@@ -575,6 +575,40 @@
 			$stmt->close();
 		}
 
+		public function getSubjectAreas() {
+			$query =
+			"SELECT Name, ParentID FROM subject_area";
+			if($stmt = $this->mysqli->query($query)){
+				$res = array();
+				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+					$res[] = $row;
+				}
+				$stmt->free();
+				return $res;
+			} else {
+				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				die;
+			}
+			$stmt->close();
+		}
+
+		public function getSubjects() {
+			$query =
+			"SELECT Name, ParentID FROM subject";
+			if($stmt = $this->mysqli->query($query)){
+				$res = array();
+				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+					$res[] = $row;
+				}
+				$stmt->free();
+				return $res;
+			} else {
+				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				die;
+			}
+			$stmt->close();
+		}
+
 		public function saveSubjects(&$subjects) {
 			$res = 0;
 			foreach ($subjects as $sub) {

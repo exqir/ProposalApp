@@ -51,6 +51,12 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   this.getCultures = function() {
     return $http.get(route + "/subjects-lists/cultures/");
   };
+  this.getAreas = function() {
+    return $http.get(route + "/subjects-lists/areas/");
+  };
+  this.getSubjects = function() {
+    return $http.get(route + "/subjects-lists/subjects/");
+  };
 })
 .filter('convertSQLdate', function () {
      return function (dateString) {
@@ -109,7 +115,16 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   rest.getCultures()
   .then(function(result) {
     $scope.cultures = result.data;
-  })
+  });
+  rest.getAreas()
+  .then(function(result) {
+    $scope.areas = result.data;
+  });
+  rest.getSubjects()
+  .then(function(result) {
+    $scope.subjects = result.data;
+  });
+
 
   $q.all(promises)
   .then(function (results) {
