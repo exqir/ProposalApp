@@ -26,27 +26,30 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   }
 ])
 .service('restRessources', function($http){
-  var route = "./..";
+  var route = "./../restEndpoint";
   this.getProposals = function() {
-    return $http.get(route + "/restEndpoint/proposals");
+    return $http.get(route + "/proposals");
   };
   this.getProposal = function(proposalID) {
-    return $http.get(route + "/restEndpoint/proposals/" + proposalID);
+    return $http.get(route + "/proposals/" + proposalID);
   };
   this.putProposal = function(proposalID, proposal) {
-    $http.put(route + "/restEndpoint/proposals/" + proposalID, proposal);
+    $http.put(route + "/proposals/" + proposalID, proposal);
   };
   this.getOrganizations = function() {
-    return $http.get(route + "/restEndpoint/organizations");
+    return $http.get(route + "/organizations");
   };
   this.getOrganization = function(organizationID) {
-    return $http.get(route + "/restEndpoint/organizations/" + organizationID);
+    return $http.get(route + "/organizations/" + organizationID);
   };
   this.putOrganization = function(organizationID, organization) {
-    $http.put(route + "/restEndpoint/organizations/" + organizationID, organization);
+    $http.put(route + "/organizations/" + organizationID, organization);
   };
   this.getStatisticsOrganization = function() {
-    return $http.get(route + "/restEndpoint/statistics/organizations/");
+    return $http.get(route + "/statistics/organizations/");
+  };
+  this.getCultures = function() {
+    return $http.get(route + "/subjects-lists/cultures/");
   };
 })
 .filter('convertSQLdate', function () {
@@ -87,99 +90,81 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   };
 })
 .controller('proposalListCtrl', function($q, $scope, $http, $uibModal, $filter, $injector ,filterFilter,searchTerm, restRessources){
+  $scope.states = [];
   var rest = $injector.get('restRessources');
   var promises = [];
-  // var setter = function (func) {
-  //   var deferObject = deferObject || $q.defer();
-  //   func().then(function (response) {
-  //     deferObject.resolve(response.data);
-  //   });
-  //   return deferObject.promise;
-  // };
-  // rest.getProposals()
-  // .then(function(response) {
-  //   $scope.proposals = response.data;
-  // })
-  // .then(function() {
-  //   for(var i = 0; i < $scope.organizations.length; i++) {
-  //     var found = false;
-  //     for(var n = 0; n < $scope.proposals.length; n++) {
-  //       if($scope.organizations[i].Name === $scope.proposals[n].orgName) {
-  //         found = true;
-  //         break;
-  //       }
-  //     }
-  //     if(found === false) $scope.organizations.splice(i,1);
-  //   }
-  // });
-  // rest.getStatisticsOrganization()
-  // .then(function (response) {
-  //   $scope.organizations = response.data;
-  // });
 
   promises.push(rest.getProposals());
   promises.push(rest.getStatisticsOrganization());
 
+  $q.when(promises[0])
+  .then(function(result) {
+    $scope.proposals = result.data;
+  });
+  $q.when(promises[1])
+  .then(function(result) {
+    $scope.organizations = result.data;
+  });
+
+  rest.getCultures()
+  .then(function(result) {
+    $scope.cultures = result.data;
+  })
+
   $q.all(promises)
   .then(function (results) {
-    $scope.proposals = results[0].data;
-    $scope.organizations = results[1].data;
     var notFound = [];
     for(var i = 0; i < $scope.organizations.length; i++) {
       var found = false;
       for(var n = 0; n < $scope.proposals.length; n++) {
         if($scope.organizations[i].Name === $scope.proposals[n].orgName) {
-          console.log($scope.organizations[i].Name + "=" + $scope.proposals[n].orgName);
           found = true;
+          $scope.states.push($scope.organizations[i].State);
           break;
         }
       }
       if(found === false) notFound.push(i);
     }
-    for (var i = notFound.length - 1; i >= 0; i--) {
+    for (i = notFound.length - 1; i >= 0; i--) {
       $scope.organizations.splice(notFound[i],1);
     }
+    $scope.states = $filter("unique")($scope.states);
   });
 
   $scope.search = searchTerm;
   $scope.org = [];
   $scope.raw = [];
+  $scope.state = [];
+  $scope.subjectCulture = [];
+  $scope.subjectArea = [];
+  $scope.subject = [];
 
-  $scope.includeOrg = function(orgName) {
-      var i = $scope.org.indexOf(orgName);
-      if (i > -1) {
-          $scope.org.splice(i, 1);
-      } else {
-          $scope.org.push(orgName);
-      }
+  var filterInclude = function(array, element) {
+    var i = $scope[array].indexOf(element);
+    i > -1 ? $scope[array].splice(i,1) : $scope[array].push(element);
   };
 
-  $scope.orgFilter = function(proposal) {
-      if ($scope.org.length > 0) {
-          if ($scope.org.indexOf(proposal.orgName) < 0)
-              return;
-      }
-
-      return proposal;
+  var filterRepeat = function(array, attribute, proposal) {
+    if($scope[array].length > 0) {
+      if($scope[array].indexOf(proposal[attribute]) < 0)
+        return;
+    }
+    return proposal;
   };
 
-  $scope.includeRaw = function(raw) {
-      var i = $scope.raw.indexOf(raw);
-      if (i > -1) {
-          $scope.raw.splice(i, 1);
-      } else {
-          $scope.raw.push(raw);
-      }
-  };
+  $scope.includeOrg = function (orgName) {filterInclude('org', orgName);};
+  $scope.includeRaw = function (raw) {filterInclude('raw', raw);};
+  $scope.includeState = function (state) {filterInclude('state', state);};
+  $scope.includeSubjectCulture = function (culture) {filterInclude('subjectCulture', culture);};
+  $scope.includeSubjectArea = function (area) {filterInclude('subjectArea', area);};
+  $scope.includeSubject = function (subject) {filterInclude('subject', subject);};
 
-  $scope.rawFilter = function(proposal) {
-      if ($scope.raw.length > 0) {
-          if ($scope.raw.indexOf(proposal.Raw) < 0)
-              return;
-      }
-
-      return proposal;
-  };
+  $scope.orgFilter = function (proposal) {return filterRepeat('org','orgName',proposal);};
+  $scope.rawFilter = function (proposal) {return filterRepeat('raw','Raw',proposal);};
+  $scope.stateFilter = function (proposal) {return filterRepeat('state','State',proposal);};
+  $scope.cultureFilter = function (proposal) {return filterRepeat('subjectCulture','Culture',proposal);};
+  $scope.areaFilter = function (proposal) {return filterRepeat('subjectArea','Area',proposal);};
+  $scope.subjectFilter = function (proposal) {return filterRepeat('subject','Subject',proposal);};
 
   $scope.getCountOrg = function(exp){
     return filterFilter( $scope.proposals, {orgName:exp}).length;

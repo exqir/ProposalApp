@@ -558,6 +558,23 @@
 			$stmt->close();
 		}
 
+		public function getSubjectCultures() {
+			$query =
+			"SELECT Name FROM subject_culture";
+			if($stmt = $this->mysqli->query($query)){
+				$res = array();
+				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+					$res[] = $row;
+				}
+				$stmt->free();
+				return $res;
+			} else {
+				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				die;
+			}
+			$stmt->close();
+		}
+
 		public function saveSubjects(&$subjects) {
 			$res = 0;
 			foreach ($subjects as $sub) {

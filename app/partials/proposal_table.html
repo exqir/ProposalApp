@@ -25,7 +25,7 @@
     <td class="smartFilter">
       <div id="orgDD" class="dropdown" uib-dropdown auto-close="disabled">
         <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
-            Organisationen ({{organizations.length}})
+            Organisation ({{organizations.length}})
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="orgDD">
@@ -47,8 +47,38 @@
         </ul>
       </div>
     </td>
-    <td>Bundesland</td>
-    <td>Fachkultur</td>
+    <td class="smartFilter">
+      <div id="stateDD" class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+            Bundesland ({{states.length}})
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="stateDD">
+          <li>
+            <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchState">
+          </li>
+          <li role="separator" class="divider filter"></li>
+          <li ng-repeat="state in states | filterBy: smartSearchState" class="list-item">
+              <input type="checkbox" ng-click="includeState(state)">
+              {{state}}
+          </li>
+        </ul>
+      </div>
+    </td>
+    <td class="smartFilter">
+      <div id="cultureDD" class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+            Fachkultur
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="cultureDD">
+          <li ng-repeat="culture in cultures" class="list-item">
+              <input type="checkbox" ng-click="includeSubjectCulture(culture.Name)">
+              {{culture.Name}}
+          </li>
+        </ul>
+      </div>
+    </td>
     <td>Fachbereich</td>
     <td>Fach</td>
     <td>Erfasst am</td>
@@ -76,7 +106,10 @@
   <span>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</span>
 </div> -->
   <!-- <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter as results"> -->
-  <tr class="table-clickable" ng-repeat="proposal in proposals | filter:search | filter: orgFilter | filter: rawFilter" ng-click="open(proposal.ID)">
+  <tr class="table-clickable"
+  ng-repeat="proposal in proposals | filter:search | filter: orgFilter |
+  filter: rawFilter | filter: stateFilter | filter: cultureFilter"
+  ng-click="open(proposal.ID)">
     <td ng-bind-html="proposal.Raw | convertToStatus"></td>
     <td>{{proposal.Title}}</td>
     <td>
