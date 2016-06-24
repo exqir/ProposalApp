@@ -86,17 +86,24 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     else return "";
   };
 })
-.factory('searchTerm', function () {
-    return "";
+.factory('freeSearch', function ($location) {
+  var factory = {};
+  factory.search = "";
+  factory.setSearch = function(search) {$location.search('search', search);};
+  factory.getSearch = function() {return this.search;};
+  return factory;
 })
-.controller('header', function($scope, searchTerm) {
-  $scope.search = searchTerm;
-  $scope.goSearch = function() {
-    searchTerm = $scope.search;
-  };
+.controller('header', function($scope, freeSearch) {
+  //$scope.search = "";
+  $scope.goSearch = function(search) {freeSearch.setSearch(search);};
 })
-.controller('proposalListCtrl', function($q, $scope, $http, $uibModal, $filter, $injector ,filterFilter,searchTerm, restRessources){
+.controller('proposalListCtrl', function($q, $scope, $http, $uibModal, $filter,
+  $injector, $routeParams, filterFilter, freeSearch, restRessources){
   $scope.states = [];
+  $scope.search = "";
+  $scope.$on('$routeChangeSuccess', function() {
+    $scope.search = $routeParams.search;
+  });
   var rest = $injector.get('restRessources');
   var promises = [];
 
@@ -146,7 +153,6 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     $scope.states = $filter("unique")($scope.states);
   });
 
-  $scope.search = searchTerm;
   $scope.org = [];
   $scope.raw = [];
   $scope.state = [];
