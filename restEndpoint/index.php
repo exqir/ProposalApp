@@ -54,5 +54,12 @@ Flight::route('PUT /organisation/@id/merge/@secId', function($id,$secId){
   $sql->closeConnection();
 });
 
+Flight::route('GET /statistics/organizations/', function(){
+  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  Flight::json($sql->getOrganizationNames());
+  $sql->closeConnection();
+});
+
 Flight::start();
 ?>

@@ -25,6 +25,30 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     .otherwise({redirectTo: '/'});
   }
 ])
+.service('restRessources', function($http){
+  var route = "./..";
+  this.getProposals = function() {
+    return $http.get(route + "/restEndpoint/proposals");
+  };
+  this.getProposal = function(proposalID) {
+    return $http.get(route + "/restEndpoint/proposals/" + proposalID);
+  };
+  this.putProposal = function(proposalID, proposal) {
+    $http.put(route + "/restEndpoint/proposals/" + proposalID, proposal);
+  };
+  this.getOrganizations = function() {
+    return $http.get(route + "/restEndpoint/organizations");
+  };
+  this.getOrganization = function(organizationID) {
+    return $http.get(route + "/restEndpoint/organizations/" + organizationID);
+  };
+  this.putOrganization = function(organizationID, organization) {
+    $http.put(route + "/restEndpoint/organizations/" + organizationID, organization);
+  };
+  this.getStatisticsOrganization = function() {
+    return $http.get(route + "/restEndpoint/statistics/organizations/");
+  };
+})
 .filter('convertSQLdate', function () {
      return function (dateString) {
       var t = dateString.split(/[- :]/);
@@ -62,17 +86,61 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     searchTerm = $scope.search;
   };
 })
-.controller('proposalListCtrl', function($scope, $http, $uibModal, $filter, filterFilter,searchTerm){
-  $http.get("./../restEndpoint/proposals")
-    .then(function (response) {
-      $scope.proposals = response.data;
-    })
-    .then(function () {
-      $scope.organizations = $filter('unique')($scope.proposals, 'orgName');
-      $scope.organizations = $filter('orderBy')($scope.organizations, 'orgName');
-      console.log($scope.organizations);
+.controller('proposalListCtrl', function($q, $scope, $http, $uibModal, $filter, $injector ,filterFilter,searchTerm, restRessources){
+  var rest = $injector.get('restRessources');
+  var promises = [];
+  // var setter = function (func) {
+  //   var deferObject = deferObject || $q.defer();
+  //   func().then(function (response) {
+  //     deferObject.resolve(response.data);
+  //   });
+  //   return deferObject.promise;
+  // };
+  // rest.getProposals()
+  // .then(function(response) {
+  //   $scope.proposals = response.data;
+  // })
+  // .then(function() {
+  //   for(var i = 0; i < $scope.organizations.length; i++) {
+  //     var found = false;
+  //     for(var n = 0; n < $scope.proposals.length; n++) {
+  //       if($scope.organizations[i].Name === $scope.proposals[n].orgName) {
+  //         found = true;
+  //         break;
+  //       }
+  //     }
+  //     if(found === false) $scope.organizations.splice(i,1);
+  //   }
+  // });
+  // rest.getStatisticsOrganization()
+  // .then(function (response) {
+  //   $scope.organizations = response.data;
+  // });
 
-    });
+  promises.push(rest.getProposals());
+  promises.push(rest.getStatisticsOrganization());
+
+  $q.all(promises)
+  .then(function (results) {
+    $scope.proposals = results[0].data;
+    $scope.organizations = results[1].data;
+    var notFound = [];
+    for(var i = 0; i < $scope.organizations.length; i++) {
+      var found = false;
+      for(var n = 0; n < $scope.proposals.length; n++) {
+        if($scope.organizations[i].Name === $scope.proposals[n].orgName) {
+          console.log($scope.organizations[i].Name + "=" + $scope.proposals[n].orgName);
+          found = true;
+          break;
+        }
+      }
+      if(found === false) notFound.push(i);
+    }
+    for (var i = notFound.length - 1; i >= 0; i--) {
+      $scope.organizations.splice(notFound[i],1);
+    }
+  });
+
   $scope.search = searchTerm;
   $scope.org = [];
   $scope.raw = [];
@@ -142,14 +210,15 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
       // });
   };
 })
-.controller('proposalDetailCtrl', function($scope, $http, $routeParams, $uibModalInstance, id){
+.controller('proposalDetailCtrl', function($scope, $http, $routeParams, $uibModalInstance, $injector, restRessources, id){
   var proposalID = id;
-  $http.get("./../restEndpoint/proposals/" + proposalID)
+  var rest = $injector.get('restRessources');
+  rest.getProposal(proposalID)
     .then(function (response) {
       $scope.proposal = response.data;
     });
   $scope.editProposal = function(){
-    $http.put("./../restEndpoint/proposals/" + proposalID, $scope.proposal)
+    rest.putProposal(proposalID, $scope.proposal)
     .then(function (response) {
       console.log(response);
     });
@@ -159,8 +228,9 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
       $uibModalInstance.dismiss();
   };
 })
-.controller('organizationListCtrl', function($scope, $http){
-  $http.get("./../restEndpoint/organizations")
+.controller('organizationListCtrl', function($scope, $http, $injector, restRessources){
+  var rest = $injector.get('restRessources');
+  rest.getOrganizations()
     .then(function (response) {
       $scope.organizations = response.data;
     });
@@ -184,8 +254,9 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
         return organization;
     };
 })
-.controller('dashboardCtrl', function($scope,$http, $filter){
-  $http.get("./../restEndpoint/proposals")
+.controller('dashboardCtrl', function($scope,$http, $filter, $injector, restRessources){
+  var rest = $injector.get('restRessources');
+  rest.getProposals()
     .then(function (response) {
       $scope.proposals = response.data;
     })
