@@ -446,10 +446,24 @@ header .input-group.search {
   margin-right: 20px; }
 
 header .input-group.search input {
-  width: 90%; }
+  width: 81%; }
 
 header .input-group.search input, header header .input-group.search span {
   float: left; }
+
+header span.reset-search {
+  position: absolute;
+  display: inline-block;
+  cursor: pointer;
+  top: 7px;
+  right: 21%;
+  width: 20px;
+  height: 20px;
+  z-index: 1000;
+  background-color: #ccc;
+  border-radius: 20px;
+  text-align: center;
+  color: #333; }
 
 nav.main-navigation {
   display: inline-block; }
