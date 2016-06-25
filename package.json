@@ -4,7 +4,8 @@
   "description": "cooming soon",
   "main": "gulpfile.js",
   "dependencies": {
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "jsurl": "^0.1.4"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
