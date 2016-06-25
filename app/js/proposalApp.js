@@ -94,6 +94,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
 })
 .controller('header', function($scope, freeSearch) {
   //$scope.search = "";
+  //TODO delete function to reset the search phrase and filtering
   $scope.goSearch = function(search) {freeSearch.setSearch(JSURL.stringify(search));};
 })
 .controller('proposalListCtrl', function($q, $scope, $http, $uibModal, $filter,
