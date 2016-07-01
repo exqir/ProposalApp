@@ -438,18 +438,12 @@ header .main-logo {
   margin-left: 50px;
   width: 250px; }
 
-header .input-group.search {
+header div.container-search {
   width: 30%;
   min-width: 200px;
   display: inline-block;
   float: right;
   margin-right: 20px; }
-
-header .input-group.search input {
-  width: 81%; }
-
-header .input-group.search input, header header .input-group.search span {
-  float: left; }
 
 header span.reset-search {
   position: absolute;
@@ -463,7 +457,7 @@ header span.reset-search {
   background-color: #ccc;
   border-radius: 20px;
   text-align: center;
-  color: #333; }
+  color: #fff; }
 
 nav.main-navigation {
   display: inline-block; }

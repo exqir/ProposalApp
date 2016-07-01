@@ -18,14 +18,16 @@
         <li><a href=".#/organizations/">Organisationen</a></li>
       </ul>
     </nav>
-    <div class="input-group search">
-      <input type="text" class="form-control" placeholder="Search for..." ng-model="search">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button" ng-click="goSearch(search)">Suchen!</button>
-      </span>
-      <span ng-show="search.length > 0" class="reset-search" ng-click="resetSearch()">
-        x
-      </span>
+    <div class="container-search">
+      <div class="input-group search">
+        <input type="text" class="form-control" placeholder="Search for..." ng-model="search">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" ng-click="goSearch(search)">Suchen!</button>
+        </span>
+        <span ng-show="search.length > 0" class="reset-search" ng-click="resetSearch()">
+          <i class="fa fa-times fa-1" aria-hidden="true"></i>
+        </span>
+      </div>
     </div>
   </header>
 	<div ng-view class="content">

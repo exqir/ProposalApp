@@ -20,19 +20,19 @@ header {
     margin-left: 50px;
     width: 250px;
   }
-  .input-group.search {
+  div.container-search {
     width: 30%;
     min-width: 200px;
     display: inline-block;
     float: right;
     margin-right: 20px;
   }
-  .input-group.search input {
-    width: 81%;
-  }
-  .input-group.search input, header .input-group.search span {
-    float: left;
-  }
+  // .input-group.search input {
+  //   width: 81%;
+  // }
+  // .input-group.search input, header .input-group.search span {
+  //   float: left;
+  // }
   span.reset-search {
     position: absolute;
     display: inline-block;
@@ -45,7 +45,7 @@ header {
     background-color: #ccc;
     border-radius: 20px;
     text-align: center;
-    color: #333;
+    color: #fff;
   }
 }
 nav.main-navigation {
