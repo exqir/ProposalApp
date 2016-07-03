@@ -8,7 +8,9 @@ class Proposal
     private $title;
     private $description;
     private $organization;
+    private $organizationId;
     private $organizationOptional;
+    private $organizationOptionalId;
     private $orgOpt = 0;
     private $enddate;
     private $link;
@@ -80,6 +82,14 @@ class Proposal
         return $this->organization;
     }
 
+    public function setOrganizationId($id) {
+        $this->organizationId = $id;
+    }
+
+    public function getOrganizationId() {
+        return $this->organizationId;
+    }
+
     public function setOrganizationOptional(organization $organization)
     {
         $this->organizationOptional = $organization;
@@ -88,6 +98,14 @@ class Proposal
     public function getOrganizationOptional()
     {
         return $this->organizationOptional;
+    }
+
+    public function setOrganizationOptId($id) {
+        $this->organizationOptionalId = $id;
+    }
+
+    public function getOrganizationOptId() {
+        return $this->organizationOptionalId;
     }
 
     public function setOrgOpt($int)
@@ -163,6 +181,8 @@ class Proposal
     public function setProposalByArray(array $array)
     {
         $this->setId($array["ID"]);
+        $this->setOrganizationId($array["OrgID"]);
+        $this->setOrganizationOptId($array["OrgOptID"]);
         $this->setTitle($array["Title"]);
         $this->description = $array["Description"];
         $this->titleAdditions = array();
@@ -175,6 +195,9 @@ class Proposal
         $this->titleAdditions["Tenure"]= $array["Tenure"];
         $this->titleAdditions["Ass"] = $array["Ass"];
         $this->raw = "2";
+        $this->setSubjectCulture($array["subject_culture"]);
+        $this->setSubjectArea($array["subject_area"]);
+        $this->setSubject($array["subject"]);
     }
 }
 

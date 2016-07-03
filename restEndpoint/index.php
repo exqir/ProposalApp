@@ -36,7 +36,7 @@ Flight::route('PUT /proposals/@id', function(){
     $proposal = new Proposal();
     $proposal->setProposalByArray($payload);
     $sql->editProposal($proposal);
-    echo $proposal->getTitle();
+    //echo $proposal->getTitle();
 });
 
 Flight::route('GET /organizations/', function(){

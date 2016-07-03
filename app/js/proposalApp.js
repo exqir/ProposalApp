@@ -34,7 +34,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     return $http.get(route + "/proposals/" + proposalID);
   };
   this.putProposal = function(proposalID, proposal) {
-    $http.put(route + "/proposals/" + proposalID, proposal);
+    return $http.put(route + "/proposals/" + proposalID, proposal);
   };
   this.getOrganizations = function() {
     return $http.get(route + "/organizations");
@@ -135,7 +135,6 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     $scope.subjects = result.data;
   });
 
-
   $q.all(promises)
   .then(function (results) {
     var notFound = [];
@@ -210,32 +209,57 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
           resolve: { id: function() {return proposalID;}}
       });
 
-      // modalInstance.result.then(function(resultV)
-      // {
-      //     $scope.chartTypes = resultV.chartTypes;
-      //     $scope.routeSelection = resultV.route;
-      //     $scope.chartType = $scope.chartTypes[0];
-      //     $scope.goTo(true);
-      // });
+      modalInstance.result.then(function()
+      {
+        //TODO reload or infuse changes
+      });
   };
 })
 .controller('proposalDetailCtrl', function($scope, $http, $routeParams, $uibModalInstance, $injector, restRessources, id){
   var proposalID = id;
   var rest = $injector.get('restRessources');
+  var lookup = {};
+  var getLookupObject = function(array,attribute) {
+    var lookup = {};
+    for (var i = 0; i < array.length; i++) {
+      lookup[array[i][attribute]] = array[i];
+    }
+    return lookup;
+  }
   rest.getProposal(proposalID)
     .then(function (response) {
       $scope.proposal = response.data;
-    });
+      rest.getOrganizations()
+      .then(function(result) {
+        $scope.organizations = result.data;
+        var orgLookup = getLookupObject($scope.organizations, "ID");
+        $scope.selectedOrg = orgLookup[$scope.proposal.OrgID];
+      })
+      rest.getCultures()
+      .then(function(result) {
+        $scope.cultures = result.data;
+        var cultureLookup = getLookupObject($scope.cultures, "ID");
+        $scope.selectedCulture = cultureLookup[$scope.proposal.subject_culture];
+      })
+  });
   $scope.editProposal = function(){
+    console.log($scope.proposal);
     rest.putProposal(proposalID, $scope.proposal)
     .then(function (response) {
       console.log(response);
+      if(response.status === 200) $uibModalInstance.dismiss();
     });
   };
   $scope.cancel = function()
   {
       $uibModalInstance.dismiss();
   };
+  $scope.setOrg = function() {
+    $scope.proposal.OrgID = $scope.selectedOrg.ID;
+  }
+  $scope.setCulture = function() {
+    $scope.proposal.subject_culture = $scope.selectedCulture.ID;
+  }
 })
 .controller('organizationListCtrl', function($scope, $http, $injector, restRessources){
   var rest = $injector.get('restRessources');
@@ -243,7 +267,6 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     .then(function (response) {
       $scope.organizations = response.data;
     });
-
     $scope.type = [];
     $scope.includeType = function(type) {
         var i = $scope.type.indexOf(type);

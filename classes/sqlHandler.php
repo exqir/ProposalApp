@@ -364,16 +364,10 @@
 
 		public function editProposal(Proposal $proposal)
 		{
-			// $updateColVal = "";
-			// foreach(array_keys(DB_PROPOSAL) as $key){
-			// 	if($key === end(array_keys(DB_PROPOSAL))) {
-			// 		$updateColVal .= $key . '=' . B_PROPOSAL[$key];
-			// 	}
-			// 	else $updateColVal .= $key . '=' . B_PROPOSAL[$key] . ',';
-			// }
-			// return $updateColVal;
 			$query = "UPDATE proposal SET
 			Title = ?,
+			OrgID = ?,
+			OrgOptID = ?,
 			Description = ?,
 			W1 = ?,
 			W2 = ?,
@@ -383,16 +377,26 @@
 			C3 = ?,
 			Tenure = ?,
 			Ass = ?,
-			Raw = ?
+			Raw = ?,
+			subject_culture = ?,
+			subject_area = ?,
+			subject = ?
 			WHERE id = ?";
 			if($stmt = $this->mysqli->prepare($query)){
 				$title = $proposal->getTitle();
+				$orgId = $proposal->getOrganizationId();
+				$orgOptId = $proposal->getOrganizationOptId();
 				$desc = $proposal->getDescription();
 				$titleAdditions = $proposal->getTitleAdditions();
 				$raw = $proposal->raw;
+				$subjectCulture = $proposal->getSubjectCulture();
+				$subjectArea = $proposal->getSubjectArea();
+				$subject = $proposal->getSubject();
 				$id = $proposal->getId();
-				$stmt->bind_param("ssiiiiiiiiii",
+				$stmt->bind_param("siisiiiiiiiiiiiii",
 				$title,
+				$orgId,
+				$orgOptId,
 				$desc,
 				$titleAdditions['W1'],
 				$titleAdditions['W2'],
@@ -403,6 +407,9 @@
 				$titleAdditions['Tenure'],
 				$titleAdditions['Ass'],
 				$raw,
+				$subjectCulture,
+				$subjectArea,
+				$subject,
 				$id);
 					if($stmt->execute()) {
 						//success
@@ -468,7 +475,7 @@
 		public function getOrganizations()
 		{
 			$query =
-			"SELECT * FROM organizations";
+			"SELECT * FROM organizations WHERE AliasOf IS NULL";
 			if($stmt = $this->mysqli->query($query)){
 				$res = array();
 				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
@@ -560,7 +567,7 @@
 
 		public function getSubjectCultures() {
 			$query =
-			"SELECT Name FROM subject_culture";
+			"SELECT ID, Name FROM subject_culture";
 			if($stmt = $this->mysqli->query($query)){
 				$res = array();
 				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
@@ -577,7 +584,7 @@
 
 		public function getSubjectAreas() {
 			$query =
-			"SELECT Name, ParentID FROM subject_area";
+			"SELECT ID, Name, ParentID FROM subject_area";
 			if($stmt = $this->mysqli->query($query)){
 				$res = array();
 				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
@@ -594,7 +601,7 @@
 
 		public function getSubjects() {
 			$query =
-			"SELECT Name, ParentID FROM subject";
+			"SELECT ID, Name, ParentID FROM subject";
 			if($stmt = $this->mysqli->query($query)){
 				$res = array();
 				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
