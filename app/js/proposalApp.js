@@ -234,12 +234,24 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
         $scope.organizations = result.data;
         var orgLookup = getLookupObject($scope.organizations, "ID");
         $scope.selectedOrg = orgLookup[$scope.proposal.OrgID];
-      })
+      });
       rest.getCultures()
       .then(function(result) {
         $scope.cultures = result.data;
         var cultureLookup = getLookupObject($scope.cultures, "ID");
         $scope.selectedCulture = cultureLookup[$scope.proposal.subject_culture];
+      });
+      rest.getAreas()
+      .then(function(result) {
+        $scope.areas = result.data;
+        var areaLookup = getLookupObject($scope.areas, "ID");
+        $scope.selectedArea = areaLookup[$scope.proposal.subject_area];
+      });
+      rest.getSubjects()
+      .then(function(result) {
+        $scope.subjects = result.data;
+        var subjectLookup = getLookupObject($scope.subjects, "ID");
+        $scope.selectedSubject = subjectLookup[$scope.proposal.subject];
       })
   });
   $scope.editProposal = function(){

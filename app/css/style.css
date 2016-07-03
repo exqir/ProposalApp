@@ -429,6 +429,15 @@ header {
 .block {
   display: block; }
 
+form .form-group .inline-select {
+  display: inline-block;
+  width: 30%;
+  margin-right: 4.5%; }
+  form .form-group .inline-select select.form-control.select-inline {
+    width: 100%; }
+  form .form-group .inline-select:last-child {
+    margin-right: 0; }
+
 .content {
   padding: 5px;
   background-color: #fafafa;
