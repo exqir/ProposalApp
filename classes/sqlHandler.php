@@ -614,6 +614,22 @@
 			$stmt->close();
 		}
 
+		public function getOrganizationTypes() {
+			$query = "SELECT ID, Abbrev FROM types ORDER BY ID";
+			if($stmt = $this->mysqli->query($query)){
+				$res = array();
+				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+					$res[] = $row;
+				}
+				$stmt->free();
+				return $res;
+			} else {
+				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				die;
+			}
+			$stmt->close();
+		}
+
 		public function getSubjectCultures() {
 			$query =
 			"SELECT ID, Name FROM subject_culture";

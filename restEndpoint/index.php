@@ -99,5 +99,12 @@ Flight::route('GET /subjects-lists/subjects/', function(){
   $sql->closeConnection();
 });
 
+Flight::route('GET /statistics/organization-types/', function(){
+  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations types';
+  Flight::json($sql->getOrganizationTypes());
+  $sql->closeConnection();
+});
+
 Flight::start();
 ?>

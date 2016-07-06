@@ -428,6 +428,11 @@ header {
 
 .block {
   display: block; }
+  .block select.form-control.select-inline {
+    width: 9%; }
+    .block select.form-control.select-inline + input.form-control {
+      width: 90%;
+      display: inline-block; }
 
 form .form-group .inline-select {
   display: inline-block;

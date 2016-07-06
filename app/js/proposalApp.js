@@ -57,6 +57,9 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   this.getSubjects = function() {
     return $http.get(route + "/subjects-lists/subjects/");
   };
+  this.getTypeIds = function() {
+    return $http.get(route + "/statistics/organization-types/");
+  }
 })
 .filter('convertSQLdate', function () {
      return function (dateString) {
@@ -225,7 +228,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
       lookup[array[i][attribute]] = array[i];
     }
     return lookup;
-  }
+  };
   rest.getProposal(proposalID)
     .then(function (response) {
       $scope.proposal = response.data;
@@ -252,7 +255,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
         $scope.subjects = result.data;
         var subjectLookup = getLookupObject($scope.subjects, "ID");
         $scope.selectedSubject = subjectLookup[$scope.proposal.subject];
-      })
+      });
   });
   $scope.editProposal = function(){
     console.log($scope.proposal);
@@ -268,10 +271,10 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   };
   $scope.setOrg = function() {
     $scope.proposal.OrgID = $scope.selectedOrg.ID;
-  }
+  };
   $scope.setCulture = function() {
     $scope.proposal.subject_culture = $scope.selectedCulture.ID;
-  }
+  };
 })
 .controller('organizationListCtrl', function($scope, $http, $injector, $uibModal ,restRessources){
   var rest = $injector.get('restRessources');
@@ -329,6 +332,13 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   rest.getOrganization(orgID)
     .then(function (response) {
       $scope.organization = response.data;
+      rest.getTypeIds()
+      .then(function(result) {
+        $scope.types = result.data;
+        console.log($scope.types);
+        var typesLookup = getLookupObject($scope.types, "ID");
+        $scope.selectedType = typesLookup[$scope.organization.TypeID];
+      });
   });
   $scope.editOrganization = function(){
     console.log($scope.organization);
@@ -342,6 +352,10 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   $scope.cancel = function()
   {
       $uibModalInstance.dismiss();
+  };
+  $scope.setType = function() {
+    $scope.organization.TypeID = $scope.selectedType.ID;
+    $scope.organization.Abbrev = $scope.selectedType.Abbrev;
   };
 })
 .controller('dashboardCtrl', function($scope,$http, $filter, $injector, restRessources){

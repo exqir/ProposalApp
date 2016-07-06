@@ -9,6 +9,14 @@ header {
 }
 .block {
   display: block;
+
+  select.form-control.select-inline {
+    width: 9%;
+    & + input.form-control {
+      width: 90%;
+      display: inline-block;
+    }
+  }
 }
 form .form-group .inline-select {
   display: inline-block;
@@ -38,12 +46,6 @@ header {
     float: right;
     margin-right: 20px;
   }
-  // .input-group.search input {
-  //   width: 81%;
-  // }
-  // .input-group.search input, header .input-group.search span {
-  //   float: left;
-  // }
   span.reset-search {
     position: absolute;
     display: inline-block;
