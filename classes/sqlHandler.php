@@ -490,6 +490,55 @@
 			$stmt->close();
 		}
 
+		public function getOrganization($id)
+		{
+			$query =
+			"SELECT * FROM organizations
+			WHERE organizations.ID = $id";
+			echo $query;
+			if($stmt = $this->mysqli->query($query)) {
+				return $stmt->fetch_assoc();
+			} else {
+				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				die;
+			}
+			$stmt->close();
+		}
+
+		public function editOrganization(Organization $organization)
+		{
+			$query = "UPDATE organizations SET
+			TypeID = ?,
+			Abbrev = ?,
+			Name = ?,
+			City = ?,
+			State = ?,
+			Country = ?
+			WHERE id = ?";
+			if($stmt = $this->mysqli->prepare($query)){
+				$typeId = $organization->getTypeId();
+				$abbrev = $organization->getAbbrev();
+				$name = $organization->getName();
+				$city = $organization->getCity();
+				$state = $organization->getState();
+				$country = $organization->getCountry();
+				$id = $organization->getId();
+				$stmt->bind_param("isssssi",
+				$typeId,
+				$abbrev,
+				$name,
+				$city,
+				$state,
+				$country,
+				$id);
+					if($stmt->execute()) {
+						//success
+						$stmt->close();
+						return 1;
+					}
+			}
+		}
+
 		public function mergeOrangization($firstId,$secondId) {
 			$res1 = $this->switchValue($firstId,$secondId,"proposal","OrgID","i");
 			$res2 = $this->switchValue($firstId,$secondId,"proposal","OrgOptID","i");

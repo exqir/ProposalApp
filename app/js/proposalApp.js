@@ -43,7 +43,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     return $http.get(route + "/organizations/" + organizationID);
   };
   this.putOrganization = function(organizationID, organization) {
-    $http.put(route + "/organizations/" + organizationID, organization);
+    return $http.put(route + "/organizations/" + organizationID, organization);
   };
   this.getStatisticsOrganization = function() {
     return $http.get(route + "/statistics/organizations/");
@@ -273,7 +273,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     $scope.proposal.subject_culture = $scope.selectedCulture.ID;
   }
 })
-.controller('organizationListCtrl', function($scope, $http, $injector, restRessources){
+.controller('organizationListCtrl', function($scope, $http, $injector, $uibModal ,restRessources){
   var rest = $injector.get('restRessources');
   rest.getOrganizations()
     .then(function (response) {
@@ -297,6 +297,52 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
 
         return organization;
     };
+
+    $scope.open = function(orgID)
+    {
+        var modalInstance = $uibModal.open
+        ({
+            animation: true,
+            templateUrl: 'partials/organizationModal.html',
+            controller: 'organizationDetailCtrl',
+            size: 'lg',
+            resolve: { id: function() {return orgID;}}
+        });
+
+        modalInstance.result.then(function()
+        {
+          //TODO reload or infuse changes
+        });
+    };
+})
+.controller('organizationDetailCtrl', function($scope, $http, $routeParams, $uibModalInstance, $injector, restRessources, id){
+  var orgID = id;
+  var rest = $injector.get('restRessources');
+  var lookup = {};
+  var getLookupObject = function(array,attribute) {
+    var lookup = {};
+    for (var i = 0; i < array.length; i++) {
+      lookup[array[i][attribute]] = array[i];
+    }
+    return lookup;
+  };
+  rest.getOrganization(orgID)
+    .then(function (response) {
+      $scope.organization = response.data;
+  });
+  $scope.editOrganization = function(){
+    console.log($scope.organization);
+    rest.putOrganization(orgID, $scope.organization)
+    .then(function (response) {
+      console.log(response);
+      console.log(response.data);
+      if(response.status === 200) $uibModalInstance.dismiss();
+    });
+  };
+  $scope.cancel = function()
+  {
+      $uibModalInstance.dismiss();
+  };
 })
 .controller('dashboardCtrl', function($scope,$http, $filter, $injector, restRessources){
   var rest = $injector.get('restRessources');

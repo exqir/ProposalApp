@@ -2,6 +2,7 @@
 require_once 'flight/Flight.php';
 require_once __DIR__ . '/../classes/sqlHandler.php';
 require_once __DIR__ . '/../classes/proposal.php';
+require_once __DIR__ . '/../classes/organization.php';
 require_once __DIR__ . '/../db.php';
 
 Flight::route('GET /', function(){
@@ -46,7 +47,23 @@ Flight::route('GET /organizations/', function(){
   $sql->closeConnection();
 });
 
-Flight::route('PUT /organisation/@id/merge/@secId', function($id,$secId){
+Flight::route('GET /organizations/@id/', function($id){
+  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  echo 'GET organization';
+  Flight::json($sql->getOrganization($id));
+  $sql->closeConnection();
+});
+
+Flight::route('PUT /organizations/@id/', function(){
+  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  echo 'PUT organization';
+  $payload = json_decode(Flight::request()->getBody(), true);
+  $organization = new Organization($payload["Name"]);
+  $organization->setOrganizationByArray($payload);
+  $sql->editOrganization($organization);
+});
+
+Flight::route('PUT /organizations/@id/merge/@secId', function($id,$secId){
   $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
   echo 'GET MERGE';
   $res = $sql->mergeOrangization($id,$secId);

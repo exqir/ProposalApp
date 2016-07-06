@@ -44,7 +44,7 @@
     <td>Bundesland</td>
     <td>Land</td>
   </thead>
-  <tr ng-repeat="organization in organizations | filter: typeFilter | orderBy: 'Name'">
+  <tr class="table-clickable" ng-repeat="organization in organizations | filter: typeFilter | orderBy: 'Name'" ng-click="open(organization.ID)">
     <td>{{organization.ID}}</td>
     <td>
       <span class="label label-default">{{organization.Abbrev}}</span>
@@ -53,6 +53,5 @@
     <td>{{organization.City}}</td>
     <td>{{organization.State}}</td>
     <td>{{organization.Country}}</td>
-    <td><a href=".#/organizations/{{organization.ID}}/">Bearbeiten</a></td>
   </tr>
 </table>
