@@ -66,7 +66,9 @@ Flight::route('PUT /organizations/@id/', function(){
 Flight::route('PUT /organizations/@id/merge/@secId', function($id,$secId){
   $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
   echo 'GET MERGE';
-  $res = $sql->mergeOrangization($id,$secId);
+  //@id: Alias of organization
+  //@secId: Main organization
+  $res = $sql->mergeOrangization($secId,$id);
   echo 'RESULT: '. $res;
   $sql->closeConnection();
 });

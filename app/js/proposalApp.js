@@ -59,7 +59,10 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   };
   this.getTypeIds = function() {
     return $http.get(route + "/statistics/organization-types/");
-  }
+  };
+  this.setAlias = function(id, mainOrg) {
+    return $http.put(route + "/organizations/" + id + "/merge/" + mainOrg);
+  };
 })
 .filter('convertSQLdate', function () {
      return function (dateString) {
@@ -335,9 +338,13 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
       rest.getTypeIds()
       .then(function(result) {
         $scope.types = result.data;
-        console.log($scope.types);
         var typesLookup = getLookupObject($scope.types, "ID");
         $scope.selectedType = typesLookup[$scope.organization.TypeID];
+      });
+      rest.getOrganizations()
+      .then(function(result) {
+        $scope.organizations = result.data;
+        //$scope.organizations = $filter("filter")($scope.organizations, {ID: orgID});
       });
   });
   $scope.editOrganization = function(){
@@ -356,6 +363,13 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   $scope.setType = function() {
     $scope.organization.TypeID = $scope.selectedType.ID;
     $scope.organization.Abbrev = $scope.selectedType.Abbrev;
+  };
+  $scope.setAlias = function(id, mainOrg) {
+    rest.setAlias(id, mainOrg)
+    .then(function(response) {
+      console.log(response);
+      if(response.status === 200) console.log("success");
+    });
   };
 })
 .controller('dashboardCtrl', function($scope,$http, $filter, $injector, restRessources){
