@@ -26,7 +26,7 @@
       <input name="orgCountry" class="form-control" type="text" ng-model="organization.Country">
     </div>
   </form>
-  <div class="form-group">
+  <!-- <div class="form-group">
     <div class="inline-select">
       <label for="orgAlias" class="block">{{organization.Name}} ist die gleiche Organisation wie:</label>
       <select name="orgAlias" class="form-control select-inline"
@@ -35,6 +35,34 @@
       </select>
       <button class="btn btn-primary" type="button" ng-click="setAlias(organization.ID, selectedOrg.ID)">Bestätigen</button>
     </div>
+  </div> -->
+  <div class="form-group">
+    <label class="block">{{organization.Name}} ist die gleiche Organisation wie: {{mainOrg.Name}}</label>
+    <div id="aliasDD" class="dropdown" uib-dropdown auto-close="disabled">
+      <a class="btn btn-default dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+        Organisation auswählen
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="aliasDD">
+        <li>
+          <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchOrg">
+        </li>
+        <li role="separator" class="divider filter"></li>
+        <li ng-repeat="org in organizations | filter: smartSearchOrg" class="list-item">
+            <input type="checkbox" ng-click="setAliasOrganization(org)">
+            {{org.Name}}
+        </li>
+      </ul>
+    </div>
+    <button class="btn btn-primary" type="button" ng-click="setAlias(organization.ID, mainOrg.ID)">Bestätigen</button>
+  </div>
+  <div class="form-group" ng-show="aliases.length > 0">
+    <label class="block" ng-show="aliases.length > 0">{{organization.Name}} hat noch folgende andere Schreibweisen:</label>
+    <ul>
+      <li ng-repeat="alias in aliases">
+        {{alias.Name}}
+      </li>
+    </ul>
   </div>
 </div>
 <div class="modal-footer">

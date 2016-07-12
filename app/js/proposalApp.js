@@ -63,6 +63,9 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   this.setAlias = function(id, mainOrg) {
     return $http.put(route + "/organizations/" + id + "/merge/" + mainOrg);
   };
+  this.getAliases = function(id) {
+    return $http.get(route + "/organizations/" + id + "/alias/");
+  };
 })
 .filter('convertSQLdate', function () {
      return function (dateString) {
@@ -346,6 +349,18 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
         $scope.organizations = result.data;
         //$scope.organizations = $filter("filter")($scope.organizations, {ID: orgID});
       });
+      rest.getAliases(orgID)
+      .then(function(result) {
+        if(!Array.isArray(result.data)) {
+          $scope.aliases = [];
+          if(result.data !== null) $scope.aliases.push(result.data);
+        } else {
+          $scope.aliases = result.data;
+        }
+        console.log($scope.aliases);
+        console.log($scope.aliases.length);
+        //$scope.organizations = $filter("filter")($scope.organizations, {ID: orgID});
+      });
   });
   $scope.editOrganization = function(){
     console.log($scope.organization);
@@ -370,6 +385,9 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
       console.log(response);
       if(response.status === 200) console.log("success");
     });
+  };
+  $scope.setAliasOrganization = function(mainOrg) {
+    $scope.mainOrg = mainOrg;
   };
 })
 .controller('dashboardCtrl', function($scope,$http, $filter, $injector, restRessources){

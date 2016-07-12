@@ -508,6 +508,9 @@ nav.main-navigation ul li {
       .table > thead > tr > td.smartFilter div.dropdown a.btn.dropdown-toggle:hover {
         color: #428bca; }
 
+div#aliasDD.dropdown {
+  display: inline-block; }
+
 .dropdown-menu.list-group #test  {
   margin: 15px 0 0 0; }
 

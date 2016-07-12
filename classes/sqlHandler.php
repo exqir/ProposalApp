@@ -563,6 +563,20 @@
 			}
 		}
 
+		public function getOrganizationsWithAlias($id) {
+			$query =
+			"SELECT * FROM organizations
+			WHERE organizations.AliasOf = $id";
+			echo $query;
+			if($stmt = $this->mysqli->query($query)) {
+				return $stmt->fetch_assoc();
+			} else {
+				printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+				die;
+			}
+			$stmt->close();
+		}
+
 		private function deleteRow($id,$table) {
 			$query = "DELETE FROM $table WHERE ID = ?";
 			if($stmt = $this->mysqli->prepare($query)) {
