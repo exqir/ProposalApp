@@ -56,8 +56,8 @@
     </div>
     <button class="btn btn-primary" type="button" ng-click="setAlias(organization.ID, mainOrg.ID)">Bestätigen</button>
   </div>
-  <div class="form-group" ng-show="aliases.length > 0">
-    <label class="block" ng-show="aliases.length > 0">{{organization.Name}} hat noch folgende andere Schreibweisen:</label>
+  <div class="form-group" ng-hide="aliases.length < 1">
+    <label class="block">{{organization.Name}} hat noch folgende andere Schreibweisen:</label>
     <ul>
       <li ng-repeat="alias in aliases">
         {{alias.Name}}
