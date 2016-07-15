@@ -433,7 +433,7 @@
       LEFT OUTER JOIN subject
       	ON proposal.subject = subject.ID
 			ORDER BY id
-			DESC LIMIT 100";
+			DESC";
 			if($stmt = $this->mysqli->query($query)){
 				$res = array();
 				while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
