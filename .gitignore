@@ -24,3 +24,6 @@ db.php
 
 #IDEA
 .idea/
+
+#Build
+/build
