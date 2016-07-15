@@ -282,8 +282,11 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     $scope.proposal.subject_culture = $scope.selectedCulture.ID;
   };
 })
-.controller('organizationListCtrl', function($scope, $http, $injector, $uibModal ,restRessources){
+.controller('organizationListCtrl', function($scope, $http, $injector, $routeParams ,$uibModal ,restRessources){
   var rest = $injector.get('restRessources');
+  $scope.$on('$routeChangeSuccess', function() {
+    $scope.search = JSURL.parse($routeParams.search);
+  });
   rest.getOrganizations()
     .then(function (response) {
       $scope.organizations = response.data;
