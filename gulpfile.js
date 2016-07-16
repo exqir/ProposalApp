@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
+var rename = require('gulp-rename');
 
 var buildFolder = './build/';
 var input = './app/scss/*.scss';
@@ -29,13 +30,20 @@ gulp.task('watch', function() {
 
 gulp.task('build',['copy-home','copy-rest','copy-php','copy-app','sass'], function () {
     console.log('building project...')
-})
+});
 
-gulp.task('copy-home', function() {
+gulp.task('copy-home',['rename-collector'], function() {
    return gulp
-       .src('./*.{php,php70}')
+       .src('./*.php')
        .pipe(gulp.dest(buildFolder));
 });
+
+gulp.task('rename-collector', function () {
+    return gulp
+        .src(buildFolder + 'proposalCollector.php')
+        .pipe(rename('proposalCollector.php70'))
+        .pipe(gulp.dest(buildFolder));
+})
 
 gulp.task('copy-rest', function () {
     return gulp
@@ -47,31 +55,31 @@ gulp.task('copy-php', function () {
     return gulp
         .src('./classes/*.php')
         .pipe(gulp.dest(buildFolder + 'classes'));
-})
+});
 
 gulp.task('copy-js', function () {
     return gulp
         .src('./app/js/*.{js,map}')
         .pipe(gulp.dest(buildFolder + 'app/js'));
-})
+});
 
 gulp.task('copy-partials', function () {
     return gulp
         .src('./app/partials/*.html')
         .pipe(gulp.dest(buildFolder + 'app/partials'));
-})
+});
 
 gulp.task('copy-assets', function () {
     return gulp
         .src('./app/assets/*.{jpeg,png,jpg}')
         .pipe(gulp.dest(buildFolder + 'app/assets'));
-})
+});
 
 gulp.task('copy-app',['copy-js','copy-assets','copy-partials'], function () {
     return gulp
         .src('./app/*.html')
         .pipe(gulp.dest(buildFolder + 'app'));
-})
+});
 
 
 

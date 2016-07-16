@@ -48,7 +48,7 @@
           <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchOrg">
         </li>
         <li role="separator" class="divider filter"></li>
-        <li ng-repeat="org in organizations | filter: smartSearchOrg" class="list-item">
+        <li ng-repeat="org in organizations | filter: smartSearchOrg" class="list-item" ng-hide="organization.ID == org.ID">
             <input type="checkbox" ng-click="setAliasOrganization(org)">
             {{org.Name}}
         </li>
