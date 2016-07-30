@@ -1,10 +1,11 @@
 <?php
-	require_once 'classes/Util.php';
-	require_once 'classes/proposal.php';
-	require_once 'classes/parser.php';
-	require_once 'classes/organizationParser.php';
-	require_once 'classes/sqlHandler.php';
-	require_once 'classes/subjects.php';
+	require_once 'backend/Util.php';
+	require_once 'backend/models/organization.php';
+	require_once 'backend/models/proposal.php';
+	require_once 'backend/models/subjects.php';
+	require_once 'backend/parser/parser.php';
+	require_once 'backend/parser/organizationParser.php';
+	require_once 'backend/db/sqlHandler.php';
 	require_once 'config.php';
 	require_once 'db.php';
 
