@@ -23,7 +23,6 @@ class Util
 	
 	public static function getParentElementByClass(&$domResult, $tagName, $className)
 	{
-		//echo "getParentElementByClass " . $className . "\n";
 		$result;
 		$parentNodes = $domResult->getElementsByTagName($tagName);
 		
@@ -40,7 +39,9 @@ class Util
 	}
 
 	public static function getJobItemsFromUrl($url) {
-        $parent = Util::getParentElementByClass((new DOMDocument())->loadHTMLFile($url),'div','result-box');
+        $dom = new DOMDocument();
+        $dom->loadHTMLFile($url);
+        $parent = Util::getParentElementByClass($dom,'div','result-box');
         return Util::getElementsByClass($parent,'div','job-item');
     }
 	

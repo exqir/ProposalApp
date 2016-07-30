@@ -1,5 +1,4 @@
 <?php
-	require_once 'organization.php';
 
 	/**
 	* Provides functions to check and save entries via SQL Queries

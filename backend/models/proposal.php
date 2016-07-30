@@ -54,6 +54,7 @@ class Proposal
     public function setTitle($title)
     {
         $this->title = $title;
+        return $this;
     }
 
     public function getTitle()
@@ -82,6 +83,7 @@ class Proposal
     public function setOrganization(Organization $organization)
     {
         $this->organization = $organization;
+        return $this;
     }
 
     public function getOrganization()
@@ -100,6 +102,7 @@ class Proposal
     public function setOrganizationOptional(organization $organization)
     {
         $this->organizationOptional = $organization;
+        return $this;
     }
 
     public function getOrganizationOptional()
@@ -128,6 +131,7 @@ class Proposal
     public function setEnddate($enddate)
     {
 	    $this->enddate = $enddate;
+        return $this;
     }
 
     public function getEnddate()
@@ -138,6 +142,7 @@ class Proposal
     public function setLink($link)
     {
 	    $this->link = $link;
+        return $this;
     }
 
     public function getLink()
@@ -148,6 +153,7 @@ class Proposal
     public function setTitleAdditions(array $titleAdditions)
     {
 	    $this->titleAdditions = $titleAdditions;
+        return $this;
     }
 
     public function getTitleAdditions()

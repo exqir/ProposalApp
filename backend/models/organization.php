@@ -1,11 +1,9 @@
 <?php
-//require_once 'type.php';
 /**
-* Institut Object
 */
 class Organization {
-  private $id;
-  private $typeId;
+  	private $id;
+  	private $typeId;
 	private $name;
 	private $abbrev;
 	private $city;
@@ -15,6 +13,10 @@ class Organization {
 
 	public function __construct($name) {
 		$this->name = $name;
+	}
+
+	public function doesExistIn($db) {
+
 	}
 
 	public function setId($id) {
@@ -90,5 +92,3 @@ class Organization {
       $this->setCountry($array["Country"]);
   }
 }
-
-?>

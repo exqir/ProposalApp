@@ -19,6 +19,14 @@ class OrganizationParser {
     private function getOrganizationFromArray($name, $a) {
         $organization = new Organization($name);
         $organization = $this->getOrganizationWithCity($a[1], $organization);
+
+        return $organization;
+    }
+
+    private function getOptionalOrganizationFromArray($name, $a) {
+        $organization = new Organization($name);
+        $organization = count($a) > 3 ?
+            $this->getOrganizationWithCity($a[2], $organization) : $this->getOrganizationWithCity($a[1], $organization);
         return $organization;
     }
 

@@ -1,5 +1,4 @@
 <?php
-require_once 'classes/subjects.php';
 /**
 * Provides functions to parse a DOM element
 **/
@@ -15,10 +14,11 @@ class Parser
 		$titleNode = Util::getParentElementByClass($domElement, 'a', 'titel');
 		$employerNode = Util::getParentElementByClass($domElement, 'span', 'employer');
 		$proposal =
-			$i->getProposalWithEmployerFromNode($employerNode,
-				$i->getProposalWithTitleAddtionsFromNode($titleNode,
-					$i->getProposalWithLinkFromNode($titleNode,
-						$i->getProposalWithTitleFromNode($titleNode, $proposal))));
+			$i->getProposalWithEnddateFromNode($employerNode,
+				$i->getProposalWithEmployerFromNode($employerNode,
+					$i->getProposalWithTitleAddtionsFromNode($titleNode,
+						$i->getProposalWithLinkFromNode($titleNode,
+							$i->getProposalWithTitleFromNode($titleNode, $proposal)))));
 		return $proposal;
 	}
 
@@ -66,13 +66,12 @@ class Parser
 		return $proposal;
 	}
 
-	/********  TODO: TRENNEN UND IN ANDERE/EIGENE CLASS  ***********/
-
-	public static function getOrganizationFromDomElement($eArray,$organization) {
-		$i = new self();
-		$organization = $i->($domElement,$organization);
-		return $organization;
+	private function getProposalWithEnddateFromNode($node, $proposal) {
+		$e = explode(',',$node->nodeValue);
+		return $proposal->setEnddate(implode('-', array_reverse(explode('.', trim($e[count($e)-1])))));
 	}
+
+	/********  TODO: TRENNEN UND IN ANDERE/EIGENE CLASS  ***********/
 
 	/**
 	* Parses the institut name, city and, if existing, country of a <span> Element with the class='employer' inside the $domElement
