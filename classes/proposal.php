@@ -24,6 +24,13 @@ class Proposal
 
     }
 
+    public static function fromDOMElement($domElement)
+    {
+        $proposal = new self();
+        $proposal = Parser::getProposalFromDomElement($domElement,$proposal);
+        return $proposal;
+    }
+
     public function setId($id)
     {
 	    $this->id = $id;

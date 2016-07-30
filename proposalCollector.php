@@ -1,12 +1,28 @@
 <?php
 	require_once 'classes/Util.php';
 	require_once 'classes/proposal.php';
-	require_once 'classes/sqlHandler.php';
 	require_once 'classes/parser.php';
+	require_once 'classes/organizationParser.php';
+	require_once 'classes/sqlHandler.php';
+	require_once 'classes/subjects.php';
 	require_once 'config.php';
 	require_once 'db.php';
 
 	error_reporting(E_ERROR | E_PARSE);
+
+	$newProposals = collectProposalsFrom(URL);
+
+	function collectProposalsFrom($url) {
+		$db = new sqlConnection(HOST,USER,PW,DB_NAME);
+		return array_map(function($job) {
+			$proposal = Proposal::fromDOMElement($job);
+			if(!$proposal->doesExistIn($db) {
+				$proposal->enrichAttributes($db);
+				$proposal->saveTo($db);
+			}
+		},Util::getJobItemsFromUrl($url));
+	}
+
 	$proposals = array();
 
 	$domResponse = new DomDocument();

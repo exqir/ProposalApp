@@ -38,6 +38,11 @@ class Util
 			}	
 		}		
 	}
+
+	public static function getJobItemsFromUrl($url) {
+        $parent = Util::getParentElementByClass((new DOMDocument())->loadHTMLFile($url),'div','result-box');
+        return Util::getElementsByClass($parent,'div','job-item');
+    }
 	
 }
 	

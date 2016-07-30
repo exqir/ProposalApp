@@ -10,43 +10,68 @@ class Parser
 
 	}
 
+	public static function getProposalFromDomElement($domElement,$proposal) {
+		$i = new self();
+		$titleNode = Util::getParentElementByClass($domElement, 'a', 'titel');
+		$employerNode = Util::getParentElementByClass($domElement, 'span', 'employer');
+		$proposal =
+			$i->getProposalWithEmployerFromNode($employerNode,
+				$i->getProposalWithTitleAddtionsFromNode($titleNode,
+					$i->getProposalWithLinkFromNode($titleNode,
+						$i->getProposalWithTitleFromNode($titleNode, $proposal))));
+		return $proposal;
+	}
+
+	/**
+	 *
+	 **/
+	private function getProposalWithTitleFromNode($node,$proposal) {
+		return $proposal->setTitle(trim($node->nodeValue));
+	}
+
+	private function getProposalWithLinkFromNode($node,$proposal) {
+		return $proposal->setLink($node->getAttribute('href'));
+	}
+
+	private function getProposalWithTitleAddtionsFromNode($node,$proposal) {
+		return $proposal->setTitleAdditions($this->getTitleAdditionsFromTitle($node));
+	}
+
 	/**
 	* Parses additional information (C1,C2,..) from the $title and returns an array with the type (C1,C2,..) as key and a 1 as value when found and 0 when not
 	**/
-	public function searchTitleAdditions($title)
+	private function getTitleAdditionsFromTitle($node)
 	{
 		$resultArray = TITLEADDITIONS;
 		$titleArray = TITLEEXPRESSIONS;
 		foreach (array_keys($titleArray) as $addition) {
 			foreach ($titleArray[$addition] as $expression) {
-				if(strpos($title,$expression) !== false) {
+				if(strpos($node,$expression) !== false) {
 					$resultArray[$addition] = 1;
 					break;
 				}
 			}
 		}
 		if($resultArray["Tenure"] == 1) {
-			if(strpos($title,"ohne Tenure") !== false || strpos($title,"keine Tenure") !== false) {
+			if(strpos($node,"ohne Tenure") !== false || strpos($node,"keine Tenure") !== false) {
 				$resultArray["Tenure"] = -1;
 			}
 		}
 		return $resultArray;
 	}
 
-	/**
-	* Parses title, link and titleAdditions from an <a> Element with the class='titel' inside the $domElement
-	* and sets them for the trasmitted $proposal object
-	**/
-	public function parseTitle(Proposal &$proposal, $domElement)
-	{
-		$title = Util::getParentElementByClass($domElement, 'a', 'titel');
-		$titleString = $title->nodeValue;
-		$titleString = trim($titleString);
-		$proposal->setTitle($titleString);
-		$link = $title->getAttribute('href');
-		$proposal->setLink($link);
-		$titleAdditions = $this->searchTitleAdditions($title->nodeValue);
-		$proposal->setTitleAdditions($titleAdditions);
+	private function getProposalWithEmployerFromNode($node, $proposal) {
+		$e = explode(',',$node->nodeValue);
+		$proposal = OrganizationParser::getProposalWithOrganizationsFromArray($e, $proposal);
+		return $proposal;
+	}
+
+	/********  TODO: TRENNEN UND IN ANDERE/EIGENE CLASS  ***********/
+
+	public static function getOrganizationFromDomElement($eArray,$organization) {
+		$i = new self();
+		$organization = $i->($domElement,$organization);
+		return $organization;
 	}
 
 	/**

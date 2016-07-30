@@ -3,8 +3,7 @@
 /**
 * Institut Object
 */
-class Organization
-{
+class Organization {
   private $id;
   private $typeId;
 	private $name;
@@ -14,94 +13,75 @@ class Organization
 	private $country = "";
 	private $type;
 
-	public function __construct($name)
-	{
+	public function __construct($name) {
 		$this->name = $name;
-		//$this->city = $city;
 	}
 
-	public function setId($id)
-    {
+	public function setId($id) {
 	    $this->id = $id;
     }
 
-    public function getId()
-    {
+    public function getId() {
 	    return $this->id;
     }
 
-    public function setTypeId($typeId)
-    {
+    public function setTypeId($typeId) {
 	    $this->typeId = $typeId;
     }
 
-    public function getTypeId()
-    {
+    public function getTypeId() {
 	    return $this->typeId;
     }
 
-	public function setName($name)
-	{
+	public function setName($name) {
 		$this->name = $name;
 	}
 
-	public function getName()
-	{
+	public function getName() {
 		return $this->name;
 	}
 
-	public function setAbbrev($abbrev)
-	{
+	public function setAbbrev($abbrev) {
 		$this->abbrev = $abbrev;
 	}
 
-	public function getAbbrev()
-	{
+	public function getAbbrev() {
 		return $this->abbrev;
 	}
 
-	public function setCity($city)
-	{
+	public function setCity($city) {
 		$this->city = $city;
 	}
 
-	public function getCity()
-	{
+	public function getCity() {
 		return $this->city;
 	}
 
-	public function setState($state)
-	{
+	public function setState($state) {
 		$this->state = $state;
 	}
 
-	public function getState()
-	{
+	public function getState() {
 		return $this->state;
 	}
 
-	public function setCountry($country)
-	{
+	public function setCountry($country) {
 		$this->country = $country;
 	}
 
-	public function getCountry()
-	{
+	public function getCountry() {
 		return $this->country;
 	}
 
-	public function setInstType(Type $type)
-	{
+	public function setInstType(Type $type) {
 		$this->type = $type;
 	}
 
-	public function getInstType()
-	{
+	public function getInstType() {
 		return $this->type;
 	}
 
-  public function setOrganizationByArray(array $array)
-  {
+  	public function setOrganizationByArray(array $array) {
       $this->setId($array["ID"]);
       $this->setTypeId($array["TypeID"]);
       $this->setAbbrev($array["Abbrev"]);
