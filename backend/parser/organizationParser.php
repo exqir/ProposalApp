@@ -17,20 +17,16 @@ class OrganizationParser {
     }
 
     private function getOrganizationFromArray($name, $a) {
-        $organization = new Organization($name);
-        $organization = $this->getOrganizationWithCity($a[1], $organization);
-        return $organization;
+        return $this->getOrganizationWithCity($a[1], new Organization($name));
     }
 
     private function getOptionalOrganizationFromArray($name, $a) {
-        $organization = new Organization($name);
-        $organization = count($a) > 3 ?
-            $this->getOrganizationWithCity($a[2], $organization) : $this->getOrganizationWithCity($a[1], $organization);
-        return $organization;
+        return count($a) > 3 ?
+            $this->getOrganizationWithCity($a[2], new Organization($name)) :
+            $this->getOrganizationWithCity($a[1], new Organization($name));
     }
 
     private function getOrganizationWithCity($string, $organization) {
-        $organization->setCity(explode('(',$string)[0]);
-        return $organization;
+        return $organization->setCity(explode('(',$string)[0]);
     }
 }

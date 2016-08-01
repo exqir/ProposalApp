@@ -1,50 +1,31 @@
 <?php
 
-class OrganizationSqlQueries {
-    private $db;
+class OrganizationSqlQueries extends SqlConnection {
+    protected $mysqli;
 
     public function __construct($db) {
-        $this->db = $db;
+        $this->mysqli = $db;
     }
 
-    public function existsIn($mysqli,$organization) {
-        $name = $organization->getName();
-        $query = "SELECT ID, TypeID, AliasOf FROM organizations WHERE Name = ?";
-        if($stmt = $mysqli->prepare($query)) {
-            $stmt->bind_param("s",$name);
-            if($stmt->execute()) {
-                $stmt->store_result();
-                $stmt->bind_result($id,$typeId,$aliasId);
-                if($stmt->num_rows === 0) {
-                    //Found no organization with the given name
-                    $res = 0;
-                } else if($stmt->num_rows === 1){
-                    //Found a organization with the given name
-                    $stmt->fetch();
-                    if($aliasId !== NULL) {
-                        //Found organization is an alias of another organization
-                        //Sets the id to the id of the main organization
-                        //TODO Change name to the name of the main organization
-                        echo "WRONG TURN" . $id . " <br />";
-                        $organization->setId($aliasId);
-                        $organization->setTypeId($typeId);
-                        $res = 1;
-                    } else {
-                        //Found organization is the main organization
-                        echo "Setting ID to: " . $id . "<br />";
-                        $organization->setId($id);
-                        $organization->setTypeId($typeId);
-                        $res = 1;
-                    }
-                } else $res = -3;
-                $stmt->close();
-                echo "checkOrganizationExistance Intern: " . $res . "<br />";
-                echo "checkIntern ID: " . $organization->getId() . "<br />";
-                return $res;
-            } else return -2;
-        } else {
-            printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
-            return -1;
-        }
+    public function hasAnEntryFor($organization) {
+        $query = "SELECT ID, AliasOf FROM organizations WHERE Name = ?";
+        return $this->sqlQuery($query,array($organization->getName()),'existsInDB',$organization);
+    }
+
+    protected function existsInDB($stmt, $organization) {
+        $stmt->store_result();
+        //$stmt->bind_result($orgId,$orgOptId);
+        if($stmt->num_rows === 0) {
+            return 0; // Found no organizatoin with the given name
+        } else if($stmt->num_rows === 1 ){
+            return $this->getOrganizationIdFromDB($stmt); // Found an organization with the given name, returning it's id
+        } else return -1; // No unique organization identified
+    }
+
+    private function getOrganizationIdFromDB($stmt) {
+        $stmt->bind_result($id,$alias);
+        $stmt->fetch();
+        if($alias !== NULL) return $alias; // Organization is an alias, returning the id of the main organization
+        else return $id;
     }
 }

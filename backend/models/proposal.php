@@ -33,6 +33,10 @@ class Proposal {
         return $db->hasAnEntryFor($this);
     }
 
+    public function getProposalWithEnrichedAttributes($connection) {
+        return ProposalParser::getEnrichedProposal($this);
+    }
+
     public function setId($id) {
 	    $this->id = $id;
     }

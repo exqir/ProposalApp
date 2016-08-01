@@ -6,11 +6,9 @@ class SqlConnection {
     /**
      * Establishes a connection to the db and sets the charset to utf8
      **/
-    public function __construct($host, $user, $pw, $db_name)
-    {
+    public function __construct($host, $user, $pw, $db_name) {
         $this->mysqli = new mysqli($host, $user, $pw, $db_name);
-        if(mysqli_connect_errno())
-        {
+        if(mysqli_connect_errno()) {
             printf("Connect failed: %s\n", mysqli_connect_error());
             exit();
         }
@@ -27,8 +25,7 @@ class SqlConnection {
     /**
      * Terminates the connection to the db
      **/
-    public function closeConnection()
-    {
+    public function closeConnection() {
         $this->mysqli->close();
     }
 
@@ -38,8 +35,7 @@ class SqlConnection {
                 array_merge(array($this->getParameterTypesAsString($params)),$params));
             call_user_func_array(array($stmt,'bind_param'), $bindParams);
             if($stmt->execute()) {
-                echo "success";
-                call_user_func(array($this,$success),$stmt,$referenceObject);
+                return call_user_func(array($this,$success),$stmt,$referenceObject);
             } else {
                 printf('errno: %d, error: %s', $stmt->errno, $stmt->error);
                 return -2; // Execute Error

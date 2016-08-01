@@ -15,8 +15,9 @@ class Organization {
 		$this->name = $name;
 	}
 
-	public function doesExistIn($db) {
-
+	public function doesExistIn($connection) {
+		$db = new OrganizationSqlQueries($connection->getConnection());
+		return $db->hasAnEntryFor($this);
 	}
 
 	public function setId($id) {
@@ -53,6 +54,7 @@ class Organization {
 
 	public function setCity($city) {
 		$this->city = $city;
+		return $this;
 	}
 
 	public function getCity() {
@@ -84,11 +86,11 @@ class Organization {
 	}
 
   	public function setOrganizationByArray(array $array) {
-      $this->setId($array["ID"]);
-      $this->setTypeId($array["TypeID"]);
-      $this->setAbbrev($array["Abbrev"]);
-      $this->setCity($array["City"]);
-      $this->setState($array["State"]);
-      $this->setCountry($array["Country"]);
-  }
+		$this->setId($array["ID"]);
+		$this->setTypeId($array["TypeID"]);
+		$this->setAbbrev($array["Abbrev"]);
+		$this->setCity($array["City"]);
+		$this->setState($array["State"]);
+		$this->setCountry($array["Country"]);
+	}
 }
