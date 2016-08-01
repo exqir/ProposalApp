@@ -1,16 +1,16 @@
 <?php
 
-class organizationDB {
+class OrganizationSqlQueries {
     private $db;
 
     public function __construct($db) {
         $this->db = $db;
     }
 
-    public function existsIn(Organization &$organization){
+    public function existsIn($mysqli,$organization) {
         $name = $organization->getName();
         $query = "SELECT ID, TypeID, AliasOf FROM organizations WHERE Name = ?";
-        if($stmt = $this->mysqli->prepare($query)) {
+        if($stmt = $mysqli->prepare($query)) {
             $stmt->bind_param("s",$name);
             if($stmt->execute()) {
                 $stmt->store_result();

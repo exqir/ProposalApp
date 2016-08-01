@@ -1,5 +1,5 @@
 <?php
- require_once 'classes/parser.php';
+ require_once 'classes/proposalParser.php';
  require_once 'classes/subjects.php';
  require_once 'classes/proposal.php';
  require_once 'classes/sqlHandler.php';

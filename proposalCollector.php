@@ -3,9 +3,11 @@
 	require_once 'backend/models/organization.php';
 	require_once 'backend/models/proposal.php';
 	require_once 'backend/models/subjects.php';
-	require_once 'backend/parser/parser.php';
+	require_once 'backend/parser/proposalParser.php';
 	require_once 'backend/parser/organizationParser.php';
 	require_once 'backend/db/sqlConnection.php';
+	require_once 'backend/db/organizationSqlQueries.php';
+	require_once 'backend/db/proposalSqlQueries.php';
 	require_once 'config.php';
 	require_once 'db.php';
 
@@ -15,13 +17,13 @@
 
 	function collectProposalsFrom($url) {
 		$db = new SqlConnection(HOST,USER,PW,DB_NAME);
-		return array_map(function($job) {
+		return array_map(function($job) use ($db) {
 			$proposal = Proposal::fromDOMElement($job);
 			if(!$proposal->doesExistIn($db)) {
 				$proposal->enrichAttributes($db);
 				$proposal->saveTo($db);
 				return $proposal;
-			} else return null;
+			}
 		},Util::getJobItemsFromUrl($url));
 	}
 

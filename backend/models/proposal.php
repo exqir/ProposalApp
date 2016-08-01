@@ -1,8 +1,7 @@
 <?php
 require_once 'organization.php';
 
-class Proposal
-{
+class Proposal {
     private $id;
     private $typeId;
     private $title;
@@ -19,51 +18,47 @@ class Proposal
     private $subject_area;
     private $subject;
 
-    public function __construct()
-    {
+    public function __construct() {
 
     }
 
-    public static function fromDOMElement($domElement)
-    {
+    public static function fromDOMElement($domElement) {
         $proposal = new self();
-        $proposal = Parser::getProposalFromDomElement($domElement,$proposal);
+        $proposal = ProposalParser::getProposalFromDomElement($domElement,$proposal);
         return $proposal;
     }
 
-    public function setId($id)
-    {
+    public function doesExistIn($connection) {
+        $db = new ProposalSqlQueries($connection->getConnection());
+        return $db->hasAnEntryFor($this);
+    }
+
+    public function setId($id) {
 	    $this->id = $id;
     }
 
-    public function getId()
-    {
+    public function getId() {
 	    return $this->id;
     }
 
-    public function setTypeId($typeId)
-    {
+    public function setTypeId($typeId) {
 	    $this->typeId = $typeId;
     }
 
-    public function getTypeId()
-    {
+    public function getTypeId() {
 	    return $this->typeId;
     }
 
-    public function setTitle($title)
-    {
+    public function setTitle($title) {
         $this->title = $title;
         return $this;
     }
 
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
-    public function setDescription(string $link)
-    {
+    public function setDescription(string $link) {
         $http = BASEURL . $link;
         $domDoc = new DomDocument();
 		$domDoc->loadHTMLFile($http);
@@ -75,19 +70,16 @@ class Proposal
       $this->desc = $desc;
     }
 
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
-    public function setOrganization(Organization $organization)
-    {
+    public function setOrganization(Organization $organization) {
         $this->organization = $organization;
         return $this;
     }
 
-    public function getOrganization()
-    {
+    public function getOrganization() {
         return $this->organization;
     }
 
@@ -99,14 +91,12 @@ class Proposal
         return $this->organizationId;
     }
 
-    public function setOrganizationOptional(organization $organization)
-    {
+    public function setOrganizationOptional(organization $organization) {
         $this->organizationOptional = $organization;
         return $this;
     }
 
-    public function getOrganizationOptional()
-    {
+    public function getOrganizationOptional() {
         return $this->organizationOptional;
     }
 
@@ -118,81 +108,66 @@ class Proposal
         return $this->organizationOptionalId;
     }
 
-    public function setOrgOpt($int)
-    {
+    public function setOrgOpt($int) {
 	    $this->orgOpt = $int;
     }
 
-    public function getOrgOpt()
-    {
+    public function getOrgOpt() {
 	    return $this->orgOpt;
     }
 
-    public function setEnddate($enddate)
-    {
+    public function setEnddate($enddate) {
 	    $this->enddate = $enddate;
         return $this;
     }
 
-    public function getEnddate()
-    {
+    public function getEnddate() {
 	    return $this->enddate;
     }
 
-    public function setLink($link)
-    {
+    public function setLink($link) {
 	    $this->link = $link;
         return $this;
     }
 
-    public function getLink()
-    {
+    public function getLink() {
 	    return $this->link;
     }
 
-    public function setTitleAdditions(array $titleAdditions)
-    {
+    public function setTitleAdditions(array $titleAdditions) {
 	    $this->titleAdditions = $titleAdditions;
         return $this;
     }
 
-    public function getTitleAdditions()
-    {
+    public function getTitleAdditions() {
 	    return $this->titleAdditions;
     }
 
-    public function setSubjectCulture($id)
-    {
+    public function setSubjectCulture($id) {
 	    $this->subject_culture = $id;
     }
 
-    public function getSubjectCulture()
-    {
+    public function getSubjectCulture() {
 	    return $this->subject_culture;
     }
 
-    public function setSubjectArea($id)
-    {
+    public function setSubjectArea($id) {
 	    $this->subject_area = $id;
     }
 
-    public function getSubjectArea()
-    {
+    public function getSubjectArea() {
 	    return $this->subject_area;
     }
 
-    public function setSubject($id)
-    {
+    public function setSubject($id) {
 	    $this->subject = $id;
     }
 
-    public function getSubject()
-    {
+    public function getSubject() {
 	    return $this->subject;
     }
 
-    public function setProposalByArray(array $array)
-    {
+    public function setProposalByArray(array $array) {
         $this->setId($array["ID"]);
         $this->setOrganizationId($array["OrgID"]);
         $this->setOrganizationOptId($array["OrgOptID"]);
@@ -213,5 +188,3 @@ class Proposal
         $this->setSubject($array["subject"]);
     }
 }
-
-?>
