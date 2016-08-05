@@ -33,9 +33,17 @@ class Proposal {
         return $db->hasAnEntryFor($this);
     }
 
-    public function getProposalWithEnrichedAttributes($connection) {
-        return ProposalParser::getEnrichedProposal($this);
+    public function getProposalWithEnrichedAttributes($connection, $link) {
+        $this->setDescription(ProposalParser::getDescriptionFromLink($link));
+        //TODO subjects
+        $this->setOrganization($this->getOrganization()->getOrganizationWithEnrichedAttributes($connection));
+        if($this->getOrganizationOptional() !== NULL)
+            $this->setOrganizationOptional(
+                $this->getOrganizationOptional()->getOrganizationWithEnrichedAttrbutes($connection));
+        return $this;
     }
+
+    //private function
 
     public function setId($id) {
 	    $this->id = $id;
@@ -62,12 +70,8 @@ class Proposal {
         return $this->title;
     }
 
-    public function setDescription(string $link) {
-        $http = BASEURL . $link;
-        $domDoc = new DomDocument();
-		$domDoc->loadHTMLFile($http);
-		$jwWrapper = Util::getParentElementByClass($domDoc, 'div', 'jw-wrapper');
-        $this->description = trim($jwWrapper->nodeValue);
+    public function setDescription($desc) {
+        $this->desc = $desc;
     }
 
     public function setDescriptionManually(string $desc) {

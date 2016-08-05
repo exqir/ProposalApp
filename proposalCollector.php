@@ -20,7 +20,7 @@
 		return array_map(function($job) use ($db) {
 			$proposal = Proposal::fromDOMElement($job);
 			if(!$proposal->doesExistIn($db)) {
-				$proposal = $proposal->getProposalWithEnrichedAttributes($db);
+				$proposal = $proposal->getProposalWithEnrichedAttributes($db,$proposal->getLink());
 				//$proposal->saveTo($db);
 				return $proposal;
 			}

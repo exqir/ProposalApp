@@ -31,9 +31,11 @@ class SqlConnection {
 
     protected function sqlQuery($query, $params, $success,$referenceObject) {
         if($stmt = $this->mysqli->prepare($query)) {
-            $bindParams = $this->getParamsAsArrayByReference(
-                array_merge(array($this->getParameterTypesAsString($params)),$params));
-            call_user_func_array(array($stmt,'bind_param'), $bindParams);
+            if($params !== NULL) {
+                $bindParams = $this->getParamsAsArrayByReference(
+                    array_merge(array($this->getParameterTypesAsString($params)),$params));
+                call_user_func_array(array($stmt,'bind_param'), $bindParams);
+            }
             if($stmt->execute()) {
                 return call_user_func(array($this,$success),$stmt,$referenceObject);
             } else {

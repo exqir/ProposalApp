@@ -20,6 +20,19 @@ class Organization {
 		return $db->hasAnEntryFor($this);
 	}
 
+	public function getOrganizationWithEnrichedAttributes($connection) {
+		$db = new OrganizationSqlQueries($connection->getConnection());
+		$id = $db->hasAnEntryFor($this);
+		if($id > 0) {
+			$this->setId();
+			return $this;
+		}
+		else {
+			$organization = $db->getOrganizationWithTypeAndAbbrev($this);
+			return new LocationService()->$this->getOrganizationWithEnrichedAttributes($organization);
+		}
+	}
+
 	public function setId($id) {
 	    $this->id = $id;
     }
@@ -30,6 +43,7 @@ class Organization {
 
     public function setTypeId($typeId) {
 	    $this->typeId = $typeId;
+		return $this;
     }
 
     public function getTypeId() {
@@ -46,6 +60,7 @@ class Organization {
 
 	public function setAbbrev($abbrev) {
 		$this->abbrev = $abbrev;
+		return $this;
 	}
 
 	public function getAbbrev() {
@@ -63,6 +78,7 @@ class Organization {
 
 	public function setState($state) {
 		$this->state = $state;
+		return $this;
 	}
 
 	public function getState() {
@@ -71,6 +87,7 @@ class Organization {
 
 	public function setCountry($country) {
 		$this->country = $country;
+		return $this;
 	}
 
 	public function getCountry() {

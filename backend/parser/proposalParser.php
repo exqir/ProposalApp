@@ -21,8 +21,10 @@ class ProposalParser
 		return $proposal;
 	}
 
-	public static function getEnrichedProposal($proposal) {
-
+	public static function getDescriptionFromLink($link) {
+		$domDoc = new DomDocument();
+		$domDoc->loadHTMLFile(BASEURL . $link);
+		return trim((Util::getParentElementByClass($domDoc, 'div', 'jw-wrapper'))->nodeValue);
 	}
 
 	/**
