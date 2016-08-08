@@ -9,6 +9,10 @@ class SubjectGroup {
     $this->name = $name;
   }
 
+  public static function fromXPath($xpath) {
+    return SubjectParser::getSubjectsFromXPath($xpath);
+  }
+
   public function getId() {
     return $this->id;
   }
@@ -28,6 +32,9 @@ class SubjectGroup {
   public function addSubjectChildren($child) {
     $this->subjectChildren[] = $child;
   }
+   public function setSubjectChildren($children) {
+     $this->subjectChildren = $children;
+   }
 
   public function getSubjectGroup() {
    return $this->subjectChildren;

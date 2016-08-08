@@ -39,7 +39,7 @@ class SqlConnection {
             if($stmt->execute()) {
                 return call_user_func(array($this,$success),$stmt,$referenceObject);
             } else {
-                printf('errno: %d, error: %s', $stmt->errno, $stmt->error);
+                printf('errno: %d, error: %s called by: %s', $stmt->errno, $stmt->error, $success);
                 return -2; // Execute Error
             }
         } else {

@@ -9,7 +9,6 @@ class Organization {
 	private $city;
 	private $state = "";
 	private $country = "";
-	private $type;
 
 	public function __construct($name) {
 		$this->name = $name;
@@ -29,7 +28,8 @@ class Organization {
 		}
 		else {
 			$organization = $db->getOrganizationWithTypeAndAbbrev($this);
-			return new LocationService()->$this->getOrganizationWithEnrichedAttributes($organization);
+			$ls = new LocationService();
+			return $ls->getOrganizationWithStateAndCountry($organization);
 		}
 	}
 
@@ -92,14 +92,6 @@ class Organization {
 
 	public function getCountry() {
 		return $this->country;
-	}
-
-	public function setInstType(Type $type) {
-		$this->type = $type;
-	}
-
-	public function getInstType() {
-		return $this->type;
 	}
 
   	public function setOrganizationByArray(array $array) {

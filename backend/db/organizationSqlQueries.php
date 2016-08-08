@@ -13,13 +13,14 @@ class OrganizationSqlQueries extends SqlConnection {
     }
 
     public function getOrganizationWithTypeAndAbbrev(Organization $organization) {
-        $organization = $this->sqlQuery("SELECT TypeID, Keyword, Strict FROM keywords",NULL,'getOrganizationWithType',$organization);
-        return $this->sqlQuery("SELECT Abbrev FROM types WHERE ID=?",array($organization->getTypeId()),'getOrganizationWithAbbrev', $organization);
+        $organization = $this->sqlQuery("SELECT TypeID, Keyword, Strict FROM keywords",array(),'getOrganizationWithType',$organization);
+        if ($organization->getTypeId() !== NULL) return $this->sqlQuery("SELECT Abbrev FROM types WHERE ID=?",
+            array($organization->getTypeId()),'getOrganizationWithAbbrev', $organization);
+        else return $organization;
     }
 
     protected function existsInDB($stmt, Organization $organization) {
         $stmt->store_result();
-        //$stmt->bind_result($orgId,$orgOptId);
         if($stmt->num_rows === 0) {
             return 0; // Found no organization with the given name
         } else if($stmt->num_rows === 1 ){
@@ -37,7 +38,8 @@ class OrganizationSqlQueries extends SqlConnection {
     protected function getOrganizationWithType($stmt, Organization $organization) {
         $stmt->store_result();
         $stmt->bind_result($typeId,$keyword,$strict);
-        $type = 0;
+        $name = $organization->getName();
+        $type = NULL;
         while($stmt->fetch()) {
             if($strict) {
                 //Compares the name and keyword stricly per regex, only when keyword is a single word it matches

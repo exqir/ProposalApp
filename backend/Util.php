@@ -35,4 +35,10 @@ class Util {
         $parent = Util::getParentElementByClass($dom,'div','result-box');
         return Util::getElementsByClass($parent,'div','job-item');
     }
+
+    public static function getXPathFromUrl($url) {
+        $dom = new DomDocument();
+        $dom->loadHTMLFile($url);
+        return new DOMXPath($dom);
+    }
 }

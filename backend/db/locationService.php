@@ -2,19 +2,20 @@
 
 class LocationService {
     private $serviceUrl = "https://maps.googleapis.com/maps/api/place/";
+    private $language = "de";
 
     public function __construct() {
 
     }
 
-    public function getOrganizationWithStaateAndCountry(Organization $organization) {
+    public function getOrganizationWithStateAndCountry(Organization $organization) {
         $placeId = $this->getPlaceIdFromAPI($organization->getCity());
         $placeDetails = $this->getPlaceDetailsFromAPI($placeId);
         return $this->getOrganizationWithCountry(
-            $this->getOrganizationWithStaate($organization, $placeDetails),$placeDetails);
+            $this->getOrganizationWithState($organization, $placeDetails),$placeDetails);
     }
 
-    private function getOrganizationWithStaate(Organization $organization,$placeDetails) {
+    private function getOrganizationWithState(Organization $organization,$placeDetails) {
         return $organization->setState($this->getStateFromPlaceDetails($placeDetails));
     }
 
@@ -22,8 +23,8 @@ class LocationService {
         return $organization->setCountry($this->getCountryFromPlaceDetails($placeDetails));
     }
 
-    private function getPlaceIdFromAPI($organizationName) {
-        $searchUrl = $this->serviceUrl . "textsearch/xml?query=" . urlencode($organizationName) . "&key=" . APIKEY;
+    private function getPlaceIdFromAPI($city) {
+        $searchUrl = $this->serviceUrl . "textsearch/xml?query=" . urlencode($city) . "&key=" . APIKEY . "&language=" . $this->language;
         $s = file_get_contents($searchUrl);
         $dom = new DomDocument();
         $dom->loadXML($s);
@@ -34,7 +35,7 @@ class LocationService {
     }
 
     private function getPlaceDetailsFromAPI($placeId) {
-        $detailUrl = $this->serviceUrl . "details/xml?placeid=" . $placeId . "&key=" . APIKEY;
+        $detailUrl = $this->serviceUrl . "details/xml?placeid=" . $placeId . "&key=" . APIKEY . "&language=" . $this->language;
         $s = file_get_contents($detailUrl);
         $dom = new DomDocument();
         $dom->loadXML($s);
@@ -58,7 +59,7 @@ class LocationService {
         $state = "";
         foreach ($componentList as $comp) {
             $type = $comp->getElementsByTagName('type')->item(0)->nodeValue;
-            if(stripos($type,"administrative_area_level_1") !== false) { //TODO change sring to match country
+            if(stripos($type,"country") !== false) {
                 $state = $comp->getElementsByTagName('long_name')->item(0)->nodeValue;
             }
         }
