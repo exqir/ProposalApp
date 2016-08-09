@@ -32,12 +32,13 @@ class SubjectGroup {
   public function addSubjectChildren($child) {
     $this->subjectChildren[] = $child;
   }
-   public function setSubjectChildren($children) {
-     $this->subjectChildren = $children;
-   }
 
-  public function getSubjectGroup() {
-   return $this->subjectChildren;
+  public function setSubjectChildren($children) {
+    $this->subjectChildren = $children;
+    return $this;
+  }
+
+  public function getSubjectChildren() {
+    return $this->subjectChildren;
   }
 }
-?>

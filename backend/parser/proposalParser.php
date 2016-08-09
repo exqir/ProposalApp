@@ -27,6 +27,14 @@ class ProposalParser
 		return trim((Util::getParentElementByClass($domDoc, 'div', 'jw-wrapper'))->nodeValue);
 	}
 
+	public static function getProposalWithSubjects($subjects,Proposal $proposal) {
+		$i = new self();
+		$proposal = $i->getProposalWithSubjectsComparedTo($subjects, $proposal, $proposal->getTitle());
+		if($proposal->getSubjects() == null || $proposal->getSubjectArea() == null) {
+			$proposal = $i->getProposalWithSubjectsComparedTo($subjects, $proposal, $proposal->getDescription());
+		}
+		return $proposal;
+	}
 	/**
 	 *
 	 **/
@@ -74,6 +82,44 @@ class ProposalParser
 		$e = explode(',',$node->nodeValue);
 		return $proposal->setEnddate(implode('-', array_reverse(explode('.', trim($e[count($e)-1])))));
 	}
+
+	private function getProposalWithSubjectsComparedTo($subjects,Proposal $proposal, $compareWith) {
+		return 	$this->getProposalWithSubjectFromArea(
+					$this->getProposalWithAreaFromCulture(
+						$this->getProposalWithCultureFromSubjects($subjects, $proposal, $compareWith), $compareWith), $compareWith);
+	}
+
+	private function getProposalWithCultureFromSubjects($subjects, Proposal $proposal, $compareWith) {
+		array_map(function($subjectCulture) use ($proposal, $compareWith) {
+			if(stripos($compareWith, $subjectCulture->getName()) !== false) {
+				return array($proposal->setSubjectCulture($subjectCulture->getId()),$subjectCulture->getSubjectChildren());
+			}
+		},$subjects);
+		return array($proposal,null);
+	}
+
+	private function getProposalWithAreaFromCulture($arrayProposalAndCulture, $compareWith) {
+		$proposal = $arrayProposalAndCulture[0];
+		$areas = $arrayProposalAndCulture[1];
+		if($areas !== null) {
+			array_map(function($subjectArea) use ($compareWith,$proposal) {
+				if(stripos($compareWith, $subjectArea->getName()) !== false) return array($proposal->setSubjectArea($subjectArea->getId()),$subjectArea->getSubjectChildren());
+			},$areas);
+		}
+		return array($proposal, null);
+	}
+
+	private function getProposalWithSubjectFromArea($arrayProposalAndArea, $compareWith) {
+		$proposal = $arrayProposalAndArea[0];
+		$subjects = $arrayProposalAndArea[1];
+		if($subjects !== null) {
+			array_map(function($subject) use ($compareWith,$proposal) {
+				if(stripos($compareWith, $subject->getName()) !== false) return $proposal->setSubject($subject->getId());
+			},$subjects);
+		}
+		return array($proposal, null);
+	}
+
 
 	/********  TODO: TRENNEN UND IN ANDERE/EIGENE CLASS  ***********/
 

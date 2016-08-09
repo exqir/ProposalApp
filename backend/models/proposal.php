@@ -33,17 +33,16 @@ class Proposal {
         return $db->hasAnEntryFor($this);
     }
 
-    public function getProposalWithEnrichedAttributes($connection, $link) {
+    public function getProposalWithEnrichedAttributes($connection, $link, $subjects) {
         $this->setDescription(ProposalParser::getDescriptionFromLink($link));
         //TODO subjects
-        $this->setOrganization($this->getOrganization()->getOrganizationWithEnrichedAttributes($connection));
-        if($this->getOrganizationOptional() !== NULL)
-            $this->setOrganizationOptional(
-                $this->getOrganizationOptional()->getOrganizationWithEnrichedAttrbutes($connection));
-        return $this;
+        $proposal = ProposalParser::getProposalWithSubjects($subjects, $this)->setOrganization(
+            $this->getOrganization()->getOrganizationWithEnrichedAttributes($connection));
+        if($proposal->getOrganizationOptional() !== NULL)
+            $proposal->setOrganizationOptional(
+                $proposal->getOrganizationOptional()->getOrganizationWithEnrichedAttrbutes($connection));
+        return $proposal;
     }
-
-    //private function
 
     public function setId($id) {
 	    $this->id = $id;
@@ -153,6 +152,7 @@ class Proposal {
 
     public function setSubjectCulture($id) {
 	    $this->subject_culture = $id;
+        return $this;
     }
 
     public function getSubjectCulture() {
@@ -161,6 +161,7 @@ class Proposal {
 
     public function setSubjectArea($id) {
 	    $this->subject_area = $id;
+        return $this;
     }
 
     public function getSubjectArea() {
@@ -169,6 +170,7 @@ class Proposal {
 
     public function setSubject($id) {
 	    $this->subject = $id;
+        return $this;
     }
 
     public function getSubject() {
