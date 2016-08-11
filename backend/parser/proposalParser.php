@@ -117,7 +117,7 @@ class ProposalParser
 				if(stripos($compareWith, $subject->getName()) !== false) return $proposal->setSubject($subject->getId());
 			},$subjects);
 		}
-		return array($proposal, null);
+		return $proposal;
 	}
 
 

@@ -32,7 +32,7 @@
 	}
 
 	function collectSubjectsFrom($url,$db) {
-		return SubjectGroup::fromXPath(Util::getXPathFromUrl($url));
+		return SubjectGroup::fromXPath(Util::getXPathFromUrl($url),$db);
 	}
 
 /*	$proposals = array();

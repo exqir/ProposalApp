@@ -9,8 +9,8 @@ class SubjectGroup {
     $this->name = $name;
   }
 
-  public static function fromXPath($xpath) {
-    return SubjectParser::getSubjectsFromXPath($xpath);
+  public static function fromXPath($xpath, $db) {
+    return (new SubjectSqlQueries($db))->getSubjectsWithId(SubjectParser::getSubjectsFromXPath($xpath));
   }
 
   public function getId() {
