@@ -30,7 +30,7 @@ class ProposalParser
 	public static function getProposalWithSubjects($subjects,Proposal $proposal) {
 		$i = new self();
 		$proposal = $i->getProposalWithSubjectsComparedTo($subjects, $proposal, $proposal->getTitle());
-		if($proposal->getSubjects() == null || $proposal->getSubjectArea() == null) {
+		if($proposal->getSubject() == null || $proposal->getSubjectArea() == null) {
 			$proposal = $i->getProposalWithSubjectsComparedTo($subjects, $proposal, $proposal->getDescription());
 		}
 		return $proposal;

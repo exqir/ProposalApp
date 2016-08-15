@@ -9,8 +9,9 @@ class SubjectGroup {
     $this->name = $name;
   }
 
-  public static function fromXPath($xpath, $db) {
-    return (new SubjectSqlQueries($db))->getSubjectsWithId(SubjectParser::getSubjectsFromXPath($xpath));
+  public static function fromXPath($xpath, $connection) {
+    $ssq = new SubjectSqlQueries($connection->getConnection());
+    return $ssq->getSubjectsWithId(SubjectParser::getSubjectsFromXPath($xpath));
   }
 
   public function getId() {
@@ -19,6 +20,7 @@ class SubjectGroup {
 
   public function setId($id) {
     $this->id = $id;
+    return $this;
   }
 
   public function getName() {
@@ -27,6 +29,7 @@ class SubjectGroup {
 
   public function setName($name) {
     $this->name = $name;
+    return $this;
   }
 
   public function addSubjectChildren($child) {

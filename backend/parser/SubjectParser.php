@@ -22,7 +22,7 @@ class SubjectParser
 		foreach($domCultures as $subjectCulture) {
 			$cultureName = trim(explode('(',$subjectCulture->firstChild->nodeValue)[0]);
 			$culture = new SubjectGroup($cultureName);
-			print ("-" . $cultureName . "<br>");
+			//print ("-" . $cultureName . "<br>");
 			$cultures[] = $culture->setSubjectChildren($this->getSubjectAreas($xpath, $subjectCulture));
 		}
 		return $cultures;
@@ -35,7 +35,7 @@ class SubjectParser
 		foreach($domAreas as $subjectArea) {
 			$areaName = $subjectArea->firstChild->nodeValue;
 			$area = new SubjectGroup($areaName);
-			print ("--" . $areaName . "<br>");
+			//print ("--" . $areaName . "<br>");
 			$areas[] = $area->setSubjectChildren($this->getSubjects($xpath, $subjectArea));
 		}
 		return $areas;
@@ -47,7 +47,7 @@ class SubjectParser
 		$domSubjects = $xpath->query($expression, $subjectArea);
 		foreach($domSubjects as $subject) {
 			$subjectName = $subject->nodeValue;
-			print ("---" . $subjectName . "<br>");
+			//print ("---" . $subjectName . "<br>");
 			$subjects = new SubjectGroup($subjectName);
 		}
 		return $subjects;

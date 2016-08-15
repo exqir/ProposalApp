@@ -36,11 +36,14 @@ class Proposal {
     public function getProposalWithEnrichedAttributes($connection, $link, $subjects) {
         $this->setDescription(ProposalParser::getDescriptionFromLink($link));
         //TODO subjects
-        $proposal = ProposalParser::getProposalWithSubjects($subjects, $this)->setOrganization(
-            $this->getOrganization()->getOrganizationWithEnrichedAttributes($connection));
-        if($proposal->getOrganizationOptional() !== NULL)
+        $proposal = ProposalParser::getProposalWithSubjects($subjects, $this);
+        $proposal->setOrganization(
+            $proposal->getOrganization()->getOrganizationWithEnrichedAttributes($connection));
+        if($proposal->getOrganizationOptional() !== NULL) {
+            //var_dump($proposal->getOrganizationOptional());
             $proposal->setOrganizationOptional(
                 $proposal->getOrganizationOptional()->getOrganizationWithEnrichedAttrbutes($connection));
+        }
         return $proposal;
     }
 

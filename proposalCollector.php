@@ -9,6 +9,7 @@
 	require_once 'backend/db/sqlConnection.php';
 	require_once 'backend/db/organizationSqlQueries.php';
 	require_once 'backend/db/proposalSqlQueries.php';
+	require_once 'backend/db/SubjectSqlQueries.php';
 	require_once 'backend/db/locationService.php';
 	require_once 'config.php';
 	require_once 'db.php';
@@ -20,7 +21,6 @@
 	function collectProposalsFrom($url) {
 		$db = new SqlConnection(HOST,USER,PW,DB_NAME);
 		$subjects = collectSubjectsFrom(SUBJECT_URL,$db);
-		//var_dump($subjects);
 		return array_map(function($job) use ($db, $subjects) {
 			$proposal = Proposal::fromDOMElement($job);
 			if(!$proposal->doesExistIn($db)) {
