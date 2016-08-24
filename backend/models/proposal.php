@@ -73,7 +73,8 @@ class Proposal {
     }
 
     public function setDescription($desc) {
-        $this->desc = $desc;
+        $this->description = $desc;
+        return $this;
     }
 
     public function setDescriptionManually(string $desc) {

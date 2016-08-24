@@ -24,7 +24,8 @@ class ProposalParser
 	public static function getDescriptionFromLink($link) {
 		$domDoc = new DomDocument();
 		$domDoc->loadHTMLFile(BASEURL . $link);
-		return trim((Util::getParentElementByClass($domDoc, 'div', 'jw-wrapper'))->nodeValue);
+		$desc = trim(Util::getParentElementByClass($domDoc, 'div', 'jw-wrapper')->nodeValue);
+		return $desc;
 	}
 
 	public static function getProposalWithSubjects($subjects,Proposal $proposal) {
@@ -84,122 +85,36 @@ class ProposalParser
 	}
 
 	private function getProposalWithSubjectsComparedTo($subjects,Proposal $proposal, $compareWith) {
-		return 	$this->getProposalWithSubjectFromArea(
-					$this->getProposalWithAreaFromCulture(
-						$this->getProposalWithCultureFromSubjects($subjects, $proposal, $compareWith), $compareWith), $compareWith);
-	}
-
-	private function getProposalWithCultureFromSubjects($subjects, Proposal $proposal, $compareWith) {
-		array_map(function($subjectCulture) use ($proposal, $compareWith) {
-			print($compareWith . "<br>");
-			print($subjectCulture->getName() . "<br>---------------<br>");
-			if(stripos($compareWith, $subjectCulture->getName()) !== false) {
-				return array($proposal->setSubjectCulture($subjectCulture->getId()),$subjectCulture->getSubjectChildren());
+		foreach ($subjects as $culture) {
+			$proposal = $this->getProposalWithArea($culture->getSubjectChildren(), $proposal, $compareWith);
+			if($proposal->getSubjectCulture() == NULL) {
+				if(stripos($compareWith, $culture->getName()) !== false) return $proposal->setSubjectCulture($culture->getId());
 			}
-			else return array($subjectCulture->getId(),$subjectCulture->getSubjectChildren());
-		},$subjects);
-		return array($proposal,null);
-	}
-
-	private function getProposalWithAreaFromCulture($arrayProposalAndCulture, $compareWith) {
-		$proposal = $arrayProposalAndCulture[0];
-		$areas = $arrayProposalAndCulture[1];
-		if($areas !== null) {
-			array_map(function($subjectArea) use ($compareWith,$proposal) {
-				print($compareWith . "<br>");
-				print($subjectArea->getName() . "<br>---------------<br>");
-				if(stripos($compareWith, $subjectArea->getName()) !== false) return array($proposal->setSubjectArea($subjectArea->getId()),$subjectArea->getSubjectChildren());
-			},$areas);
-		}
-		return array($proposal, null);
-	}
-
-	private function getProposalWithSubjectFromArea($arrayProposalAndArea, $compareWith) {
-		$proposal = $arrayProposalAndArea[0];
-		$subjects = $arrayProposalAndArea[1];
-		if($subjects !== null) {
-			array_map(function($subject) use ($compareWith,$proposal) {
-				print($compareWith . "<br>");
-				print($subject->getName() . "<br>---------------<br>");
-				if(stripos($compareWith, $subject->getName()) !== false) return $proposal->setSubject($subject->getId());
-			},$subjects);
 		}
 		return $proposal;
 	}
 
+	private function getProposalWithArea($areas, Proposal $proposal, $compareWith) {
+		foreach ($areas as $area) {
+			$proposal = $this->getProposalWithSubject($area->getSubjectChildren(), $proposal, $compareWith);
+			if($proposal->getSubjectArea() == NULL) {
+				if(stripos($compareWith, $area->getName()) !== false) {
+					$proposal = $proposal->setSubjectArea($area->getId());
+					return $proposal->setSubjectCulture($area->getSubjectParent()->getId());
+				}
+			}
+		}
+		return $proposal;
+	}
 
-	/********  TODO: TRENNEN UND IN ANDERE/EIGENE CLASS  ***********/
-
-//	public function findSubjects (Proposal &$proposal, $subjectReference) {
-//		//$subjects = $this->parseSubjects($subjectReference);
-//		$this->searchSubjects($subjectReference,$proposal,$proposal->getTitle());
-//		if($proposal->getSubject() === NULL || $proposal->getSubjectArea === NULL) {
-//			echo "searching desc <br>";
-//			$this->searchSubjects($subjectReference,$proposal,$proposal->getDescription());
-//		}
-//	}
-//
-//	private function searchSubjects($subjectCultures, &$proposal,$searchIn) {
-//		foreach ($subjectCultures as $subjectCulture) {
-//			$subjectAreas = $subjectCulture->getSubjectGroup();
-//			foreach ($subjectAreas as $subjectArea) {
-//				$subjects = $subjectArea->getSubjectGroup();
-//				foreach ($subjects as $subject) {
-//					$subjectName = $subject->getName();
-//					if(stripos($searchIn,$subjectName) !== false) {
-//						$proposal->setSubjectCulture($subjectCulture->getId());
-//						$proposal->setSubjectArea($subjectArea->getId());
-//						$proposal->setSubject($subject->getId());
-//					}
-//				}
-//				$area = $subjectArea->getName();
-//				if(stripos($searchIn,$area) !== false) {
-//					$proposal->setSubjectCulture($subjectCulture->getId());
-//					$proposal->setSubjectArea($subjectArea->getId());
-//				}
-//			}
-//			$culture = $subjectCulture->getName();
-//			if(stripos($searchIn,$culture) !== false) {
-//				$proposal->setSubjectCulture($subjectCulture->getId());
-//			}
-//		}
-//	}
-//
-//	public function gatherSubjects($domObject,&$proposal) {
-//		$subjects = $this->parseSubjects($domObject);
-//		$sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-//		$res = $sql->saveSubjects($subjects);
-//		$this->findSubjects($proposal, $subjects);
-//		if($res > 0) return 1;
-//		else return 0;
-//	}
-//
-//  private function parseSubjects($domObject) {
-//    $subjects = array();
-//		//$tableBox = get...
-//		$expression = "(//div)[contains(concat(' ', normalize-space(@class), ' '), concat(' ', 'tabellenBox', ' '))]/table";
-//		$tableBox = $domObject->query($expression);
-//    foreach($tableBox as $subject1) {
-//			$tmp = $subject1->firstChild->nodeValue;
-//			$name = trim(explode('(',$tmp)[0]);
-//      $sub = new SubjectGroup($name);
-//
-//			$exp1 = "tbody/tr/td[2]";
-//      $subSubjects = $domObject->query($exp1,$subject1);
-//      foreach($subSubjects as $subject2) {
-//        $sname = $subject2->firstChild->nodeValue;
-//        $ssub = new SubjectGroup($sname);
-//
-//				$exp2 = "div[contains(concat(' ', normalize-space(@class), ' '), concat(' ', 'fachInhalt', ' '))]/span[contains(concat(' ', normalize-space(@class), ' '), concat(' ', 'subKat', ' '))]/a";
-//        $subKats = $domObject->query($exp2,$subject2);
-//        foreach($subKats as $subject3) {
-//          $ssname = $subject3->nodeValue;
-//          $ssub->addSubjectChildren(new SubjectGroup($ssname));
-//        }
-//        $sub->addSubjectChildren($ssub);
-//      }
-//      $subjects[] = $sub;
-//    }
-//    return $subjects;
-//  }
+	private function getProposalWithSubject($subjects, Proposal $proposal, $compareWith) {
+		foreach ($subjects as $subject) {
+			if(stripos($compareWith, $subject->getName()) !== false) {
+				$proposal = $proposal->setSubject($subject->getId());
+				$proposal = $proposal->setSubjectArea($subject->getSubjectParent()->getId());
+				return $proposal->setSubjectCulture($subject->getSubjectParent()->getSubjectParent()->getId());
+			}
+		}
+		return $proposal;
+	}
 }

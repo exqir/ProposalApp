@@ -41,8 +41,10 @@
 		array_map(function($proposal) {
 			print("Titel: " . $proposal->getTitle() . "<br>");
 			print("Subjects: " . $proposal->getSubjectCulture() . " -> " . $proposal->getSubjectArea() . " -> " . $proposal->getSubject() . "<br>");
-			print("Organisation: " . $proposal->getOrganization()->getName() . "<br>");
-			if($proposal->getOrganizationOptional() !== NULL) print("Optionale Organisation: " . $proposal->getOrganizationOptional->getName() . "<br>");
+			print("Organisation: " . $proposal->getOrganization()->getName() . ", " . $proposal->getOrganization()->getState() . "<br>");
+			if($proposal->getOrganizationOptional() !== NULL)
+				print("Optionale Organisation: " . $proposal->getOrganizationOptional->getName() . ", " . $proposal->getOrganizationOptional()->getState() . "<br>");
+			print("------------------------------------------------------<br>");
 		},$proposals);
 	}
 /*	$proposals = array();

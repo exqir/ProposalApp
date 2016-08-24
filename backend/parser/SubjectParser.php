@@ -52,49 +52,4 @@ class SubjectParser
 		}
 		return $subjects;
 	}
-	/********  TODO: TRENNEN UND IN ANDERE/EIGENE CLASS  ***********/
-
-//	public function findSubjects (Proposal &$proposal, $subjectReference) {
-//		//$subjects = $this->parseSubjects($subjectReference);
-//		$this->searchSubjects($subjectReference,$proposal,$proposal->getTitle());
-//		if($proposal->getSubject() === NULL || $proposal->getSubjectArea === NULL) {
-//			echo "searching desc <br>";
-//			$this->searchSubjects($subjectReference,$proposal,$proposal->getDescription());
-//		}
-//	}
-//
-//	private function searchSubjects($subjectCultures, &$proposal,$searchIn) {
-//		foreach ($subjectCultures as $subjectCulture) {
-//			$subjectAreas = $subjectCulture->getSubjectGroup();
-//			foreach ($subjectAreas as $subjectArea) {
-//				$subjects = $subjectArea->getSubjectGroup();
-//				foreach ($subjects as $subject) {
-//					$subjectName = $subject->getName();
-//					if(stripos($searchIn,$subjectName) !== false) {
-//						$proposal->setSubjectCulture($subjectCulture->getId());
-//						$proposal->setSubjectArea($subjectArea->getId());
-//						$proposal->setSubject($subject->getId());
-//					}
-//				}
-//				$area = $subjectArea->getName();
-//				if(stripos($searchIn,$area) !== false) {
-//					$proposal->setSubjectCulture($subjectCulture->getId());
-//					$proposal->setSubjectArea($subjectArea->getId());
-//				}
-//			}
-//			$culture = $subjectCulture->getName();
-//			if(stripos($searchIn,$culture) !== false) {
-//				$proposal->setSubjectCulture($subjectCulture->getId());
-//			}
-//		}
-//	}
-//
-//	public function gatherSubjects($domObject,&$proposal) {
-//		$subjects = $this->parseSubjects($domObject);
-//		$sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-//		$res = $sql->saveSubjects($subjects);
-//		$this->findSubjects($proposal, $subjects);
-//		if($res > 0) return 1;
-//		else return 0;
-//	}
 }
