@@ -2,6 +2,7 @@
 
 class SubjectGroup {
   private $subjectChildren = [];
+  private $subjectParent;
   private $name;
   private $id;
 
@@ -43,5 +44,14 @@ class SubjectGroup {
 
   public function getSubjectChildren() {
     return $this->subjectChildren;
+  }
+
+  public function getSubjectParent() {
+      return $this->subjectParent;
+  }
+
+  public function setSubjectParent($parent) {
+      $this->subjectParent = $parent;
+      return $this;
   }
 }

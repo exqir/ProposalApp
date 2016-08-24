@@ -37,28 +37,31 @@ class SubjectSqlQueries extends SqlConnection {
     private function getCultureWithId(SubjectGroup $culture) {
         $cultureId = $this->has($culture, "subject_culture");
         if($cultureId <= 0) $cultureId = $this->sqlQuery("INSERT INTO subject_culture (Name) VALUES (?)", array($culture->getName()),'getInsertId', $culture);
-        $culture->setId($cultureId);
-        return $this->getSubjectGroupeWithSubjectChildren($culture->getSubjectChildren(), $cultureId);
+        $culture = $culture->setId($cultureId);
+        //var_dump($culture);
+        return $culture->setSubjectChildren($this->getSubjectGroupeWithSubjectChildren($culture->getSubjectChildren(), $culture));
     }
 
-    private function getAreaWithId($area, $parentId) {
+    private function getAreaWithId(SubjectGroup $area, $parent) {
         $areaId = $this->has($area, "subject_area");
-        if($areaId <= 0) $areaId = $this->sqlQuery("INSERT INTO subject_area (Name, ParentID) VALUES (?,?)", array($area->getName(),$parentId),'getInsertId', $area);
-        $area->setId($areaId);
-        return $this->getSubjectGroupeWithSubjectChildren($area->getSubjectChildren(), $areaId);
+        if($areaId <= 0) $areaId = $this->sqlQuery("INSERT INTO subject_area (Name, ParentID) VALUES (?,?)", array($area->getName(),$parent->getId()),'getInsertId', $area);
+        $area = $area->setId($areaId);
+        $area = $area->setSubjectParent($parent);
+        return $area->setSubjectChildren($this->getSubjectGroupeWithSubjectChildren($area->getSubjectChildren(), $area));
     }
 
-    private function getSubjectWithId($subject, $parentId) {
+    private function getSubjectWithId($subject, $parent) {
         $subjectId = $this->has($subject, "subject");
-        if($subjectId <= 0) $subjectId = $this->sqlQuery("INSERT INTO subject (Name, ParentID) VALUES (?,?)", array($subject->getName(),$parentId),'getInsertId',$subject);
-        $subject->setId($subjectId);
+        if($subjectId <= 0) $subjectId = $this->sqlQuery("INSERT INTO subject (Name, ParentID) VALUES (?,?)", array($subject->getName(),$parent->getId()),'getInsertId',$subject);
+        $subject = $subject->setId($subjectId);
+        $subject = $subject->setSubjectParent($parent);
         return $subject;
     }
 
-    private function getSubjectGroupeWithSubjectChildren($subjectGroup, $parentId) {
-        return array_map(function($subject) use ($parentId) {
-            if($subject->getSubjectChildren() === NULL )return $this->getSubjectWithId($subject, $parentId);
-            else return $this->getAreaWithId($subject, $parentId);
+    private function getSubjectGroupeWithSubjectChildren($subjectGroup, $parent) {
+        return array_map(function($subject) use ($parent) {
+            if(count($subject->getSubjectChildren()) === 0 )return $this->getSubjectWithId($subject, $parent);
+            else return $this->getAreaWithId($subject, $parent);
         }, $subjectGroup);
     }
 }
