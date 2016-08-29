@@ -64,4 +64,8 @@ class SqlConnection {
         },$parameterArray);
         return $s;
     }
+
+    protected function getInsertId($stmt, $referenceObject) {
+        return $this->mysqli->insert_id;
+    }
 }

@@ -47,6 +47,17 @@ class Proposal {
         return $proposal;
     }
 
+    public function saveTo(SqlConnection $connection) {
+        if($this->getOrganization()->getId() === NULL) {
+            $this->setOrganization($this->getOrganization()->saveTo($connection));
+        }
+        if($this->getOrganizationOptional() !== NULL && $this->getOrganizationOptional()->getId() === NULL) {
+            $this->setOrganizationOptional($this->getOrganizationOptional()->saveTo($connection));
+        }
+        $db = new ProposalSqlQueries($connection->getConnection());
+        $db->save($this);
+    }
+
     public function setId($id) {
 	    $this->id = $id;
     }

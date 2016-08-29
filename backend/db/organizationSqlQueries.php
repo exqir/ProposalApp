@@ -19,6 +19,18 @@ class OrganizationSqlQueries extends SqlConnection {
         else return $organization;
     }
 
+    public function save(Organization $organization) {
+        $query = "INSERT INTO organizations (TypeID, Abbrev, Name, City, State, Country) VALUES (?,?,?,?,?,?)";
+        $values = array($organization->getTypeId(),
+            $organization->getAbbrev(),
+            $organization->getName(),
+            $organization->getCity(),
+            $organization->getState(),
+            $organization->getCountry());
+        $id = $this->sqlQuery($query,$values,'getInsertId',$organization);
+        return $organization->setId($id);
+    }
+
     protected function existsInDB($stmt, Organization $organization) {
         $stmt->store_result();
         if($stmt->num_rows === 0) {

@@ -33,8 +33,14 @@ class Organization {
 		}
 	}
 
+	public function saveTo(SqlConnection $connection) {
+	    $db = new OrganizationSqlQueries($connection->getConnection());
+        return $db->save($this);
+    }
+
 	public function setId($id) {
 	    $this->id = $id;
+        return $this;
     }
 
     public function getId() {
@@ -52,6 +58,7 @@ class Organization {
 
 	public function setName($name) {
 		$this->name = $name;
+        return $this;
 	}
 
 	public function getName() {

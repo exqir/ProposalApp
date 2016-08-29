@@ -16,6 +16,25 @@ class ProposalSqlQueries extends SqlConnection {
         return $this->sqlQuery($query, array($proposal->getTitle(), $proposal->getEnddate()), 'existsInDB', $proposal);
     }
 
+    public function save(Proposal $proposal) {
+        $colums = "(";
+        foreach(array_keys(DB_PROPOSAL) as $key) {
+            if($key === end(array_keys(DB_PROPOSAL))) $colums .= $key;
+            else $colums .= $key . ", ";
+        }
+        $colums .= ")";
+        $values = "(";
+        $i = 0;
+        foreach(DB_PROPOSAL as $value) {
+            if(++$i === count(DB_PROPOSAL)) $values .= $value;
+            else $values .= $value . ", ";
+        }
+        $values .= ")";
+        $query = "INSERT INTO proposal " . $colums . " VALUES " . $values . "";
+        $id = $this->sqlQuery($query,Config::getParam($proposal),'getInsertId',$proposal);
+        return $proposal->setId($id);
+    }
+
     protected function existsInDB($stmt, $proposal) {
         $stmt->store_result();
         if($stmt->num_rows === 0) {
