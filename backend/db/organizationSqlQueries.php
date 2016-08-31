@@ -14,9 +14,11 @@ class OrganizationSqlQueries extends SqlConnection {
 
     public function getOrganizationWithTypeAndAbbrev(Organization $organization) {
         $organization = $this->sqlQuery("SELECT TypeID, Keyword, Strict FROM keywords",array(),'getOrganizationWithType',$organization);
-        if ($organization->getTypeId() !== NULL) return $this->sqlQuery("SELECT Abbrev FROM types WHERE ID=?",
+        return $this->sqlQuery("SELECT Abbrev FROM types WHERE ID=?",
             array($organization->getTypeId()),'getOrganizationWithAbbrev', $organization);
-        else return $organization;
+//        if ($organization->getTypeId() !== 0) return $this->sqlQuery("SELECT Abbrev FROM types WHERE ID=?",
+//            array($organization->getTypeId()),'getOrganizationWithAbbrev', $organization);
+//        else return $organization;
     }
 
     public function save(Organization $organization) {
@@ -27,7 +29,8 @@ class OrganizationSqlQueries extends SqlConnection {
             $organization->getCity(),
             $organization->getState(),
             $organization->getCountry());
-        $id = $this->sqlQuery($query,$values,'getInsertId',$organization);
+        //var_dump($values);
+        $id = $this->sqlQuery($query,$values,'getInsertIdOrg',$organization);
         return $organization->setId($id);
     }
 
@@ -51,9 +54,9 @@ class OrganizationSqlQueries extends SqlConnection {
         $stmt->store_result();
         $stmt->bind_result($typeId,$keyword,$strict);
         $name = $organization->getName();
-        $type = NULL;
+        $type = 0;
         while($stmt->fetch()) {
-            if($strict) {
+            if($strict === 1) {
                 //Compares the name and keyword stricly per regex, only when keyword is a single word it matches
                 if(preg_match("/\b" . preg_quote($keyword, '/') . "\b/i", $name)) $type = $typeId;
             } else {
@@ -62,6 +65,7 @@ class OrganizationSqlQueries extends SqlConnection {
             }
         }
         $stmt->close(); //TODO adding close to other functions
+        printf("TypeID %i", $type);
         return $organization->setTypeId($type);
     }
 
@@ -69,7 +73,11 @@ class OrganizationSqlQueries extends SqlConnection {
         $stmt->store_result();
         $stmt->bind_result($abbrev);
         $stmt->fetch();
-        if($stmt->num_rows !== 1) return null;
+        if($stmt->num_rows !== 1) return $organization->setAbbrev('');
         else return $organization->setAbbrev($abbrev);
+    }
+
+    protected function getInsertIdOrg($stmt, $referenceObject) {
+        return $this->mysqli->insert_id;
     }
 }

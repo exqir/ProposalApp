@@ -17,6 +17,8 @@ class ProposalSqlQueries extends SqlConnection {
     }
 
     public function save(Proposal $proposal) {
+        //$query = "INSERT INTO proposal (OrgID, OrgOptID, Title, Description, LID, SID, SSID, RAW, Ass, W1, W2,)"
+
         $colums = "(";
         foreach(array_keys(DB_PROPOSAL) as $key) {
             if($key === end(array_keys(DB_PROPOSAL))) $colums .= $key;
@@ -30,6 +32,7 @@ class ProposalSqlQueries extends SqlConnection {
             else $values .= $value . ", ";
         }
         $values .= ")";
+        var_dump(Config::getParam($proposal));
         $query = "INSERT INTO proposal " . $colums . " VALUES " . $values . "";
         $id = $this->sqlQuery($query,Config::getParam($proposal),'getInsertId',$proposal);
         return $proposal->setId($id);
@@ -65,5 +68,63 @@ class ProposalSqlQueries extends SqlConnection {
         $dbId = $organization->doesExistIn($this);
         if($dbId > 0 && $dbId === $id) return true;
         else return false;
+    }
+
+    private function getColumesAsString() {
+        $s = implode(',', $this->getColumes());
+        return '(' + $s + ')';
+    }
+
+    private function getColumes() {
+        return array(
+            "OrgID",
+            "TypeID",
+			"OrgOptID",
+			"TypeOptID",
+			"Title",
+			"Description",
+			"Catchword",
+			"Faculty",
+			"Section",
+			"LID",
+			"SID",
+			"SSID",
+			"Current",
+			"Raw",
+			"Ass",
+			"W1",
+			"W2",
+			"W3",
+			"C1",
+			"C2",
+			"C3",
+			"C4",
+			"Found",
+			"Tenure",
+			"Note",
+			"Enddate",
+			"ASAP",
+			"Publisher1",
+			"Pdate1",
+			"Pissue1",
+			"Pyear1",
+			"Publisher2",
+			"Pdate2",
+			"Pissue2",
+			"Pyear2",
+			"Publisher3",
+			"Pdate3",
+			"Pissue3",
+			"Pyear3",
+			"Publisher4",
+			"Pdate4",
+			"Pissue4",
+			"Pyear4",
+			"Link",
+			"SaveTime",
+			"subject_culture",
+			"subject_area",
+			"subject"
+        );
     }
 }

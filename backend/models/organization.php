@@ -23,7 +23,7 @@ class Organization {
 		$db = new OrganizationSqlQueries($connection->getConnection());
 		$id = $db->hasAnEntryFor($this);
 		if($id > 0) {
-			$this->setId();
+			$this->setId($id);
 			return $this;
 		}
 		else {

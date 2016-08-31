@@ -109,9 +109,9 @@ class Config
 	public static function getParam(Proposal &$proposal)
 	{
 		$orgID = $proposal->getOrganization()->getId(); // OrgtID
-		$typeID = $proposal->getOrganization()->getTypeId(); // TypeID
-		$orgOptID = ($proposal->getOrgOpt() == 1 ? $proposal->getOrganizationOptional()->getId() : 0);
-		$typeOptID = ($proposal->getOrgOpt() == 1 ? $proposal->getOrganizationOptional()->getTypeId() : 0);
+		$typeID = ($proposal->getOrganization()->getTypeId() !== NULL ? $proposal->getOrganization()->getTypeId() : 0); // TypeID
+		$orgOptID = ($proposal->getOrganizationOptional() !== NULL ? $proposal->getOrganizationOptional()->getId() : 0);
+		$typeOptID = ($proposal->getOrganizationOptional() !== NULL ? $proposal->getOrganizationOptional()->getTypeId() : 0);
 		$title = $proposal->getTitle(); // Title
 		$desc = $proposal->getDescription(); // Description
 		$ass = $proposal->getTitleAdditions()['Ass']; // Ass

@@ -42,7 +42,7 @@ class Proposal {
         if($proposal->getOrganizationOptional() !== NULL) {
             //var_dump($proposal->getOrganizationOptional());
             $proposal->setOrganizationOptional(
-                $proposal->getOrganizationOptional()->getOrganizationWithEnrichedAttrbutes($connection));
+                $proposal->getOrganizationOptional()->getOrganizationWithEnrichedAttributes($connection));
         }
         return $proposal;
     }
@@ -54,8 +54,8 @@ class Proposal {
         if($this->getOrganizationOptional() !== NULL && $this->getOrganizationOptional()->getId() === NULL) {
             $this->setOrganizationOptional($this->getOrganizationOptional()->saveTo($connection));
         }
-        $db = new ProposalSqlQueries($connection->getConnection());
-        $db->save($this);
+        //$db = new ProposalSqlQueries($connection->getConnection());
+        //$db->save($this);
     }
 
     public function setId($id) {

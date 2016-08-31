@@ -51,7 +51,7 @@ class LocationService {
                 $state = $comp->getElementsByTagName('long_name')->item(0)->nodeValue;
             }
         }
-        return $state;
+        return trim($state);
     }
 
     private function getCountryFromPlaceDetails($xpath) {
@@ -63,6 +63,6 @@ class LocationService {
                 $state = $comp->getElementsByTagName('long_name')->item(0)->nodeValue;
             }
         }
-        return $state;
+        return trim($state);
     }
 }

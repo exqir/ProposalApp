@@ -17,6 +17,8 @@
 	error_reporting(E_ERROR | E_PARSE);
 
 	$newProposals = collectProposalsFrom(URL);
+
+	var_dump($newProposals);
 	printProposals($newProposals);
 
 	function collectProposalsFrom($url) {
@@ -27,7 +29,7 @@
 			$proposal = Proposal::fromDOMElement($job);
 			if(!$proposal->doesExistIn($db)) {
 				$proposal = $proposal->getProposalWithEnrichedAttributes($db,$proposal->getLink(),$subjects);
-				//$proposal->saveTo($db);
+				$proposal->saveTo($db);
 				return $proposal;
 			}
 		},Util::getJobItemsFromUrl($url));
@@ -41,9 +43,9 @@
 		array_map(function($proposal) {
 			print("Titel: " . $proposal->getTitle() . "<br>");
 			print("Subjects: " . $proposal->getSubjectCulture() . " -> " . $proposal->getSubjectArea() . " -> " . $proposal->getSubject() . "<br>");
-			print("Organisation: " . $proposal->getOrganization()->getName() . ", " . $proposal->getOrganization()->getState() . "<br>");
+			print("Organisation: " . $proposal->getOrganization()->getName() . ", " . $proposal->getOrganization()->getCity() . ", " . $proposal->getOrganization()->getState() . "<br>");
 			if($proposal->getOrganizationOptional() !== NULL)
-				print("Optionale Organisation: " . $proposal->getOrganizationOptional->getName() . ", " . $proposal->getOrganizationOptional()->getState() . "<br>");
+				print("Optionale Organisation: " . $proposal->getOrganizationOptional()->getName() . ", " . $proposal->getOrganizationOptional()->getCity() . ", " . $proposal->getOrganizationOptional()->getState() . "<br>");
 			print("------------------------------------------------------<br>");
 		},$proposals);
 	}
