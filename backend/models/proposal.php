@@ -49,29 +49,24 @@ class Proposal {
 
     public function saveTo(SqlConnection $connection) {
         if($this->getOrganization()->getId() === NULL) {
+            print("New organization <br>");
             $this->setOrganization($this->getOrganization()->saveTo($connection));
         }
         if($this->getOrganizationOptional() !== NULL && $this->getOrganizationOptional()->getId() === NULL) {
+            print("New optional organization <br>");
             $this->setOrganizationOptional($this->getOrganizationOptional()->saveTo($connection));
         }
-        //$db = new ProposalSqlQueries($connection->getConnection());
-        //$db->save($this);
+        $db = new ProposalSqlQueries($connection->getConnection());
+        return $db->save($this);
     }
 
     public function setId($id) {
 	    $this->id = $id;
+        return $this;
     }
 
     public function getId() {
 	    return $this->id;
-    }
-
-    public function setTypeId($typeId) {
-	    $this->typeId = $typeId;
-    }
-
-    public function getTypeId() {
-	    return $this->typeId;
     }
 
     public function setTitle($title) {
@@ -86,10 +81,6 @@ class Proposal {
     public function setDescription($desc) {
         $this->description = $desc;
         return $this;
-    }
-
-    public function setDescriptionManually(string $desc) {
-      $this->desc = $desc;
     }
 
     public function getDescription() {
@@ -128,14 +119,6 @@ class Proposal {
 
     public function getOrganizationOptId() {
         return $this->organizationOptionalId;
-    }
-
-    public function setOrgOpt($int) {
-	    $this->orgOpt = $int;
-    }
-
-    public function getOrgOpt() {
-	    return $this->orgOpt;
     }
 
     public function setEnddate($enddate) {
@@ -197,7 +180,7 @@ class Proposal {
         $this->setOrganizationId($array["OrgID"]);
         $this->setOrganizationOptId($array["OrgOptID"]);
         $this->setTitle($array["Title"]);
-        $this->description = $array["Description"];
+        $this->setDescription($array["Description"]);
         $this->titleAdditions = array();
         $this->titleAdditions["W1"] = $array["W1"];
         $this->titleAdditions["W2"] = $array["W2"];

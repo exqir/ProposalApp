@@ -1,8 +1,8 @@
 <?php
 require_once 'flight/Flight.php';
-require_once __DIR__ . '/../classes/sqlHandler.php';
-require_once __DIR__ . '/../classes/proposal.php';
-require_once __DIR__ . '/../classes/organization.php';
+require_once __DIR__ . '/../backend/db/sqlHandler.php';
+require_once __DIR__ . '/../backend/models/proposal.php';
+require_once __DIR__ . '/../backend/models/organization.php';
 require_once __DIR__ . '/../db.php';
 
 Flight::route('GET /', function(){

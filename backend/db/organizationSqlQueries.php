@@ -64,12 +64,11 @@ class OrganizationSqlQueries extends SqlConnection {
                 if(stripos($name,$keyword) !== false) $type = $typeId;
             }
         }
-        $stmt->close(); //TODO adding close to other functions
-        printf("TypeID %i", $type);
         return $organization->setTypeId($type);
     }
 
     protected function getOrganizationWithAbbrev($stmt, Organization $organization) {
+        print("TypeID: " . $organization->getTypeId() . "<br>");
         $stmt->store_result();
         $stmt->bind_result($abbrev);
         $stmt->fetch();

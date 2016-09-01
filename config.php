@@ -30,9 +30,7 @@ define("TITLEEXPRESSIONS", [
 
 define("DB_PROPOSAL", [
 			"OrgID" => "?",
-			"TypeID" => "?",
 			"OrgOptID" => "?",
-			"TypeOptID" => "?",
 			"Title" => "?",
 			"Description" => "?",
 			"Catchword" => "''",
@@ -82,9 +80,7 @@ define("DB_PROPOSAL", [
 // i = integer, s = string, d = double, b = blob
 define("DB_PARAM_TYPES", [
 			"i", // OrgID
-			"i", // TypeID
 			"i", // OrgOptID
-			"i", //	TypeOptID
 			"s", // Title
 			"s", // Description
 			"i", // Ass
@@ -109,9 +105,7 @@ class Config
 	public static function getParam(Proposal &$proposal)
 	{
 		$orgID = $proposal->getOrganization()->getId(); // OrgtID
-		$typeID = ($proposal->getOrganization()->getTypeId() !== NULL ? $proposal->getOrganization()->getTypeId() : 0); // TypeID
 		$orgOptID = ($proposal->getOrganizationOptional() !== NULL ? $proposal->getOrganizationOptional()->getId() : 0);
-		$typeOptID = ($proposal->getOrganizationOptional() !== NULL ? $proposal->getOrganizationOptional()->getTypeId() : 0);
 		$title = $proposal->getTitle(); // Title
 		$desc = $proposal->getDescription(); // Description
 		$ass = $proposal->getTitleAdditions()['Ass']; // Ass
@@ -131,9 +125,7 @@ class Config
 
 		$array = array();
 		array_push($array, $orgID);
-		array_push($array, $typeID);
 		array_push($array, $orgOptID);
-		array_push($array, $typeOptID);
 		array_push($array, $title);
 		array_push($array, $desc);
 		array_push($array, $ass);
