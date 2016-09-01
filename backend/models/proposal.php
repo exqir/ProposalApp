@@ -3,14 +3,12 @@ require_once 'organization.php';
 
 class Proposal {
     private $id;
-    private $typeId;
     private $title;
     private $description;
     private $organization;
     private $organizationId;
     private $organizationOptional;
     private $organizationOptionalId;
-    private $orgOpt = 0;
     private $enddate;
     private $link;
     private $titleAdditions;

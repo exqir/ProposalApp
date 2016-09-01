@@ -27,3 +27,10 @@ db.php
 
 #Build
 /build
+/dist
+
+#Temp
+temp
+
+#Tern
+.tern-project

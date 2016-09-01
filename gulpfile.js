@@ -1,88 +1,115 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var rename = require('gulp-rename');
+var gulpSequence = require('gulp-sequence');
+var path = require('path');
+var del = require('del');
 
-var buildFolder = './build/';
-var input = './app/scss/*.scss';
-var output = './build/app/css';
+const config = {
+    src: 'src',
+    dist: 'dist'
+}
+
+const paths = require('./path-config')(config)
+
+gulp.task('clean', function() {
+    return del(paths.build.dist);
+});
+
+gulp.task('php', function() {
+   return gulp
+       .src(path.resolve(paths.src.backend, '**/*'))
+       .pipe(gulp.dest(paths.build.backend));
+});
+
+gulp.task('move-rename-collector', function(){
+    return gulp
+        .src(path.resolve(paths.build.backend, 'proposalCollector.php'))
+        .pipe(rename('proposalCollector.php70'))
+        .pipe(gulp.dest(paths.build.dist));
+});
+
+gulp.task('backend', function(cb) {
+    gulpSequence('php','move-rename-collector')(cb);
+});
 
 gulp.task('sass', function () {
   return gulp
-    // Find all `.scss` files from the `stylesheets/` folder
-    .src(input)
-    // Run Sass on those files
+    .src(path.resolve(paths.src.styles, '**/*.scss'))
     .pipe(sass())
-    // Write the resulting CSS in the output folder
-    .pipe(gulp.dest(output));
+    .pipe(gulp.dest(paths.build.app.styles));
 });
 
-gulp.task('watch', function() {
+gulp.task('scripts', function() {
+    return gulp
+        .src(path.resolve(paths.src.scripts, '**/*'))
+        .pipe(gulp.dest(paths.build.app.scripts));
+});
+
+gulp.task('partials', function() {
+    return gulp
+        .src(path.resolve(paths.src.partials,'**/*'))
+        .pipe(gulp.dest(paths.build.app.partials));
+});
+
+gulp.task('assets', function() {
+    return gulp
+        .src(path.resolve(paths.src.assets,'**/*'))
+        .pipe(gulp.dest(paths.build.app.assets));
+});
+
+gulp.task('bootstrap', function() {
+    return gulp
+        .src([paths.src.bootstrap.js,paths.src.bootstrap.css,paths.src.bootstrap.map])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('jsurl', function() {
+    return gulp
+        .src(paths.src.jsurl)
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('app',['sass','scripts','partials','assets','bootstrap','jsurl'], function() {
+    return gulp
+        .src(path.resolve(paths.src.app, 'index.html'))
+        .pipe(gulp.dest(paths.build.app.root));
+});
+
+gulp.task('watch-app', function() {
   return gulp
-    // Watch the input folder for change,
-    // and run `sass` task when something happens
-    .watch(input, ['sass'])
-    // When there is a change,
-    // log a message in the console
+    .watch(path.resolve(paths.src.app), ['app'])
     .on('change', function(event) {
       console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
     });
 });
 
-gulp.task('build',['copy-home','copy-rest','copy-php','copy-app','sass'], function () {
-    console.log('building project...')
-});
-
-gulp.task('copy-home',['rename-collector'], function() {
-   return gulp
-       .src('./*.php')
-       .pipe(gulp.dest(buildFolder));
-});
-
-gulp.task('rename-collector', function () {
+gulp.task('watch-backend', function() {
     return gulp
-        .src(buildFolder + 'proposalCollector.php')
-        .pipe(rename('proposalCollector.php70'))
-        .pipe(gulp.dest(buildFolder));
+        .watch(path.resolve(paths.src.backend), ['backend'])
+        .on('change', function(event) {
+            console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+        });
+});
+
+gulp.task('watch', ['watch-app','watch-backend'], function(){
+
+});
+
+gulp.task('dev-db', function() {
+    return gulp
+        .src('db.php')
+        .pipe(gulp.dest(paths.build.dist));
 })
 
-gulp.task('copy-rest', function () {
-    return gulp
-        .src('./restEndpoint/index.php')
-        .pipe(gulp.dest(buildFolder + 'restEndpoint'));
+gulp.task('dev', function (cb) {
+    gulpSequence('clean',['backend','app'],'dev-db')(cb);
 });
 
-gulp.task('copy-php', function () {
-    return gulp
-        .src('./classes/*.php')
-        .pipe(gulp.dest(buildFolder + 'classes'));
+gulp.task('build', function (cb) {
+    gulpSequence('clean',['backend','app'])(cb);
 });
 
-gulp.task('copy-js', function () {
-    return gulp
-        .src('./app/js/*.{js,map}')
-        .pipe(gulp.dest(buildFolder + 'app/js'));
-});
-
-gulp.task('copy-partials', function () {
-    return gulp
-        .src('./app/partials/*.html')
-        .pipe(gulp.dest(buildFolder + 'app/partials'));
-});
-
-gulp.task('copy-assets', function () {
-    return gulp
-        .src('./app/assets/*.{jpeg,png,jpg}')
-        .pipe(gulp.dest(buildFolder + 'app/assets'));
-});
-
-gulp.task('copy-app',['copy-js','copy-assets','copy-partials'], function () {
-    return gulp
-        .src('./app/*.html')
-        .pipe(gulp.dest(buildFolder + 'app'));
-});
-
-
-
-gulp.task('default', ['sass', 'watch'], function() {
+gulp.task('default', ['build'], function() {
   // place code for your default task here
 });
