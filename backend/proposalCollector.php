@@ -1,18 +1,34 @@
 <?php
-	require_once 'backend/Util.php';
-	require_once 'backend/models/organization.php';
-	require_once 'backend/models/proposal.php';
-	require_once 'backend/models/subjects.php';
-	require_once 'backend/parser/proposalParser.php';
-	require_once 'backend/parser/organizationParser.php';
-	require_once 'backend/parser/SubjectParser.php';
-	require_once 'backend/db/sqlConnection.php';
-	require_once 'backend/db/organizationSqlQueries.php';
-	require_once 'backend/db/proposalSqlQueries.php';
-	require_once 'backend/db/SubjectSqlQueries.php';
-	require_once 'backend/db/locationService.php';
-	require_once 'config.php';
-	require_once 'db.php';
+    namespace ProposalApp;
+
+//    require_once 'backend/Util.php';
+//	require_once 'backend/models/Organization.php';
+//	require_once 'backend/models/Proposal.php';
+//	require_once 'backend/models/SubjectGroup.php';
+//	require_once 'backend/parser/ProposalParser.php';
+//	require_once 'backend/parser/OrganizationParser.php';
+//	require_once 'backend/parser/SubjectParser.php';
+//	require_once 'backend/db/SqlConnection.php';
+//	require_once 'backend/db/OrganizationSqlQueries.php';
+//	require_once 'backend/db/ProposalSqlQueries.php';
+//	require_once 'backend/db/SubjectSqlQueries.php';
+//	require_once 'backend/db/LocationService.php';
+//	require_once 'config.php';
+//	require_once 'db.php';
+
+    require_once 'backend/db/SqlConnection.php';
+    require_once 'backend/proposal/Proposal.php';
+    require_once 'backend/organization/Organization.php';
+    require_once 'backend/subject/SubjectGroup.php';
+    require_once 'backend/util/Util.php';
+    require_once 'config.php';
+    require_once 'db.php';
+
+    use ProposalApp\db\SqlConnection;
+    use ProposalApp\Proposal\Proposal;
+    use ProposalApp\Organization\Organization;
+    use ProposalApp\Subject\SubjectGroup;
+    use ProposalApp\Util\Util;
 
 	error_reporting(E_ERROR | E_PARSE);
 
@@ -22,7 +38,6 @@
 	function collectProposalsFrom($url) {
 		$db = new SqlConnection(HOST,USER,PW,DB_NAME);
 		$subjects = collectSubjectsFrom(SUBJECT_URL,$db);
-		//var_dump($subjects);
 		return array_map(function($job) use ($db, $subjects) {
 			$proposal = Proposal::fromDOMElement($job);
 			if(!$proposal->doesExistIn($db)) {

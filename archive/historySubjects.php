@@ -1,7 +1,7 @@
 <?php
- require_once 'classes/proposalParser.php';
- require_once 'classes/subjects.php';
- require_once 'classes/proposal.php';
+ require_once 'classes/ProposalParser.php';
+ require_once 'classes/SubjectGroup.php';
+ require_once 'classes/Proposal.php';
  require_once 'classes/sqlHandler.php';
  require_once 'config.php';
  require_once 'db.php';

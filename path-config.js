@@ -1,9 +1,9 @@
 "use strict"
 
-const path = require('path')
+const path = require('path');
 
 module.exports = function(config) {
-    let paths = {
+    const paths = {
         src: {
             nodeModules: path.resolve(__dirname, 'node_modules'),
             app: path.resolve(__dirname, 'app'),

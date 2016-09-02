@@ -1,7 +1,13 @@
 <?php
-/**
-* Provides functions to parse a DOM element
-**/
+namespace ProposalApp\Proposal;
+
+require_once __DIR__ . '/../organization/OrganizationParser.php';
+require_once __DIR__ . '/../util/Util.php';
+
+use ProposalApp\Organization\OrganizationParser;
+use ProposalApp\Util\Util;
+use DOMDocument;
+
 class ProposalParser
 {
 	public function __construct() {

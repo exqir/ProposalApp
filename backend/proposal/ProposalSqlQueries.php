@@ -1,4 +1,11 @@
 <?php
+namespace ProposalApp\Proposal;
+
+require_once __DIR__ . '/../db/SqlConnection.php';
+require_once __DIR__ . '/../organization/Organization.php';
+
+use ProposalApp\db\SqlConnection;
+use ProposalApp\Organization\Organization;
 
 class ProposalSqlQueries extends SqlConnection {
     protected $mysqli;
@@ -7,7 +14,7 @@ class ProposalSqlQueries extends SqlConnection {
         $this->mysqli = $db;
     }
 
-    public function hasAnEntryFor($proposal) {
+    public function hasAnEntryFor(Proposal $proposal) {
         //$proposal->setTitle("Assistant (tenure track) / Associate Professorships in Electrical and Computer Engineering");
         //$proposal->setEnddate("2016-04-22");
         //$proposal->getOrganization()->setName("Aarhus University");
@@ -44,7 +51,7 @@ class ProposalSqlQueries extends SqlConnection {
         }
     }
 
-    private function existsWithOrganization($stmt, $proposal) {
+    private function existsWithOrganization($stmt, Proposal $proposal) {
         $stmt->bind_result($orgId,$orgOptId);
         $stmt->fetch();
         if($proposal->getOrganizationOptional() !== NULL) {
@@ -69,7 +76,7 @@ class ProposalSqlQueries extends SqlConnection {
 
     private function getColumesAsString() {
         $s = implode(',', $this->getColumes());
-        return '(' + $s + ')';
+        return '(' . $s . ')';
     }
 
     private function getColumes() {

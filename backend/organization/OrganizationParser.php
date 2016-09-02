@@ -1,4 +1,5 @@
 <?php
+namespace ProposalApp\Organization;
 
 class OrganizationParser {
 

@@ -1,4 +1,6 @@
 <?php
+namespace ProposalApp;
+
 define("URL", "https://www.academics.de/wissenschaft/professur_37187.html?unpaged=true&amount=5");
 define("BASEURL", "https://www.academics.de");
 define("SUBJECT_URL", "http://www.dfg.de/dfg_profil/gremien/fachkollegien/faecher/");
@@ -146,4 +148,3 @@ class Config
 		return $array;
 	}
 }
-?>

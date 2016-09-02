@@ -1,4 +1,9 @@
 <?php
+namespace ProposalApp\Organization;
+
+require_once __DIR__ . '/../db/SqlConnection.php';
+
+use ProposalApp\db\SqlConnection;
 
 class OrganizationSqlQueries extends SqlConnection {
     protected $mysqli;

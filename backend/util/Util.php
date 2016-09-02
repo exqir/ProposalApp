@@ -1,7 +1,9 @@
 <?php
-/**
-* Static Util Class
-*/
+namespace ProposalApp\Util;
+
+use DOMDocument;
+use DOMXPath;
+
 class Util {
 	public static function getElementsByClass(&$parentNode, $tagName, $className) {
     	$nodes=array();
@@ -17,7 +19,7 @@ class Util {
 	}
 	
 	public static function getParentElementByClass(&$domResult, $tagName, $className) {
-		$result;
+		$result = NULL;
 		$parentNodes = $domResult->getElementsByTagName($tagName);
 		
 		foreach($parentNodes as $parentNode) {

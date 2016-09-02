@@ -1,4 +1,11 @@
 <?php
+namespace ProposalApp\Subject;
+
+require_once 'SubjectSqlQueries.php';
+require_once 'SubjectParser.php';
+require_once __DIR__. '/../db/SqlConnection.php';
+
+use ProposalApp\db\SqlConnection;
 
 class SubjectGroup {
   private $subjectChildren = [];
@@ -10,7 +17,7 @@ class SubjectGroup {
     $this->name = $name;
   }
 
-  public static function fromXPath($xpath, $connection) {
+  public static function fromXPath(\DOMXPath $xpath, SqlConnection $connection) {
     $ssq = new SubjectSqlQueries($connection->getConnection());
     return $ssq->getSubjectsWithId(SubjectParser::getSubjectsFromXPath($xpath));
   }

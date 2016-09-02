@@ -1,21 +1,20 @@
 <?php
-/**
-* Provides functions to parse a DOM element
-**/
+namespace ProposalApp\Subject;
+
 class SubjectParser
 {
 	public function __construct() {
 
 	}
 
-	public static function getSubjectsFromXPath($xpath) {
+	public static function getSubjectsFromXPath(\DOMXPath $xpath) {
 		$i = new self();
 		$subjects = $i->getSubjectCultures($xpath);
 		return $subjects;
 
 	}
 
-	private function getSubjectCultures($xpath) {
+	private function getSubjectCultures(\DOMXPath $xpath) {
 		$cultures = array();
 		$expression = "(//div)[contains(concat(' ', normalize-space(@class), ' '), concat(' ', 'tabellenBox', ' '))]/table";
 		$domCultures = $xpath->query($expression);
@@ -28,7 +27,7 @@ class SubjectParser
 		return $cultures;
 	}
 
-	private function getSubjectAreas($xpath, $subjectCulture) {
+	private function getSubjectAreas(\DOMXPath $xpath, \DOMElement $subjectCulture) {
 		$areas = array();
 		$expression = "tbody/tr/td[2]";
 		$domAreas = $xpath->query($expression, $subjectCulture);
@@ -41,7 +40,7 @@ class SubjectParser
 		return $areas;
 	}
 
-	private function getSubjects($xpath, $subjectArea) {
+	private function getSubjects(\DOMXPath $xpath, \DOMElement $subjectArea) {
 		$subjects = array();
 		$expression = "div[contains(concat(' ', normalize-space(@class), ' '), concat(' ', 'fachInhalt', ' '))]/span[contains(concat(' ', normalize-space(@class), ' '), concat(' ', 'subKat', ' '))]/a";
 		$domSubjects = $xpath->query($expression, $subjectArea);

@@ -1,6 +1,14 @@
 <?php
-/**
-*/
+namespace ProposalApp\Organization;
+
+require_once 'OrganizationSqlQueries.php';
+require_once 'OrganizationParser.php';
+require_once __DIR__ . '/../location/LocationService.php';
+require_once __DIR__ . '/../db/SqlConnection.php';
+
+use ProposalApp\db\SqlConnection;
+use ProposalApp\Location\LocationService;
+
 class Organization {
   	private $id;
   	private $typeId;

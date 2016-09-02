@@ -1,4 +1,11 @@
 <?php
+namespace ProposalApp\Location;
+
+require_once __DIR__ . '/../organization/Organization.php';
+
+use ProposalApp\Organization\Organization;
+use DOMDocument;
+use DOMXPath;
 
 class LocationService {
     private $serviceUrl = "https://maps.googleapis.com/maps/api/place/";
