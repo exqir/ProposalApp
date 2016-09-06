@@ -22,15 +22,15 @@ gulp.task('php', function() {
        .pipe(gulp.dest(paths.build.backend));
 });
 
-gulp.task('move-to-root', function(){
+gulp.task('rename-to-70', function(){
     return gulp
-        .src([path.resolve(paths.build.backend, 'proposalCollector.php'),path.resolve(paths.build.backend, 'config.php')])
-//        .pipe(rename('proposalCollector.php70'))
-        .pipe(gulp.dest(paths.build.dist));
+        .src(path.resolve(paths.build.dist, 'proposalCollector.php'))
+        .pipe(rename('proposalCollector.php70'));
+//        .pipe(gulp.dest(paths.build.dist));
 });
 
 gulp.task('backend', function(cb) {
-    gulpSequence('php','move-to-root')(cb);
+    gulpSequence('php','rename-to-70')(cb);
 });
 
 gulp.task('sass', function () {

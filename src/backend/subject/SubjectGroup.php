@@ -3,7 +3,7 @@ namespace ProposalApp;
 
 require_once 'SubjectSqlQueries.php';
 require_once 'SubjectParser.php';
-require_once __DIR__. '/../db/SqlConnection.php';
+require_once __DIR__ . '/../db/SqlConnection.php';
 
 class SubjectGroup {
   private $subjectChildren = [];

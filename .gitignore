@@ -17,10 +17,10 @@ db.php
 /node_modules
 
 # CSS
-/app/css/style.css
+/src/app/css/style.css
 
 # Bourbon
-/app/scss/bourbon
+/src/app/scss/bourbon
 
 #IDEA
 .idea/

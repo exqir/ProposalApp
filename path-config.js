@@ -5,13 +5,14 @@ const path = require('path');
 module.exports = function(config) {
     const paths = {
         src: {
-            nodeModules: path.resolve(__dirname, 'node_modules'),
-            app: path.resolve(__dirname, 'app'),
-            scripts: path.resolve(__dirname, 'app', 'scripts'),
-            styles: path.resolve(__dirname, 'app', 'styles'),
-            partials: path.resolve(__dirname, 'app', 'partials'),
-            assets: path.resolve(__dirname, 'app', 'assets'),
-            backend: path.resolve(__dirname, 'backend')
+            nodeModules: path.resolve(__dirname, config.src, 'node_modules'),
+            app: path.resolve(__dirname, config.src, 'app'),
+            scripts: path.resolve(__dirname, config.src, 'app', 'scripts'),
+            styles: path.resolve(__dirname, config.src, 'app', 'styles'),
+            partials: path.resolve(__dirname, config.src, 'app', 'partials'),
+            assets: path.resolve(__dirname, config.src, 'app', 'assets'),
+            backend: path.resolve(__dirname, config.src, 'backend'),
+            root: path.resolve(__dirname, config.src)
         },
         build: {
             dist: path.resolve(__dirname, config.dist),
