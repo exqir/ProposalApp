@@ -1,5 +1,5 @@
 <?php
-namespace ProposalApp\db;
+namespace ProposalApp;
 
 use mysqli;
 use mysqli_stmt;

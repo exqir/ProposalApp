@@ -1,11 +1,9 @@
 <?php
-namespace ProposalApp\Proposal;
+namespace ProposalApp;
 
 require_once 'ProposalSqlQueries.php';
 require_once 'ProposalParser.php';
 require_once __DIR__ . '/../organization/Organization.php';
-
-use ProposalApp\Organization\Organization;
 
 class Proposal {
     private $id;

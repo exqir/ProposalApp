@@ -1,11 +1,9 @@
 <?php
-namespace ProposalApp\Subject;
+namespace ProposalApp;
 
 require_once 'SubjectSqlQueries.php';
 require_once 'SubjectParser.php';
 require_once __DIR__. '/../db/SqlConnection.php';
-
-use ProposalApp\db\SqlConnection;
 
 class SubjectGroup {
   private $subjectChildren = [];

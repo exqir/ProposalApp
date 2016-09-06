@@ -1,5 +1,5 @@
 <?php
-namespace ProposalApp\Subject;
+namespace ProposalApp;
 
 class SubjectParser
 {

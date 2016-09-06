@@ -1,5 +1,5 @@
 <?php
-namespace ProposalApp\Util;
+namespace ProposalApp;
 
 use DOMDocument;
 use DOMXPath;

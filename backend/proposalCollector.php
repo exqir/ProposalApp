@@ -24,12 +24,6 @@
     require_once 'config.php';
     require_once 'db.php';
 
-    use ProposalApp\db\SqlConnection;
-    use ProposalApp\Proposal\Proposal;
-    use ProposalApp\Organization\Organization;
-    use ProposalApp\Subject\SubjectGroup;
-    use ProposalApp\Util\Util;
-
 	error_reporting(E_ERROR | E_PARSE);
 
 	$newProposals = collectProposalsFrom(URL);

@@ -1,11 +1,9 @@
 <?php
-namespace ProposalApp\Proposal;
+namespace ProposalApp;
 
 require_once __DIR__ . '/../organization/OrganizationParser.php';
 require_once __DIR__ . '/../util/Util.php';
 
-use ProposalApp\Organization\OrganizationParser;
-use ProposalApp\Util\Util;
 use DOMDocument;
 
 class ProposalParser

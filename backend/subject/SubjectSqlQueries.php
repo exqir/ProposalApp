@@ -1,12 +1,11 @@
 <?php
-namespace ProposalApp\Subject;
+namespace ProposalApp;
 
 require_once __DIR__ . '/../db/SqlConnection.php';
 
-use ProposalApp\db\SqlConnection as Connection;
 use mysqli_stmt;
 
-class SubjectSqlQueries extends Connection {
+class SubjectSqlQueries extends SqlConnection {
     protected $mysqli;
 
     public function __construct($db) {

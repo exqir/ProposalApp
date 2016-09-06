@@ -1,9 +1,8 @@
 <?php
-namespace ProposalApp\Location;
+namespace ProposalApp;
 
 require_once __DIR__ . '/../organization/Organization.php';
 
-use ProposalApp\Organization\Organization;
 use DOMDocument;
 use DOMXPath;
 
