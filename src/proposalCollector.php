@@ -1,20 +1,5 @@
 <?php
 
-//    require_once 'backend/Util.php';
-//	require_once 'backend/models/Organization.php';
-//	require_once 'backend/models/Proposal.php';
-//	require_once 'backend/models/SubjectGroup.php';
-//	require_once 'backend/parser/ProposalParser.php';
-//	require_once 'backend/parser/OrganizationParser.php';
-//	require_once 'backend/parser/SubjectParser.php';
-//	require_once 'backend/db/SqlConnection.php';
-//	require_once 'backend/db/OrganizationSqlQueries.php';
-//	require_once 'backend/db/ProposalSqlQueries.php';
-//	require_once 'backend/db/SubjectSqlQueries.php';
-//	require_once 'backend/db/LocationService.php';
-//	require_once 'config.php';
-//	require_once 'db.php';
-
     require_once 'backend/db/SqlConnection.php';
     require_once 'backend/proposal/Proposal.php';
     require_once 'backend/organization/Organization.php';

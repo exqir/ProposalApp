@@ -1,118 +1,144 @@
 <?php
 require_once 'flight/Flight.php';
-require_once __DIR__ . '/../db/SqlConnection.php';
-require_once __DIR__ . '/../proposal/Proposal.php';
-require_once __DIR__ . '/../organization/Organization.php';
 require_once __DIR__ . '/../../db.php';
+
+require_once __DIR__ . '/statistics/OrganizationStatistics.php';
+require_once __DIR__ . '/organization/OrganizationGets.php';
+require_once __DIR__ . '/organization/OrganizationPuts.php';
+
+require_once __DIR__ . '/proposal/ProposalGets.php';
+require_once __DIR__ . '/proposal/ProposalPuts.php';
+
+require_once __DIR__ . '/subject/SubjectGets.php';
+
 
 Flight::route('GET /', function(){
     echo 'GET hello world!';
 });
 
-Flight::route('GET /proposals/', function(){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-  echo 'GET proposal';
-  Flight::json($sql->getProposals());
-  $sql->closeConnection();
-});
+/*********************
+** /PROPOSALS
+**********************/
 
-Flight::route('PUT /proposals/', function(){
-    echo 'PUT proposal';
+Flight::route('GET /proposals/', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET proposals';
+  $pg = new ProposalGets($db->getConnection());
+  Flight::json($pg->getProposals());
+  $db->closeConnection();
 });
 
 Flight::route('GET /proposals/@id/', function($id){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
   echo 'GET proposal';
-  Flight::json($sql->getProposal($id));
-  $sql->closeConnection();
+  $pg = new ProposalGets($db->getConnection());
+  Flight::json($pg->getProposal($id));
+  $db->closeConnection();
 });
 
 Flight::route('PUT /proposals/@id', function(){
-    $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-    echo 'PUT proposal';
-    $payload = json_decode(Flight::request()->getBody(), true);
-    //$json = json_decode($payload, true);
-    //var_dump(json_decode($payload, true));
-    //echo $json["test"];
-    $proposal = new Proposal();
-    $proposal->setProposalByArray($payload);
-    $sql->editProposal($proposal);
-    //echo $proposal->getTitle();
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'PUT proposal';
+  $payload = json_decode(Flight::request()->getBody(), true);
+  $pp = new ProposalPuts($db->getConnection());
+  $pp->putProposal($payload);
+  $db->closeConnection();
 });
 
+/*********************
+ ** /ORGANIZATIONS
+ **********************/
+
 Flight::route('GET /organizations/', function(){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
   echo 'GET organizations';
-  Flight::json($sql->getOrganizations());
-  $sql->closeConnection();
+  $og = new OrganizationGets($db->getConnection());
+  Flight::json($og->getOrganizations());
+  $db->closeConnection();
 });
 
 Flight::route('GET /organizations/@id/', function($id){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-  echo 'GET organization';
-  Flight::json($sql->getOrganization($id));
-  $sql->closeConnection();
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $og = new OrganizationGets($db->getConnection());
+  Flight::json($og->getOrganization($id));
+  $db->closeConnection();
 });
 
 Flight::route('PUT /organizations/@id/', function(){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-  echo 'PUT organization';
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'PUT organizations';
   $payload = json_decode(Flight::request()->getBody(), true);
-  $organization = new Organization($payload["Name"]);
-  $organization->setOrganizationByArray($payload);
-  $sql->editOrganization($organization);
+  $op = new OrganizationPuts($db->getConnection());
+  $op->putOrganization($payload);
+  $db->closeConnection();
 });
 
 Flight::route('PUT /organizations/@id/merge/@secId', function($id,$secId){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
   echo 'GET MERGE';
   //@id: Alias of organization
   //@secId: Main organization
-  $res = $sql->mergeOrangization($secId,$id);
+  $op = new OrganizationPuts($db->getConnection());
+  $res = $op->mergeOrangization($secId,$id);
   echo 'RESULT: '. $res;
-  $sql->closeConnection();
+  $db->closeConnection();
 });
 
 Flight::route('GET /organizations/@id/alias/', function($id){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
   echo 'GET ALIASES';
-  Flight::json($sql->getOrganizationsWithAlias($id));
-  $sql->closeConnection();
+  $og = new OrganizationGets($db->getConnection());
+  Flight::json($og->getAliasOfOrganization($id));
+  $db->closeConnection();
 });
+
+/*********************
+ ** /STATISTICS
+ **********************/
 
 Flight::route('GET /statistics/organizations/', function(){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
   echo 'GET organizations';
-  Flight::json($sql->getOrganizationNames());
-  $sql->closeConnection();
-});
-
-Flight::route('GET /subjects-lists/cultures/', function(){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-  echo 'GET organizations';
-  Flight::json($sql->getSubjectCultures());
-  $sql->closeConnection();
-});
-
-Flight::route('GET /subjects-lists/areas/', function(){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-  echo 'GET organizations';
-  Flight::json($sql->getSubjectAreas());
-  $sql->closeConnection();
-});
-
-Flight::route('GET /subjects-lists/subjects/', function(){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-  echo 'GET organizations';
-  Flight::json($sql->getSubjects());
-  $sql->closeConnection();
+  $os = new OrganizationStatistics($db->getConnection());
+  Flight::json($os->getOrganizations());
+  $db->closeConnection();
 });
 
 Flight::route('GET /statistics/organization-types/', function(){
-  $sql = new SqlHandler(HOST,USER,PW,DB_NAME);
-  echo 'GET organizations types';
-  Flight::json($sql->getOrganizationTypes());
-  $sql->closeConnection();
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organization types';
+  $os = new OrganizationStatistics($db->getConnection());
+  Flight::json($os->getOrganizationTypes());
+  $db->closeConnection();
+});
+
+/*********************
+ ** /SUBJECTS
+ **********************/
+
+Flight::route('GET /subjects/cultures/', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET cultures';
+  $sg = new SubjectGets($db->getConnection());
+  Flight::json($sg->getSubjectCultures());
+  $db->closeConnection();
+});
+
+Flight::route('GET /subjects/areas/', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET cultures';
+  $sg = new SubjectGets($db->getConnection());
+  Flight::json($sg->getSubjectAreas());
+  $db->closeConnection();
+});
+
+Flight::route('GET /subjects/subjects/', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET cultures';
+  $sg = new SubjectGets($db->getConnection());
+  Flight::json($sg->getSubjects());
+  $db->closeConnection();
 });
 
 Flight::start();

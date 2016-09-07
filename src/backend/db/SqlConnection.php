@@ -31,7 +31,7 @@ class SqlConnection {
 
     protected function sqlQuery($query, $params, $success,$referenceObject) {
         if($stmt = $this->mysqli->prepare($query)) {
-            if($params !== NULL) {
+            if($params !== NULL && count($params) > 0) {
                 $bindParams = $this->getParamsAsArrayByReference(
                     array_merge(array($this->getParameterTypesAsString($params)),$params));
                 call_user_func_array(array($stmt,'bind_param'), $bindParams);
@@ -67,5 +67,23 @@ class SqlConnection {
 
     protected function getInsertId(mysqli_stmt $stmt, $referenceObject) {
         return $this->mysqli->insert_id;
+    }
+
+    protected function put(mysqli_stmt $stmt, $referenceObject) {
+        return 1;
+    }
+
+    protected function selectArrayQuery($query) {
+        if($stmt = $this->mysqli->query($query)){
+            $res = array();
+            while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+                $res[] = $row;
+            }
+            $stmt->free();
+            return $res;
+        } else {
+            printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+            return -1; // Query Error
+        }
     }
 }

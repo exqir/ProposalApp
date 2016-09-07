@@ -112,5 +112,6 @@ class Organization {
 		$this->setCity($array["City"]);
 		$this->setState($array["State"]);
 		$this->setCountry($array["Country"]);
+        return $this;
 	}
 }

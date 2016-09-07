@@ -195,5 +195,6 @@ class Proposal {
         $this->setSubjectCulture($array["subject_culture"]);
         $this->setSubjectArea($array["subject_area"]);
         $this->setSubject($array["subject"]);
+        return $this;
     }
 }

@@ -65,8 +65,9 @@ gulp.task('assets', function() {
 });
 
 gulp.task('bootstrap', function() {
+    console.log(paths.build.app.vendor);
     return gulp
-        .src([paths.src.bootstrap.js,paths.src.bootstrap.css,paths.src.bootstrap.map])
+        .src([paths.src.bootstrap.css,paths.src.bootstrap.map])
         .pipe(gulp.dest(paths.build.app.vendor));
 });
 

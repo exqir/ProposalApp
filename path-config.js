@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = function(config) {
     const paths = {
         src: {
-            nodeModules: path.resolve(__dirname, config.src, 'node_modules'),
+            nodeModules: path.resolve(__dirname, 'node_modules'),
             app: path.resolve(__dirname, config.src, 'app'),
             scripts: path.resolve(__dirname, config.src, 'app', 'scripts'),
             styles: path.resolve(__dirname, config.src, 'app', 'styles'),
@@ -32,7 +32,6 @@ module.exports = function(config) {
     paths.src.jsurl = path.resolve(paths.src.nodeModules, 'jsurl/lib/jsurl.js')
 
     paths.src.bootstrap = {
-        js: path.resolve(paths.src.nodeModules, 'bootstrap/dist/js/prism.js'),
         css: path.resolve(paths.src.nodeModules, 'bootstrap/dist/css/bootstrap.min.css'),
         map: path.resolve(paths.src.nodeModules, 'bootstrap/dist/css/bootstrap.min.css.map')
     }

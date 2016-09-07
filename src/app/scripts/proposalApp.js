@@ -26,7 +26,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   }
 ])
 .service('restRessources', function($http){
-  var route = "./../restEndpoint";
+  var route = "./../backend/api";
   this.getProposals = function() {
     return $http.get(route + "/proposals");
   };
@@ -49,13 +49,13 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     return $http.get(route + "/statistics/organizations/");
   };
   this.getCultures = function() {
-    return $http.get(route + "/subjects-lists/cultures/");
+    return $http.get(route + "/subjects/cultures/");
   };
   this.getAreas = function() {
-    return $http.get(route + "/subjects-lists/areas/");
+    return $http.get(route + "/subjects/areas/");
   };
   this.getSubjects = function() {
-    return $http.get(route + "/subjects-lists/subjects/");
+    return $http.get(route + "/subjects/subjects/");
   };
   this.getTypeIds = function() {
     return $http.get(route + "/statistics/organization-types/");
