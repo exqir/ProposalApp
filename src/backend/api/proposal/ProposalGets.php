@@ -10,7 +10,14 @@ class ProposalGets extends SqlConnection {
     }
 
     public function getProposals() {
-        return $this->selectArrayQuery("SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, organizations.State AS State , organizations.Country AS Country ,subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
+        return $this->selectArrayQuery("SELECT proposal.*, 
+            organizations.Abbrev AS orgAbbrev, 
+            organizations.Name AS orgName, 
+            organizations.State AS State, 
+            organizations.Country AS Country,
+            subject_culture.Name AS Culture,
+            subject_area.Name AS Area,
+            subject.Name AS Subject
 			FROM proposal
 			INNER JOIN organizations
 				ON proposal.OrgID = organizations.ID

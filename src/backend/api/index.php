@@ -3,6 +3,8 @@ require_once 'flight/Flight.php';
 require_once __DIR__ . '/../../db.php';
 
 require_once __DIR__ . '/statistics/OrganizationStatistics.php';
+require_once __DIR__ . '/statistics/ProposalStatistics.php';
+
 require_once __DIR__ . '/organization/OrganizationGets.php';
 require_once __DIR__ . '/organization/OrganizationPuts.php';
 
@@ -135,6 +137,14 @@ Flight::route('GET /statistics/organizations/states/used', function(){
   $os = new OrganizationStatistics($db->getConnection());
   Flight::json($os->getUsedStates());
   $db->closeConnection();
+});
+
+Flight::route('GET /statistics/proposals/@country', function($country){
+    $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+    echo 'GET organizations';
+    $ps = new ProposalStatistics($db->getConnection());
+    Flight::json($ps->getProposalsByCountry($country));
+    $db->closeConnection();
 });
 
 /*********************

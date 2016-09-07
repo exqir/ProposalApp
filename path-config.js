@@ -31,6 +31,31 @@ module.exports = function(config) {
 
     paths.src.jsurl = path.resolve(paths.src.nodeModules, 'jsurl/lib/jsurl.js')
 
+    paths.src.angular = {
+        js: path.resolve(paths.src.nodeModules, 'angular/angular.min.js'),
+        map: path.resolve(paths.src.nodeModules, 'angular/angular.min.js.map'),
+        route: {
+            js: path.resolve(paths.src.nodeModules, 'angular-route/angular-route.min.js'),
+            map: path.resolve(paths.src.nodeModules, 'angular-route/angular-route.min.js.map')
+        },
+        sanitize: {
+            js: path.resolve(paths.src.nodeModules, 'angular-sanitize/angular-sanitize.min.js'),
+            map: path.resolve(paths.src.nodeModules, 'angular-sanitize/angular-sanitize.min.js.map')
+        },
+        animate: {
+            js: path.resolve(paths.src.nodeModules, 'angular-animate/angular-animate.min.js'),
+            map: path.resolve(paths.src.nodeModules, 'angular-animate/angular-animate.min.js.map')
+        },
+        filter: {
+            js: path.resolve(paths.src.nodeModules, 'angular-filter/dist/angular-filter.min.js')
+        },
+        uiBootstrap: {
+            js: path.resolve(paths.src.nodeModules, 'angular-ui-bootstrap/dist/ui-bootstrap.js'),
+            tpls: path.resolve(paths.src.nodeModules, 'angular-ui-bootstrap/dist/ui-bootstrap-tpls.js')
+        }
+    }
+
+
     paths.src.bootstrap = {
         css: path.resolve(paths.src.nodeModules, 'bootstrap/dist/css/bootstrap.min.css'),
         map: path.resolve(paths.src.nodeModules, 'bootstrap/dist/css/bootstrap.min.css.map')

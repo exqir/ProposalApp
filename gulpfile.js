@@ -76,7 +76,43 @@ gulp.task('jsurl', function() {
         .pipe(gulp.dest(paths.build.app.vendor));
 });
 
-gulp.task('app',['sass','scripts','partials','assets','bootstrap','jsurl'], function() {
+gulp.task('angular',['angular-route','angular-sanitize','angular-animate','angular-filter','angular-ui-bootstrap'], function() {
+    return gulp
+        .src([paths.src.angular.js,paths.src.angular.map])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular-route', function() {
+    return gulp
+        .src([paths.src.angular.route.js,paths.src.angular.route.map])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular-sanitize', function() {
+    return gulp
+        .src([paths.src.angular.sanitize.js,paths.src.angular.sanitize.map])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular-animate', function() {
+    return gulp
+        .src([paths.src.angular.animate.js,paths.src.angular.animate.map])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular-filter', function() {
+    return gulp
+        .src(paths.src.angular.filter.js)
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular-ui-bootstrap', function() {
+    return gulp
+        .src([paths.src.angular.uiBootstrap.js,paths.src.angular.uiBootstrap.tpls])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('app',['sass','scripts','partials','assets','bootstrap','jsurl', 'angular'], function() {
     return gulp
         .src(path.resolve(paths.src.app, 'index.html'))
         .pipe(gulp.dest(paths.build.app.root));
