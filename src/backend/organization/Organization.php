@@ -1,5 +1,4 @@
 <?php
-namespace ProposalApp;
 
 require_once 'OrganizationSqlQueries.php';
 require_once 'OrganizationParser.php';

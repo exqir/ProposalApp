@@ -1,8 +1,4 @@
 <?php
-namespace ProposalApp;
-
-use DOMDocument;
-use DOMXPath;
 
 class Util {
 	public static function getElementsByClass(&$parentNode, $tagName, $className) {

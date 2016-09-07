@@ -22,6 +22,12 @@ gulp.task('php', function() {
        .pipe(gulp.dest(paths.build.backend));
 });
 
+gulp.task('root', function() {
+    return gulp
+        .src(path.resolve(paths.src.root, '*.php'))
+        .pipe(gulp.dest(paths.build.dist));
+});
+
 gulp.task('rename-to-70', function(){
     return gulp
         .src(path.resolve(paths.build.dist, 'proposalCollector.php'))
@@ -30,7 +36,7 @@ gulp.task('rename-to-70', function(){
 });
 
 gulp.task('backend', function(cb) {
-    gulpSequence('php','rename-to-70')(cb);
+    gulpSequence('php', 'root')(cb);
 });
 
 gulp.task('sass', function () {
@@ -107,7 +113,7 @@ gulp.task('dev', function (cb) {
 });
 
 gulp.task('build', function (cb) {
-    gulpSequence('clean',['backend','app'])(cb);
+    gulpSequence('clean',['backend','app'],'rename-to-70')(cb);
 });
 
 gulp.task('default', ['build'], function() {

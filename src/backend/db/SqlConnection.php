@@ -1,8 +1,4 @@
 <?php
-namespace ProposalApp;
-
-use mysqli;
-use mysqli_stmt;
 
 class SqlConnection {
     protected $mysqli;
@@ -35,8 +31,6 @@ class SqlConnection {
 
     protected function sqlQuery($query, $params, $success,$referenceObject) {
         if($stmt = $this->mysqli->prepare($query)) {
-            print($query . "<br>");
-            var_dump($params);
             if($params !== NULL) {
                 $bindParams = $this->getParamsAsArrayByReference(
                     array_merge(array($this->getParameterTypesAsString($params)),$params));
@@ -45,7 +39,6 @@ class SqlConnection {
             if($stmt->execute()) {
                 return call_user_func(array($this,$success),$stmt,$referenceObject);
             } else {
-                var_dump($bindParams);
                 printf('errno: %d, error: %s called by: %s<br>', $stmt->errno, $stmt->error, $success);
                 return -2; // Execute Error
             }

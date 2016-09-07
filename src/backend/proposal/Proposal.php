@@ -1,5 +1,4 @@
 <?php
-namespace ProposalApp;
 
 require_once 'ProposalSqlQueries.php';
 require_once 'ProposalParser.php';

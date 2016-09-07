@@ -1,5 +1,4 @@
 <?php
-    namespace ProposalApp;
 
 //    require_once 'backend/Util.php';
 //	require_once 'backend/models/Organization.php';

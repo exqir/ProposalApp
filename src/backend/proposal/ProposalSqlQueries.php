@@ -1,5 +1,4 @@
 <?php
-namespace ProposalApp;
 
 require_once __DIR__ . '/../db/SqlConnection.php';
 require_once __DIR__ . '/../organization/Organization.php';

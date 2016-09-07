@@ -1,5 +1,4 @@
 <?php
-namespace ProposalApp;
 
 require_once 'SubjectSqlQueries.php';
 require_once 'SubjectParser.php';
