@@ -59,8 +59,8 @@
           </li>
           <li role="separator" class="divider filter"></li>
           <li ng-repeat="state in states | filter: smartSearchState" class="list-item">
-              <input type="checkbox" ng-click="includeState(state)">
-              {{state}}
+              <input type="checkbox" ng-click="includeState(state.State)">
+              {{state.State}}
           </li>
         </ul>
       </div>

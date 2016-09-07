@@ -48,6 +48,12 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   this.getStatisticsOrganization = function() {
     return $http.get(route + "/statistics/organizations/");
   };
+  this.getUsedOrganizations = function() {
+    return $http.get(route + "/statistics/organizations/used/");
+  };
+  this.getUsedStates = function() {
+    return $http.get(route + "/statistics/organizations/states/used/");
+  };
   this.getCultures = function() {
     return $http.get(route + "/subjects/cultures/");
   };
@@ -120,7 +126,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   var promises = [];
 
   promises.push(rest.getProposals());
-  promises.push(rest.getStatisticsOrganization());
+  promises.push(rest.getUsedOrganizations());
 
   $q.when(promises[0])
   .then(function(result) {
@@ -131,6 +137,10 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     $scope.organizations = result.data;
   });
 
+  rest.getUsedStates()
+  .then(function(result) {
+    $scope.states = result.data;
+  })
   rest.getCultures()
   .then(function(result) {
     $scope.cultures = result.data;
@@ -144,25 +154,25 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     $scope.subjects = result.data;
   });
 
-  $q.all(promises)
-  .then(function (results) {
-    var notFound = [];
-    for(var i = 0; i < $scope.organizations.length; i++) {
-      var found = false;
-      for(var n = 0; n < $scope.proposals.length; n++) {
-        if($scope.organizations[i].Name === $scope.proposals[n].orgName) {
-          found = true;
-          $scope.states.push($scope.organizations[i].State);
-          break;
-        }
-      }
-      if(found === false) notFound.push(i);
-    }
-    for (i = notFound.length - 1; i >= 0; i--) {
-      $scope.organizations.splice(notFound[i],1);
-    }
-    $scope.states = $filter("unique")($scope.states);
-  });
+  // $q.all(promises)
+  // .then(function (results) {
+  //   var notFound = [];
+  //   for(var i = 0; i < $scope.organizations.length; i++) {
+  //     var found = false;
+  //     for(var n = 0; n < $scope.proposals.length; n++) {
+  //       if($scope.organizations[i].Name === $scope.proposals[n].orgName) {
+  //         found = true;
+  //         $scope.states.push($scope.organizations[i].State);
+  //         break;
+  //       }
+  //     }
+  //     if(found === false) notFound.push(i);
+  //   }
+  //   for (i = notFound.length - 1; i >= 0; i--) {
+  //     $scope.organizations.splice(notFound[i],1);
+  //   }
+  //   $scope.states = $filter("unique")($scope.states);
+  // });
 
   $scope.org = [];
   $scope.raw = [];

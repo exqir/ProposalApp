@@ -105,11 +105,35 @@ Flight::route('GET /statistics/organizations/', function(){
   $db->closeConnection();
 });
 
+Flight::route('GET /statistics/organizations/used/', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $os = new OrganizationStatistics($db->getConnection());
+  Flight::json($os->getUsedOrganizations());
+  $db->closeConnection();
+});
+
 Flight::route('GET /statistics/organization-types/', function(){
   $db = new SqlConnection(HOST,USER,PW,DB_NAME);
   echo 'GET organization types';
   $os = new OrganizationStatistics($db->getConnection());
   Flight::json($os->getOrganizationTypes());
+  $db->closeConnection();
+});
+
+Flight::route('GET /statistics/organizations/states/', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $os = new OrganizationStatistics($db->getConnection());
+  Flight::json($os->getStates());
+  $db->closeConnection();
+});
+
+Flight::route('GET /statistics/organizations/states/used', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $os = new OrganizationStatistics($db->getConnection());
+  Flight::json($os->getUsedStates());
   $db->closeConnection();
 });
 
