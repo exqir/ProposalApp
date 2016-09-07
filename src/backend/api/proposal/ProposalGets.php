@@ -36,7 +36,7 @@ class ProposalGets extends SqlConnection {
             LEFT OUTER JOIN subject
       	        ON proposal.subject = subject.ID
 			WHERE proposal.ID = " . $id ."";
-        return $this->selectArrayQuery($query);
+        return $this->selectQuery($query);
     }
 
     public function getAliasOfOrganization($id) {

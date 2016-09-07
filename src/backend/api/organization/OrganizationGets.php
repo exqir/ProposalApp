@@ -15,7 +15,7 @@ class OrganizationGets extends SqlConnection {
 
     public function getOrganization($id) {
         $query = "SELECT * FROM organizations WHERE organizations.ID = " . $id ."";
-        return $this->selectArrayQuery($query);
+        return $this->selectQuery($query);
     }
 
     public function getAliasOfOrganization($id) {

@@ -86,4 +86,13 @@ class SqlConnection {
             return -1; // Query Error
         }
     }
+
+    protected function selectQuery($query) {
+        if($stmt = $this->mysqli->query($query)) {
+            return $stmt->fetch_assoc();
+        } else {
+            printf('errno: %d, error: %s', $this->mysqli->errno, $this->mysqli->error);
+            die;
+        }
+    }
 }

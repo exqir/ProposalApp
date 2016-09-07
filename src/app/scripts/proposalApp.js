@@ -360,8 +360,6 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
         } else {
           $scope.aliases = result.data;
         }
-        console.log($scope.aliases);
-        console.log($scope.aliases.length);
         //$scope.organizations = $filter("filter")($scope.organizations, {ID: orgID});
       });
   });
@@ -369,7 +367,6 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     console.log($scope.organization);
     rest.putOrganization(orgID, $scope.organization)
     .then(function (response) {
-      console.log(response);
       console.log(response.data);
       if(response.status === 200) $uibModalInstance.dismiss();
     });
@@ -385,7 +382,6 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   $scope.setAlias = function(id, mainOrg) {
     rest.setAlias(id, mainOrg)
     .then(function(response) {
-      console.log(response);
       if(response.status === 200) console.log("success");
     });
   };
