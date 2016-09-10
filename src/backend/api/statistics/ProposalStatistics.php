@@ -9,16 +9,25 @@ class ProposalStatistics extends SqlConnection {
         $this->mysqli = $db;
     }
 
-    public function getProposals() {
-        return $this->selectArrayQuery("SELECT * FROM proposal");
+    public function getProposalCount() {
+        return $this->selectQuery("SELECT COUNT(*) AS number FROM proposal");
     }
 
-    public function getProposalsByCountry($country) {
-        $query = "SELECT * FROM proposal 
+    public function getProposalCountByCountry($country) {
+        $query = "SELECT COUNT(*) AS number FROM proposal 
           LEFT JOIN organizations
           ON proposal.OrgID = organizations.ID
           OR proposal.OrgOptID = organizations.ID
           WHERE organizations.Country = '" . $country . "'";
-        return $this->selectArrayQuery($query);
+        return $this->selectQuery($query);
+    }
+
+    public function getProposalTypeCount() {
+        return $this->selectQuery("SELECT
+	      SUM(CASE WHEN W1 != 0 THEN 1 ELSE 0 END) AS W1,
+          SUM(CASE WHEN W2 != 0 THEN 1 ELSE 0 END) AS W2,
+          SUM(CASE WHEN W3 != 0 THEN 1 ELSE 0 END) AS W3
+          FROM proposal
+        ");
     }
 }

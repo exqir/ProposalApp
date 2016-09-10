@@ -1,9 +1,3 @@
-<!-- <div class="input-group">
-  <input type="text" class="form-control" placeholder="Search for..." ng-model="search">
-  <span class="input-group-btn">
-    <button class="btn btn-default" type="button" ng-click="goSearch()">Go!</button>
-  </span>
-</div> -->
 <table class="table table-bordered">
   <thead>
     <td class="smartFilter">
@@ -13,9 +7,9 @@
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="rawDD">
-          <li ng-repeat="proposal in proposals | unique: 'Raw' | orderBy: 'Raw' " class="list-item">
-              <input type="checkbox" ng-click="includeRaw(proposal.Raw)">
-              <span ng-bind-html="proposal.Raw | convertToStatus"></span> ({{getCountRaw(proposal.Raw)}})
+          <li ng-repeat="proposal in pTable.proposals | unique: 'Raw' | orderBy: 'Raw' " class="list-item">
+              <input type="checkbox" ng-click="pTable.includeRaw(proposal.Raw)">
+              <span ng-bind-html="proposal.Raw | convertToStatus"></span>
           </li>
         </ul>
       </div>
@@ -25,7 +19,7 @@
     <td class="smartFilter">
       <div id="orgDD" class="dropdown" uib-dropdown auto-close="disabled">
         <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
-            Organisation ({{organizations.length}})
+            Organisation ({{pTable.organizations.length}})
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="orgDD">
@@ -33,24 +27,17 @@
             <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchOrg">
           </li>
           <li id="test" role="separator" class="divider filter"></li>
-          <li ng-repeat="org in organizations | filterBy: ['Name']:smartSearchOrg" class="list-item">
-              <input type="checkbox" ng-click="includeOrg(org.Name)">
+          <li ng-repeat="org in pTable.organizations | filterBy: ['Name']:smartSearchOrg" class="list-item">
+              <input type="checkbox" ng-click="pTable.includeOrg(org.Name)">
               {{org.Name}}
-              <!-- ({{(proposals | filter: org.orgName | filter: rawFilter).length}}) -->
-              <!-- ({{getCountOrg(proposal.orgName)}}) -->
           </li>
-          <!-- <li ng-repeat="proposal in proposals | unique: 'orgName' | filterBy: ['orgName']:smartSearchOrg | orderBy: 'orgName' " class="list-item">
-              <input type="checkbox" ng-click="includeOrg(proposal.orgName)">
-              {{proposal.orgName}} ({{(proposals | filter: proposal.orgName | filter: rawFilter).length}})
-              //({{getCountOrg(proposal.orgName)}})
-          </li> -->
         </ul>
       </div>
     </td>
     <td class="smartFilter">
       <div id="stateDD" class="dropdown" uib-dropdown auto-close="disabled">
         <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
-            Bundesland ({{states.length}})
+            Bundesland ({{pTable.states.length}})
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="stateDD">
@@ -58,8 +45,8 @@
             <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchState">
           </li>
           <li role="separator" class="divider filter"></li>
-          <li ng-repeat="state in states | filter: smartSearchState" class="list-item">
-              <input type="checkbox" ng-click="includeState(state.State)">
+          <li ng-repeat="state in pTable.states | filter: smartSearchState" class="list-item">
+              <input type="checkbox" ng-click="pTable.includeState(state.State)">
               {{state.State}}
           </li>
         </ul>
@@ -72,8 +59,8 @@
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="cultureDD">
-          <li ng-repeat="culture in cultures" class="list-item">
-              <input type="checkbox" ng-click="includeSubjectCulture(culture.Name)">
+          <li ng-repeat="culture in pTable.cultures" class="list-item">
+              <input type="checkbox" ng-click="pTable.includeSubjectCulture(culture.Name)">
               {{culture.Name}}
           </li>
         </ul>
@@ -90,8 +77,8 @@
             <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchArea">
           </li>
           <li role="separator" class="divider filter"></li>
-          <li ng-repeat="area in areas | filterBy: ['Name']:smartSearchArea" class="list-item">
-              <input type="checkbox" ng-click="includeSubjectArea(area.Name)">
+          <li ng-repeat="area in pTable.areas | filterBy: ['Name']:smartSearchArea" class="list-item">
+              <input type="checkbox" ng-click="pTable.includeSubjectArea(area.Name)">
               {{area.Name}}
           </li>
         </ul>
@@ -108,8 +95,8 @@
             <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchSubject">
           </li>
           <li role="separator" class="divider filter"></li>
-          <li ng-repeat="subject in subjects | filterBy: ['Name']:smartSearchSubject" class="list-item">
-              <input type="checkbox" ng-click="includeSubject(subject.Name)">
+          <li ng-repeat="subject in pTable.subjects | filterBy: ['Name']:smartSearchSubject" class="list-item">
+              <input type="checkbox" ng-click="pTable.includeSubject(subject.Name)">
               {{subject.Name}}
           </li>
         </ul>
@@ -117,33 +104,10 @@
     </td>
     <td>Erfasst am</td>
   </thead>
-<!-- </table>
-<div class="table-clickable" ng-repeat="proposal in proposals | filter:search | filter: orgFilter | filter: rawFilter" ng-click="open(proposal.ID)">
-  <span ng-bind-html="proposal.Raw | convertToStatus"></span>
-  <span>{{proposal.Title}}</span>
-  <span>
-    {{proposal.W1 | convertToName: 'W1' }}
-    {{proposal.W2 | convertToName: 'W2' }}
-    {{proposal.W3 | convertToName: 'W3' }}
-    {{proposal.C1 | convertToName: 'C1' }}
-    {{proposal.C2 | convertToName: 'C2' }}
-    {{proposal.C3 | convertToName: 'C3' }}
-    {{proposal.Tenure | convertTenure }}
-  </span>
-  <span>
-    <span class="label label-default">{{proposal.orgAbbrev}}</span>
-    {{proposal.orgName}}
-  </span>
-  <span>{{proposal.Culture}}</span>
-  <span>{{proposal.Area}}</span>
-  <span>{{proposal.Subject}}</span>
-  <span>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</span>
-</div> -->
-  <!-- <tr ng-repeat="proposal in proposals | filter:search | filter: orgFilter as results"> -->
   <tr class="table-clickable"
-  ng-repeat="proposal in proposals | filter:search | filter: orgFilter |
-  filter: rawFilter | filter: stateFilter | filter: cultureFilter"
-  ng-click="open(proposal.ID)">
+  ng-repeat="proposal in pTable.proposals | filter: pTable.search | filter: pTable.orgFilter |
+  filter: pTable.rawFilter | filter: pTable.stateFilter | filter: pTable.cultureFilter"
+  ng-click="pTable.open(proposal.ID)">
     <td ng-bind-html="proposal.Raw | convertToStatus"></td>
     <td>{{proposal.Title}}</td>
     <td>

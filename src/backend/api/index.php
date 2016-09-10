@@ -51,6 +51,10 @@ Flight::route('PUT /proposals/@id', function(){
  ** /ORGANIZATIONS
  **********************/
 
+/*******
+ * GET
+ ******/
+
 Flight::route('GET /organizations/', function(){
   $db = new SqlConnection(HOST,USER,PW,DB_NAME);
   echo 'GET organizations';
@@ -66,6 +70,18 @@ Flight::route('GET /organizations/@id/', function($id){
   Flight::json($og->getOrganization($id));
   $db->closeConnection();
 });
+
+Flight::route('GET /organizations/@id/alias/', function($id){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET ALIASES';
+  $og = new OrganizationGets($db->getConnection());
+  Flight::json($og->getAliasOfOrganization($id));
+  $db->closeConnection();
+});
+
+/*******
+ * PUT
+ ******/
 
 Flight::route('PUT /organizations/@id/', function(){
   $db = new SqlConnection(HOST,USER,PW,DB_NAME);
@@ -87,35 +103,11 @@ Flight::route('PUT /organizations/@id/merge/@secId', function($id,$secId){
   $db->closeConnection();
 });
 
-Flight::route('GET /organizations/@id/alias/', function($id){
-  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
-  echo 'GET ALIASES';
-  $og = new OrganizationGets($db->getConnection());
-  Flight::json($og->getAliasOfOrganization($id));
-  $db->closeConnection();
-});
-
 /*********************
  ** /STATISTICS
  **********************/
 
-Flight::route('GET /statistics/organizations/', function(){
-  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
-  echo 'GET organizations';
-  $os = new OrganizationStatistics($db->getConnection());
-  Flight::json($os->getOrganizations());
-  $db->closeConnection();
-});
-
-Flight::route('GET /statistics/organizations/used/', function(){
-  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
-  echo 'GET organizations';
-  $os = new OrganizationStatistics($db->getConnection());
-  Flight::json($os->getUsedOrganizations());
-  $db->closeConnection();
-});
-
-Flight::route('GET /statistics/organization-types/', function(){
+Flight::route('GET /statistics/organizations/types/', function(){
   $db = new SqlConnection(HOST,USER,PW,DB_NAME);
   echo 'GET organization types';
   $os = new OrganizationStatistics($db->getConnection());
@@ -131,6 +123,62 @@ Flight::route('GET /statistics/organizations/states/', function(){
   $db->closeConnection();
 });
 
+/*******
+ * COUNT
+ ******/
+
+Flight::route('GET /statistics/organizations/', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $os = new OrganizationStatistics($db->getConnection());
+  Flight::json($os->getOrganizationCount());
+  $db->closeConnection();
+});
+
+Flight::route('GET /statistics/organizations/types/count/', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organization types';
+  $os = new OrganizationStatistics($db->getConnection());
+  Flight::json($os->getOrganizationTypeCount());
+  $db->closeConnection();
+});
+
+Flight::route('GET /statistics/proposals/', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $ps = new ProposalStatistics($db->getConnection());
+  Flight::json($ps->getProposalCount());
+  $db->closeConnection();
+});
+
+Flight::route('GET /statistics/proposals/types', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $ps = new ProposalStatistics($db->getConnection());
+  Flight::json($ps->getProposalTypeCount());
+  $db->closeConnection();
+});
+
+Flight::route('GET /statistics/proposals/country/@country', function($country){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $ps = new ProposalStatistics($db->getConnection());
+  Flight::json($ps->getProposalCountByCountry($country));
+  $db->closeConnection();
+});
+
+/*******
+ * USED
+ ******/
+
+Flight::route('GET /statistics/organizations/used/', function(){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $os = new OrganizationStatistics($db->getConnection());
+  Flight::json($os->getUsedOrganizations());
+  $db->closeConnection();
+});
+
 Flight::route('GET /statistics/organizations/states/used', function(){
   $db = new SqlConnection(HOST,USER,PW,DB_NAME);
   echo 'GET organizations';
@@ -139,12 +187,20 @@ Flight::route('GET /statistics/organizations/states/used', function(){
   $db->closeConnection();
 });
 
-Flight::route('GET /statistics/proposals/@country', function($country){
-    $db = new SqlConnection(HOST,USER,PW,DB_NAME);
-    echo 'GET organizations';
-    $ps = new ProposalStatistics($db->getConnection());
-    Flight::json($ps->getProposalsByCountry($country));
-    $db->closeConnection();
+Flight::route('GET /statistics/organizations/states/used/@country', function($country){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $os = new OrganizationStatistics($db->getConnection());
+  Flight::json($os->getUsedStatesByCountry($country));
+  $db->closeConnection();
+});
+
+Flight::route('GET /statistics/organizations/states/used/count/@country', function($country){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET organizations';
+  $os = new OrganizationStatistics($db->getConnection());
+  Flight::json($os->getUsedStatesCountByCountry($country));
+  $db->closeConnection();
 });
 
 /*********************

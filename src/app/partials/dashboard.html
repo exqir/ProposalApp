@@ -8,8 +8,8 @@
             <p>/ davon aus Deutschlad</p>
           </div>
           <div class="number">
-            {{proposalsTotal}}
-            <span>{{proposalsGermanyTotal}}</span>
+            {{dash.proposalNumber}}
+            <span>{{dash.proposalNumberByCountry}}</span>
           </div>
         </div>
       </div>
@@ -19,7 +19,7 @@
             Organisationen
           </div>
           <div class="number">
-            {{organizationsTotal}}
+            {{dash.organizationNumber}}
           </div>
         </div>
       </div>
@@ -30,8 +30,8 @@
           <div class="title">
             Ausschreibungen pro Art
           </div>
-          <div ng-repeat="org in orgas | orderBy: 'number':true">
-            {{org.type}} | {{org.number}} | {{org.percentage}}%
+          <div ng-repeat="type in dash.organizationTypes">
+            {{type.name}} | {{type.number}} | {{dash.calculatePercentage(type.number, dash.proposalNumber)}}%
           </div>
         </div>
       </div>
@@ -40,8 +40,8 @@
           <div class="title">
             Besoldungen
           </div>
-          <div ng-repeat="sold in besoldung">
-            {{sold.type}} | {{sold.number}} | {{sold.percentage()}}%
+          <div ng-repeat="type in dash.proposalTypes">
+            {{type.name}} | {{type.number}} | {{dash.calculatePercentage(type.number, dash.proposalNumber)}}%
           </div>
         </div>
       </div>
@@ -50,8 +50,8 @@
           <div class="title">
             Ausschreibungen pro Bundesland
           </div>
-          <div ng-repeat="state in states | orderBy: 'name'">
-            {{state.name}} | {{state.number}} | {{state.percentage}}%
+          <div ng-repeat="state in dash.stateNumberByCountry">
+            {{state.name}} | {{state.number}} | {{state.calculatePercentage(type.number, dash.proposalNumber)}}%
           </div>
         </div>
       </div>
