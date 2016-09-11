@@ -3,6 +3,7 @@ var sass = require('gulp-sass');
 var rename = require('gulp-rename');
 var gulpSequence = require('gulp-sequence');
 var coffee = require('gulp-coffee');
+var concat = require('gulp-concat');
 var path = require('path');
 var del = require('del');
 
@@ -57,6 +58,7 @@ gulp.task('coffee', function() {
     return gulp
         .src(path.resolve(paths.src.scripts, '**/*.coffee'))
         .pipe(coffee({bare: true}))
+        .pipe(concat('coffee.js'))
         .pipe(gulp.dest(paths.build.app.scripts));
 });
 

@@ -17,7 +17,7 @@ class ProposalGets extends SqlConnection {
             organizations.Country AS Country,
             subject_culture.Name AS Culture,
             subject_area.Name AS Area,
-            subject.Name AS Subject
+            subject.Name AS SubjectName
 			FROM proposal
 			INNER JOIN organizations
 				ON proposal.OrgID = organizations.ID

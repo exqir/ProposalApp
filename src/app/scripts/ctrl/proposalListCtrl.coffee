@@ -39,13 +39,16 @@
       @includeSubject = includeSubject
       @subjectFilter = subjectFilter
 
+      # Search
       @search = ''
+      #@.$on('$routeChangeSuccess', setSearchTerm)
+
+      # Modal
+      @open = open
 
       pullData()
 
-      @.$on('$routeChangeSuccess', setSearchTerm)
-
-    #Util
+    # Util
 
     filterInclude = (array, element) =>
       i = @[array].indexOf(element)
@@ -58,7 +61,7 @@
     setSearchTerm = () =>
       @search = JSURL.parse($routeParams.search)
 
-    #Public
+    # pullData
 
     getProposals = () =>
       proposalsDataService
@@ -96,23 +99,32 @@
       .then (data) =>
         @subjects = data
 
-    ## Modal
+    # Modal
 
-    @open = (proposalID) =>
+    open = (proposalID, cultures, areas, subjects) =>
       modalInstance = $uibModal.open({
         animation: true,
         templateUrl: 'partials/_proposalModal.html',
         controller: 'proposalModalCtrl',
         controllerAs: 'modal',
         size: 'lg',
-        resolve: {id: () => proposalID}
+        resolve:
+          {
+            items: () =>
+              return {
+                id: proposalID,
+                cultures: cultures,
+                areas: areas,
+                subjects: subjects
+              }
+          }
       })
 
       modalInstance.result.then () ->
         return
 
 
-    ## Filter
+    # Filter
 
     includeOrg = (orgName) =>
       filterInclude('org', orgName)

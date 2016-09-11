@@ -246,64 +246,64 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
 //       });
 //   };
 // })
-.controller('proposalDetailCtrl', function($scope, $http, $routeParams, $uibModalInstance, $injector, restRessources, id){
-  var proposalID = id;
-  var rest = $injector.get('restRessources');
-  var lookup = {};
-  var getLookupObject = function(array,attribute) {
-    var lookup = {};
-    for (var i = 0; i < array.length; i++) {
-      lookup[array[i][attribute]] = array[i];
-    }
-    return lookup;
-  };
-  rest.getProposal(proposalID)
-    .then(function (response) {
-      $scope.proposal = response.data;
-      rest.getOrganizations()
-      .then(function(result) {
-        $scope.organizations = result.data;
-        var orgLookup = getLookupObject($scope.organizations, "ID");
-        $scope.selectedOrg = orgLookup[$scope.proposal.OrgID];
-      });
-      rest.getCultures()
-      .then(function(result) {
-        $scope.cultures = result.data;
-        var cultureLookup = getLookupObject($scope.cultures, "ID");
-        $scope.selectedCulture = cultureLookup[$scope.proposal.subject_culture];
-      });
-      rest.getAreas()
-      .then(function(result) {
-        $scope.areas = result.data;
-        var areaLookup = getLookupObject($scope.areas, "ID");
-        $scope.selectedArea = areaLookup[$scope.proposal.subject_area];
-      });
-      rest.getSubjects()
-      .then(function(result) {
-        $scope.subjects = result.data;
-        var subjectLookup = getLookupObject($scope.subjects, "ID");
-        $scope.selectedSubject = subjectLookup[$scope.proposal.subject];
-      });
-  });
-  $scope.editProposal = function(){
-    console.log($scope.proposal);
-    rest.putProposal(proposalID, $scope.proposal)
-    .then(function (response) {
-      console.log(response);
-      if(response.status === 200) $uibModalInstance.dismiss();
-    });
-  };
-  $scope.cancel = function()
-  {
-      $uibModalInstance.dismiss();
-  };
-  $scope.setOrg = function() {
-    $scope.proposal.OrgID = $scope.selectedOrg.ID;
-  };
-  $scope.setCulture = function() {
-    $scope.proposal.subject_culture = $scope.selectedCulture.ID;
-  };
-})
+// .controller('proposalDetailCtrl', function($scope, $http, $routeParams, $uibModalInstance, $injector, restRessources, id){
+//   var proposalID = id;
+//   var rest = $injector.get('restRessources');
+//   var lookup = {};
+//   var getLookupObject = function(array,attribute) {
+//     var lookup = {};
+//     for (var i = 0; i < array.length; i++) {
+//       lookup[array[i][attribute]] = array[i];
+//     }
+//     return lookup;
+//   };
+//   rest.getProposal(proposalID)
+//     .then(function (response) {
+//       $scope.proposal = response.data;
+//       rest.getOrganizations()
+//       .then(function(result) {
+//         $scope.organizations = result.data;
+//         var orgLookup = getLookupObject($scope.organizations, "ID");
+//         $scope.selectedOrg = orgLookup[$scope.proposal.OrgID];
+//       });
+//       rest.getCultures()
+//       .then(function(result) {
+//         $scope.cultures = result.data;
+//         var cultureLookup = getLookupObject($scope.cultures, "ID");
+//         $scope.selectedCulture = cultureLookup[$scope.proposal.subject_culture];
+//       });
+//       rest.getAreas()
+//       .then(function(result) {
+//         $scope.areas = result.data;
+//         var areaLookup = getLookupObject($scope.areas, "ID");
+//         $scope.selectedArea = areaLookup[$scope.proposal.subject_area];
+//       });
+//       rest.getSubjects()
+//       .then(function(result) {
+//         $scope.subjects = result.data;
+//         var subjectLookup = getLookupObject($scope.subjects, "ID");
+//         $scope.selectedSubject = subjectLookup[$scope.proposal.subject];
+//       });
+//   });
+//   $scope.editProposal = function(){
+//     console.log($scope.proposal);
+//     rest.putProposal(proposalID, $scope.proposal)
+//     .then(function (response) {
+//       console.log(response);
+//       if(response.status === 200) $uibModalInstance.dismiss();
+//     });
+//   };
+//   $scope.cancel = function()
+//   {
+//       $uibModalInstance.dismiss();
+//   };
+//   $scope.setOrg = function() {
+//     $scope.proposal.OrgID = $scope.selectedOrg.ID;
+//   };
+//   $scope.setCulture = function() {
+//     $scope.proposal.subject_culture = $scope.selectedCulture.ID;
+//   };
+// })
 .controller('organizationListCtrl', function($scope, $http, $injector, $routeParams ,$uibModal ,restRessources){
   var rest = $injector.get('restRessources');
   $scope.$on('$routeChangeSuccess', function() {
@@ -411,57 +411,3 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
     $scope.mainOrg = mainOrg;
   };
 });
-// .controller('dashboardCtrl', function($scope,$http, $filter, $injector, restRessources){
-//   var rest = $injector.get('restRessources');
-//   rest.getProposals()
-//     .then(function (response) {
-//       $scope.proposals = response.data;
-//     })
-//     .then(function () {
-//       //// TOTAL AND GERMANY TOTAL
-//       $scope.proposalsTotal = $scope.proposals.length;
-//       var proposalsGermany = $filter('filter')($scope.proposals, {Country: 'Deutschland'});
-//       $scope.proposalsGermanyTotal = proposalsGermany.length;
-//       //// STATES
-//       var stateNames = $filter('unique')(proposalsGermany, 'State');
-//       $scope.states = [];
-//       for (var i = 0; i < stateNames.length; i++) {
-//         var state = {};
-//         state.name = stateNames[i].State;
-//         if(state.name === null || state.name === '') state.name = "Unbestimmt";
-//         state.number = (($filter('filter')(proposalsGermany, {State: stateNames[i].State})).length);
-//         state.percentage = Math.round((state.number / $scope.proposalsGermanyTotal) * 100);
-//         $scope.states.push(state);
-//       }
-//       //// ORGANIZATIONS
-//       $scope.organizationsTotal = ($filter('unique')($scope.proposals, 'orgName')).length;
-//       var organizationTypes = $filter('unique')($scope.proposals, 'orgAbbrev');
-//       $scope.orgas = [];
-//       for (var n = 0; n < organizationTypes.length; n++) {
-//         var org = {};
-//         //TODO null handling
-//         org.type = organizationTypes[n].orgAbbrev;
-//         if(org.type === null) org.type = "Sonstige";
-//         org.number = (($filter('filter')($scope.proposals, {orgAbbrev: organizationTypes[n].orgAbbrev}, true)).length);
-//         org.percentage = Math.round((org.number / $scope.proposalsTotal) * 100);
-//         $scope.orgas.push(org);
-//       }
-//       //// BESOLDUNG
-//       $scope.besoldung = [];
-//       $scope.besoldung.push({
-//         type: 'W1',
-//         number: (($filter('filter')($scope.proposals, {W1: 1})).length),
-//         percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
-//       });
-//       $scope.besoldung.push({
-//         type: 'W2',
-//         number: (($filter('filter')($scope.proposals, {W2: 1})).length),
-//         percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
-//       });
-//       $scope.besoldung.push({
-//         type: 'W3',
-//         number: (($filter('filter')($scope.proposals, {W3: 1})).length),
-//         percentage: function() {return Math.round((this.number/$scope.proposalsTotal)*100);}
-//       });
-//     });
-// });

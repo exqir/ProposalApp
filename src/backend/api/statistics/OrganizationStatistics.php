@@ -18,6 +18,7 @@ class OrganizationStatistics extends SqlConnection {
           LEFT JOIN organizations 
             ON proposal.OrgID = organizations.ID 
             OR organizations.ID = proposal.OrgOptID
+          WHERE organizations.Name != ''
           ORDER BY organizations.Name
          ");
     }

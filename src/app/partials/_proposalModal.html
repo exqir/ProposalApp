@@ -13,10 +13,10 @@
     </div>
     <div class="form-group">
       <div class="inline-select">
-        <label for="proposalInstName" class="block">Organisation:</label>
-        <select name="proposalInstName" class="form-control select-inline"
+        <label for="proposalOrgName" class="block">Organisation:</label>
+        <select name="proposalOrgName" class="form-control select-inline"
         ng-options="org as org.Name for org in modal.organizations" ng-model="modal.selectedOrg"
-        ng-value="{{org.Name}}" ng-change="modal.setOrg()">
+        ng-value="{{org.Name}}" ng-change="modal.setOrganization(modal.selectedOrg.ID)">
         </select>
       </div>
     </div>
@@ -25,31 +25,31 @@
         <label for="subject_culture" class="block">Fachkulture:</label>
         <select name="subject_culture" class="form-control select-inline"
         ng-options="culture as culture.Name for culture in modal.cultures" ng-model="modal.selectedCulture"
-        ng-value="{{culture.Name}}" ng-change="setCulture()">
+        ng-value="{{culture.Name}}" ng-change="modal.setCulture(modal.selectedCulture.ID)">
         </select>
       </div>
       <div class="inline-select">
         <label for="subject_area" class="block">Fachbereich:</label>
         <select name="subject_area" class="form-control select-inline"
-        ng-options="area as area.Name for area in areas" ng-model="selectedArea"
-        ng-value="{{area.Name}}" ng-change="setArea()">
+        ng-options="area as area.Name for area in modal.areas" ng-model="modal.selectedArea"
+        ng-value="{{area.Name}}" ng-change="modal.setArea(area.ID)">
         </select>
       </div>
       <div class="inline-select">
         <label for="subject" class="block">Fach:</label>
         <select name="subject" class="form-control select-inline"
-        ng-options="subject as subject.Name for subject in subjects" ng-model="selectedSubject"
-        ng-value="{{subject.Name}}" ng-change="setSubject()">
+        ng-options="subject as subject.Name for subject in modal.subjects" ng-model="modal.selectedSubject"
+        ng-value="{{subject.Name}}" ng-change="modal.setSubject(modal.selectedSubject.ID)">
         </select>
       </div>
     </div>
     <div class="form-group">
       <label for="proposalDescription">Beschreibung:</label>
-      <textarea name="proposalDescription" class="form-control" rows="15" type="text" ng-model="proposal.Description"></textarea>
+      <textarea name="proposalDescription" class="form-control" rows="15" type="text" ng-model="modal.proposal.Description"></textarea>
     </div>
   </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
-    <button class="btn btn-primary" type="button" ng-click="editProposal()">Save</button>
+    <button class="btn btn-default" type="button" ng-click="modal.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="modal.editProposal()">Save</button>
 </div>

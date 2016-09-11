@@ -106,8 +106,8 @@
   </thead>
   <tr class="table-clickable"
   ng-repeat="proposal in pTable.proposals | filter: pTable.search | filter: pTable.orgFilter |
-  filter: pTable.rawFilter | filter: pTable.stateFilter | filter: pTable.cultureFilter"
-  ng-click="pTable.open(proposal.ID)">
+  filter: pTable.rawFilter | filter: pTable.stateFilter | filter: pTable.cultureFilter | filter: pTable.areaFilter | filter: pTable.subjectFilter"
+  ng-click="pTable.open(proposal.ID, pTable.cultures, pTable.areas, pTable.subjects)">
     <td ng-bind-html="proposal.Raw | convertToStatus"></td>
     <td>{{proposal.Title}}</td>
     <td>
@@ -126,7 +126,7 @@
     <td>{{proposal.State}}</td>
     <td>{{proposal.Culture}}</td>
     <td>{{proposal.Area}}</td>
-    <td>{{proposal.Subject}}</td>
+    <td>{{proposal.SubjectName}}</td>
     <td>{{proposal.SaveTime | convertSQLdate | date: 'dd.MM.yyyy'}}</td>
   </tr>
 </table>
