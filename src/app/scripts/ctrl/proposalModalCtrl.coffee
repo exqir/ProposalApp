@@ -35,12 +35,21 @@
       @areaLookup = createLookup(@areas, 'ID')
       @subjectLookup = createLookup(@subjects, 'ID')
 
+      console.log(@cultures)
+
       $q.all(pullData(proposalID))
         .then () =>
           @orgLookup = createLookup(@organizations, 'ID')
           setSelection(@proposal)
 
     # Util
+
+    setChildren = (parents, children) =>
+      setAsChildren = (element) =>
+        parent.children.push(element) if element.ParentID == parent.ID
+
+      setChildren parent, children for parent in parents
+      setAsChildren child for child in children
 
     createLookup = (array, attribute) ->
       obj = {}
@@ -81,6 +90,11 @@
 
     cancel = () =>
       $uibModalInstance.dismiss()
+
+    # Setter
+
+    selectCulture = (id) =>
+
 
     setOrganization = (id) =>
       @proposal.OrgID = id

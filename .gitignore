@@ -16,12 +16,6 @@ db.php
 # Node Modules
 /node_modules
 
-# CSS
-/src/app/css/style.css
-
-# Bourbon
-/src/app/scss/bourbon
-
 #IDEA
 .idea/
 
