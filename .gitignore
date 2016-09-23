@@ -10,8 +10,9 @@ Thumbs.db
 .Spotlight-V100
 .Trashes
 
-# DB config
-db.php
+# Credentials
+credentials.php
+credentials.js
 
 # Node Modules
 /node_modules

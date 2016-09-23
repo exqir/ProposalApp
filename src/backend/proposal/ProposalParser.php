@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../organization/OrganizationParser.php';
 require_once __DIR__ . '/../util/Util.php';
+require_once 'ProposalConfig.php';
 
 class ProposalParser
 {

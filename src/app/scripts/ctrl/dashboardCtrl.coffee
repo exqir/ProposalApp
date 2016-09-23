@@ -1,6 +1,6 @@
 (->
   dashboardCtrl = ($scope, $filter, $injector, statisticsDataService) ->
-    dashboardCtrl.$inject = ['statisticsDataService']
+    dashboardCtrl.$inject = ['$scope','$filter','$injector','statisticsDataService']
 
     init = () =>
 

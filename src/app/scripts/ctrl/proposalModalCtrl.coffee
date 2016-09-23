@@ -17,6 +17,8 @@
       @areas = items.areas
       @subjects = items.subjects
 
+      @subjectsTree = []
+
       # Modal
 
       @editProposal = editProposal
@@ -29,35 +31,44 @@
       @setArea = setArea
       @setSubject = setSubject
 
-      # Lookup
-      @orgLookup = {}
-      @cultureLookup = createLookup(@cultures, 'ID')
-      @areaLookup = createLookup(@areas, 'ID')
-      @subjectLookup = createLookup(@subjects, 'ID')
-
-      console.log(@cultures)
-
       $q.all(pullData(proposalID))
         .then () =>
-          @orgLookup = createLookup(@organizations, 'ID')
           setSelection(@proposal)
 
     # Util
+    initSubjectsTree = (cultures, areas, subjects) =>
+      initSelection(cultures, @proposal.subject_culture)
+      initSelection(areas, @proposal.subject_area)
+      initSelection(subjects, @proposal.subject)
 
-    setChildren = (parents, children) =>
-      setAsChildren = (element) =>
-        parent.children.push(element) if element.ParentID == parent.ID
+      setChildren(cultures, setChildren(areas, subjects))
 
-      setChildren parent, children for parent in parents
-      setAsChildren child for child in children
+    initSelection = (array, id) ->
+      for obj in array
+        do (obj) ->
+          obj.checked = if obj.ID == id
+            if obj.checked? then obj.checked else true
+          else false
 
-    createLookup = (array, attribute) ->
-      obj = {}
-      pushElement = (element) =>
-        obj[element[attribute]] = element
+    setChildren = (parents, children) ->
+      _parents = parents
+      for parent in _parents
+        do (parent) ->
+          fillChildren(parent, children)
+      return _parents
 
-      pushElement element for element in array
-      return obj
+    fillChildren = (parent, children) ->
+      parent.children = []
+      for child in children
+        do (child) ->
+          parent.children.push(child) if parent.ID == child.ParentID
+
+    searchObjectById = (array, id) ->
+      _result = {}
+      for obj in array
+        do (obj) ->
+          _result = obj if obj.ID == id
+      return _result
 
     # pullData
 
@@ -83,37 +94,48 @@
     # Public
 
     editProposal = () =>
-      proposalsDataService
-        .editProposal(proposalID, @proposal)
-        .then (result) =>
-          $uibModalInstance.dismiss() if result.status == 200
+      console.log(@proposal)
+#      proposalsDataService
+#        .editProposal(proposalID, @proposal)
+#        .then (result) =>
+#          $uibModalInstance.dismiss() if result.status == 200
 
     cancel = () =>
       $uibModalInstance.dismiss()
 
     # Setter
 
-    selectCulture = (id) =>
-
+    checkIfSelected = (id, checked) ->
+      if checked then id else 0
 
     setOrganization = (id) =>
       @proposal.OrgID = id
 
-    setCulture = (id) =>
-      @proposal.subject_culture = id
+    setCulture = (cultures, id, checked) =>
+      initSelection(cultures, id)
+      if @proposal.subject_culture isnt id
+        @proposal.subject_area = 0
+        @proposal.subject = 0
+      @proposal.subject_culture = checkIfSelected(id, checked)
 
-    setArea = (id) =>
-      @proposal.subject_area = id
+    setArea = (areas, id, checked) =>
+      initSelection(areas, id)
+      if @proposal.subject_area isnt id
+        @proposal.subject = 0
+      @proposal.subject_area = checkIfSelected(id, checked)
 
-    setSubject = (id) =>
-      @proposal.subject = id
+    setSubject = (subjects, id, checked) =>
+      initSelection(subjects, id)
+      @proposal.subject = checkIfSelected(id, checked)
 
     # setSelection
+
     setSelection = (proposal) =>
-      @selectedOrg = @orgLookup[proposal.OrgID]
-      @selectedCulture = @cultureLookup[proposal.subject_culture]
-      @selectedArea = @areaLookup[proposal.subject_area]
-      @selectedSubject = @subjectLookup[proposal.subject]
+      @selectedOrg = searchObjectById(@organizations, proposal.OrgID)
+      @subjectsTree = initSubjectsTree(@cultures, @areas, @subjects)
+      #@selectedCulture = searchObjectById(@cultures, proposal.subject_culture)
+      #@selectedArea = searchObjectById(@areas, proposal.subject_area)
+      #@selectedSubject = searchObjectById(@subjects, proposal.subject)
 
     init()
 

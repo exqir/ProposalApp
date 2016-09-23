@@ -1,7 +1,10 @@
 (->
   proposalListCtrl = ($scope, $uibModal, $filter,
-    $injector, $routeParams, filterFilter, freeSearch, proposalsDataService, subjectsDataService, statisticsDataService) ->
-    proposalListCtrl.$inject = ['$scope','$routeParams','proposalsDataService','subjectsDataService','statisticsDataService']
+    $injector, $routeParams, filterFilter, freeSearch,
+    proposalsDataService, subjectsDataService, statisticsDataService) ->
+    proposalListCtrl.$inject = ['$scope','$uibModal','$filter',
+      '$injector','$routeParams','filterFilter','freeSearch',
+      'proposalsDataService','subjectsDataService','statisticsDataService']
 
     init = () =>
 

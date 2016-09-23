@@ -5,8 +5,8 @@
     require_once 'backend/organization/Organization.php';
     require_once 'backend/subject/SubjectGroup.php';
     require_once 'backend/util/Util.php';
-    require_once 'config.php';
-    require_once 'db.php';
+    require_once 'backend/config.php';
+    require_once 'credentials.php';
 
 	error_reporting(E_ERROR | E_PARSE);
 

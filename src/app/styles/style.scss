@@ -197,3 +197,29 @@ div.wrapper {
     }
   }
 }
+
+.drilldown-list {
+  display: none;
+  list-style: none;
+  padding-left: 0;
+  padding-top: .75em;
+  padding-bottom: .75em;
+  margin-bottom: 1em;
+  border: 1px solid #e5e5e5;
+  border-left: none;
+  border-right: none;
+}
+
+.drilldown-list--open {
+  display: block;
+}
+
+.drilldown-list-item {
+  padding-left: 10px;
+  input {
+    margin-right: .5em;
+  }
+
+
+}
+

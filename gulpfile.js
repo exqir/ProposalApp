@@ -4,8 +4,11 @@ var rename = require('gulp-rename');
 var gulpSequence = require('gulp-sequence');
 var coffee = require('gulp-coffee');
 var concat = require('gulp-concat');
+var ftp = require('vinyl-ftp');
 var path = require('path');
 var del = require('del');
+
+const credentials = require('./credentials')()
 
 const config = {
     src: 'src',
@@ -148,18 +151,36 @@ gulp.task('watch', ['watch-app','watch-backend'], function(){
 
 });
 
-gulp.task('dev-db', function() {
+gulp.task('credentials', function() {
     return gulp
-        .src('db.php')
+        .src('credentials.php')
         .pipe(gulp.dest(paths.build.dist));
-})
+});
+
+gulp.task('publish', function() {
+
+    console.log('Publishing to ' + credentials.server + ' ...');
+    var conn = ftp.create( {
+        host: credentials.server,
+        user: credentials.user,
+        password: credentials.pw
+    } );
+
+    return gulp.src(path.resolve(paths.build.dist, '**/*'), { base: '.', buffer: false } )
+//        .pipe( conn.newer( '/test' ) ) // only upload newer files
+        .pipe( conn.dest( '/test' ) );
+});
 
 gulp.task('dev', function (cb) {
-    gulpSequence('clean',['backend','app'],'dev-db')(cb);
+    gulpSequence('clean',['backend','app'],'credentials')(cb);
 });
 
 gulp.task('build', function (cb) {
     gulpSequence('clean',['backend','app'],'rename-to-70')(cb);
+});
+
+gulp.task('deploy', function (cb) {
+    gulpSequence('build','publish')(cb);
 });
 
 gulp.task('default', ['build'], function() {

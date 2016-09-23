@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../organization/Organization.php';
+require_once __DIR__ . '/../../credentials.php';
 
 class LocationService {
     private $serviceUrl = "https://maps.googleapis.com/maps/api/place/";

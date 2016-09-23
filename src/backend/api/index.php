@@ -1,6 +1,6 @@
 <?php
 require_once 'flight/Flight.php';
-require_once __DIR__ . '/../../db.php';
+require_once __DIR__ . '/../../credentials.php';
 
 require_once __DIR__ . '/statistics/OrganizationStatistics.php';
 require_once __DIR__ . '/statistics/ProposalStatistics.php';

@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../db/SqlConnection.php';
 require_once __DIR__ . '/../organization/Organization.php';
+require_once 'ProposalConfig.php';
 
 class ProposalSqlQueries extends SqlConnection {
     protected $mysqli;
