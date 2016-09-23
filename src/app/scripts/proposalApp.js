@@ -3,27 +3,24 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   function($routeProvider){
     $routeProvider.
     when('/', {
-      templateUrl: 'partials/dashboard.html',
+      templateUrl: 'partials/_dashboard.html',
       controller: 'dashboardCtrl',
       controllerAs: 'dash'
     })
     .when('/dashboard', {
-      templateUrl: 'partials/dashboard.html',
+      templateUrl: 'partials/_dashboard.html',
       controller: 'dashboardCtrl',
       controllerAs: 'dash'
     })
     .when('/proposals', {
-      templateUrl: 'partials/_proposalTable.html',
+      templateUrl: 'partials/_proposalList.html',
       controller: 'proposalListCtrl',
       controllerAs: 'pTable'
     })
-    .when('/proposals/:id', {
-      templateUrl: 'partials/proposal_detail.html',
-      controller: 'proposalDetailCtrl'
-    })
     .when('/organizations', {
-      templateUrl: 'partials/organizations_table.html',
-      controller: 'organizationListCtrl'
+      templateUrl: 'partials/_organizationList.html',
+      controller: 'organizationListCtrl',
+      controllerAs: 'vm'
     })
     .otherwise({redirectTo: '/'});
   }
@@ -119,14 +116,14 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   factory.setSearch = function(search) {$location.search('search', search);};
   return factory;
 })
-.controller('header', function($scope, freeSearch) {
-  //TODO delete function to reset the search phrase and filtering
-  $scope.goSearch = function(search) {freeSearch.setSearch(JSURL.stringify(search));};
-  $scope.resetSearch = function() {
-    freeSearch.setSearch("");
-    $scope.search = "";
-  };
-})
+// .controller('header', function($scope, freeSearch) {
+//   //TODO delete function to reset the search phrase and filtering
+//   $scope.goSearch = function(search) {freeSearch.setSearch(JSURL.stringify(search));};
+//   $scope.resetSearch = function() {
+//     freeSearch.setSearch("");
+//     $scope.search = "";
+//   };
+// })
 // .controller('proposalListCtrl', function($q, $scope, $http, $uibModal, $filter,
 //   $injector, $routeParams, filterFilter, freeSearch, restRessources){
 //   $scope.states = [];
@@ -304,51 +301,51 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
 //     $scope.proposal.subject_culture = $scope.selectedCulture.ID;
 //   };
 // })
-.controller('organizationListCtrl', function($scope, $http, $injector, $routeParams ,$uibModal ,restRessources){
-  var rest = $injector.get('restRessources');
-  $scope.$on('$routeChangeSuccess', function() {
-    $scope.search = JSURL.parse($routeParams.search);
-  });
-  rest.getOrganizations()
-    .then(function (response) {
-      $scope.organizations = response.data;
-    });
-    $scope.type = [];
-    $scope.includeType = function(type) {
-        var i = $scope.type.indexOf(type);
-        if (i > -1) {
-            $scope.type.splice(i, 1);
-        } else {
-            $scope.type.push(type);
-        }
-    };
-
-    $scope.typeFilter = function(organization) {
-        if ($scope.type.length > 0) {
-            if ($scope.type.indexOf(organization.Abbrev) < 0)
-                return;
-        }
-
-        return organization;
-    };
-
-    $scope.open = function(orgID)
-    {
-        var modalInstance = $uibModal.open
-        ({
-            animation: true,
-            templateUrl: 'partials/organizationModal.html',
-            controller: 'organizationDetailCtrl',
-            size: 'lg',
-            resolve: { id: function() {return orgID;}}
-        });
-
-        modalInstance.result.then(function()
-        {
-          //TODO reload or infuse changes
-        });
-    };
-})
+// .controller('organizationListCtrl', function($scope, $http, $injector, $routeParams ,$uibModal ,restRessources){
+//   var rest = $injector.get('restRessources');
+//   $scope.$on('$routeChangeSuccess', function() {
+//     $scope.search = JSURL.parse($routeParams.search);
+//   });
+//   rest.getOrganizations()
+//     .then(function (response) {
+//       $scope.organizations = response.data;
+//     });
+//     $scope.type = [];
+//     $scope.includeType = function(type) {
+//         var i = $scope.type.indexOf(type);
+//         if (i > -1) {
+//             $scope.type.splice(i, 1);
+//         } else {
+//             $scope.type.push(type);
+//         }
+//     };
+//
+//     $scope.typeFilter = function(organization) {
+//         if ($scope.type.length > 0) {
+//             if ($scope.type.indexOf(organization.Abbrev) < 0)
+//                 return;
+//         }
+//
+//         return organization;
+//     };
+//
+//     $scope.open = function(orgID)
+//     {
+//         var modalInstance = $uibModal.open
+//         ({
+//             animation: true,
+//             templateUrl: 'partials/_organizationModal.html',
+//             controller: 'organizationDetailCtrl',
+//             size: 'lg',
+//             resolve: { id: function() {return orgID;}}
+//         });
+//
+//         modalInstance.result.then(function()
+//         {
+//           //TODO reload or infuse changes
+//         });
+//     };
+// })
 .controller('organizationDetailCtrl', function($scope, $http, $routeParams, $uibModalInstance, $injector, restRessources, id){
   var orgID = id;
   var rest = $injector.get('restRessources');

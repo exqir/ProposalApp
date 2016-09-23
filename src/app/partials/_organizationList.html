@@ -1,0 +1,50 @@
+<table class="table table-bordered">
+  <thead>
+    <td>ID</td>
+    <td class="smartFilter">
+      <div id="typeDD" class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+            Typ
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="typeDD">
+          <li ng-repeat="type in vm.types" class="list-item">
+              <input type="checkbox" ng-click="vm.includeType(type.Abbrev)">
+              <span class="label label-default">{{type.Abbrev}}</span>
+          </li>
+        </ul>
+      </div>
+    </td>
+    <td>Name</td>
+    <td>Stadt</td>
+    <td class="smartFilter">
+      <div id="stateDD" class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+            Bundesland
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="stateDD">
+          <li>
+            <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchState">
+          </li>
+          <li id="test" role="separator" class="divider filter"></li>
+          <li ng-repeat="state in vm.states | filterBy: ['State']:smartSearchState" class="list-item">
+              <input type="checkbox" ng-click="vm.includeState(state.State)">
+              {{state.State}}
+          </li>
+        </ul>
+      </div>
+    </td>
+    <td>Land</td>
+  </thead>
+  <tr class="table-clickable" ng-repeat="organization in vm.organizations | filter: vm.search | filter: vm.typeFilter | filter: vm.stateFilter | orderBy: 'Name'" ng-click="vm.open(organization, vm.types, vm.organizations)">
+    <td>{{organization.ID}}</td>
+    <td>
+      <span class="label label-default">{{organization.Abbrev}}</span>
+    </td>
+    <td>{{organization.Name}}</td>
+    <td>{{organization.City}}</td>
+    <td>{{organization.State}}</td>
+    <td>{{organization.Country}}</td>
+  </tr>
+</table>

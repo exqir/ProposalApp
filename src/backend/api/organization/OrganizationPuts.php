@@ -16,7 +16,6 @@ class OrganizationPuts extends SqlConnection {
         $query =
             "UPDATE organizations SET
 			TypeID = ?,
-			Abbrev = ?,
 			Name = ?,
 			City = ?,
 			State = ?,
@@ -24,7 +23,6 @@ class OrganizationPuts extends SqlConnection {
 			WHERE id = ?";
         $params = array(
             $organization->getTypeId(),
-            $organization->getAbbrev(),
             $organization->getName(),
             $organization->getCity(),
             $organization->getState(),

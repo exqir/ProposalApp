@@ -10,16 +10,25 @@ class OrganizationGets extends SqlConnection {
     }
 
     public function getOrganizations() {
-        return $this->selectArrayQuery("SELECT * FROM organizations WHERE AliasOf IS NULL");
+        return $this->selectArrayQuery("SELECT organizations.*, types.Abbrev FROM organizations
+        LEFT JOIN types
+          ON organizations.TypeID = types.ID
+        WHERE AliasOf IS NULL");
     }
 
     public function getOrganization($id) {
-        $query = "SELECT * FROM organizations WHERE organizations.ID = " . $id ."";
+        $query = "SELECT organizations.*, types.Abbrev FROM organizations
+        LEFT JOIN types
+          ON organizations.TypeID = types.ID
+        WHERE organizations.ID = " . $id ."";
         return $this->selectQuery($query);
     }
 
     public function getAliasOfOrganization($id) {
-        $query = "SELECT * FROM organizations WHERE organizations.AliasOf = " . $id ."";
+        $query = "SELECT organizations.*, types.Abbrev FROM organizations
+        LEFT JOIN types
+          ON organizations.TypeID = types.ID
+        WHERE organizations.AliasOf = " . $id ."";
         return $this->selectArrayQuery($query);
     }
 }

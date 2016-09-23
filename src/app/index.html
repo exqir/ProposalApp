@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-  <header ng-controller="header">
+  <header ng-controller="headerCtrl as vm">
     <a href="#/"><img class="main-logo" src="assets/logo_uni_siegen.png"/></a>
     <nav class="main-navigation">
       <ul>
@@ -20,11 +20,11 @@
     </nav>
     <div class="container-search">
       <div class="input-group search">
-        <input type="text" class="form-control" placeholder="Search for..." ng-model="search">
+        <input type="text" class="form-control" placeholder="Search for..." ng-model="vm.search">
         <span class="input-group-btn">
-          <button class="btn btn-default" type="button" ng-click="goSearch(search)">Suchen!</button>
+          <button class="btn btn-default" type="button" ng-click="vm.startSearch(vm.search)">Suchen!</button>
         </span>
-        <span ng-show="search.length > 0" class="reset-search" ng-click="resetSearch()">
+        <span ng-show="vm.search.length > 0" class="reset-search" ng-click="vm.resetSearch()">
           <i class="fa fa-times fa-1" aria-hidden="true"></i>
         </span>
       </div>

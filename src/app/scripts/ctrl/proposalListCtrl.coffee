@@ -1,10 +1,10 @@
 (->
   proposalListCtrl = ($scope, $uibModal, $filter,
     $injector, $routeParams, filterFilter, freeSearch,
-    proposalsDataService, subjectsDataService, statisticsDataService) ->
+    proposalsDataService, subjectsDataService, statisticsDataService, tableFilterService) ->
     proposalListCtrl.$inject = ['$scope','$uibModal','$filter',
       '$injector','$routeParams','filterFilter','freeSearch',
-      'proposalsDataService','subjectsDataService','statisticsDataService']
+      'proposalsDataService','subjectsDataService','statisticsDataService','tableFilterService']
 
     init = () =>
 
@@ -52,14 +52,6 @@
       pullData()
 
     # Util
-
-    filterInclude = (array, element) =>
-      i = @[array].indexOf(element)
-      if i > -1 then @[array].splice(i,1) else @[array].push(element)
-
-    filterRepeat = (array, attribute, proposal) =>
-      if(@[array].length > 0) then if(@[array].indexOf(proposal[attribute]) < 0) then return
-      return proposal
 
     setSearchTerm = () =>
       @search = JSURL.parse($routeParams.search)
@@ -130,40 +122,40 @@
     # Filter
 
     includeOrg = (orgName) =>
-      filterInclude('org', orgName)
+      tableFilterService.filterInclude(@org, orgName)
 
     orgFilter = (proposal) =>
-      filterRepeat('org','orgName', proposal)
+      tableFilterService.filterRepeat(@org,'orgName', proposal)
 
     includeRaw = (raw) =>
-      filterInclude('raw', raw)
+      tableFilterService.filterInclude(@raw, raw)
 
     rawFilter = (proposal) =>
-      filterRepeat('raw','Raw', proposal)
+      tableFilterService.filterRepeat(@raw,'Raw', proposal)
 
     includeState = (state) =>
-      filterInclude('state', state)
+      tableFilterService.filterInclude(@state, state)
 
     stateFilter = (proposal) =>
-      filterRepeat('state','State', proposal)
+      tableFilterService.filterRepeat(@state,'State', proposal)
 
     includeCulture = (culture) =>
-      filterInclude('subjectCulture', culture)
+      tableFilterService.filterInclude(@subjectCulture, culture)
 
     cultureFilter = (proposal) =>
-      filterRepeat('subjectCulture','Culture', proposal)
+      tableFilterService.filterRepeat(@subjectCulture,'Culture', proposal)
 
     includeArea = (area) =>
-      filterInclude('subjectArea', area)
+      tableFilterService.filterInclude(@subjectArea, area)
 
     areaFilter = (proposal) =>
-      filterRepeat('subjectArea','Area', proposal)
+      tableFilterService.filterRepeat(@subjectArea,'Area', proposal)
 
     includeSubject = (subject) =>
-      filterInclude('subject', subject)
+      tableFilterService.filterInclude(@subject, subject)
 
     subjectFilter = (proposal) =>
-      filterRepeat('subject','Subject', proposal)
+      tableFilterService.filterRepeat(@subject,'Subject', proposal)
 
     pullData = () =>
       getProposals()

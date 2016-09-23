@@ -17,6 +17,8 @@
       @areas = items.areas
       @subjects = items.subjects
 
+      @selectedOrg
+
       @subjectsTree = []
 
       # Modal
@@ -70,6 +72,9 @@
           _result = obj if obj.ID == id
       return _result
 
+    checkIfSelected = (id, checked) ->
+      if checked then id else 0
+
     # pullData
 
     getProposal = (proposalID) =>
@@ -105,9 +110,6 @@
 
     # Setter
 
-    checkIfSelected = (id, checked) ->
-      if checked then id else 0
-
     setOrganization = (id) =>
       @proposal.OrgID = id
 
@@ -133,9 +135,6 @@
     setSelection = (proposal) =>
       @selectedOrg = searchObjectById(@organizations, proposal.OrgID)
       @subjectsTree = initSubjectsTree(@cultures, @areas, @subjects)
-      #@selectedCulture = searchObjectById(@cultures, proposal.subject_culture)
-      #@selectedArea = searchObjectById(@areas, proposal.subject_area)
-      #@selectedSubject = searchObjectById(@subjects, proposal.subject)
 
     init()
 

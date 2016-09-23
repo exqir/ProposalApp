@@ -108,7 +108,6 @@ class Organization {
   	public function setOrganizationByArray(array $array) {
 		$this->setId($array["ID"]);
 		$this->setTypeId($array["TypeID"]);
-		$this->setAbbrev($array["Abbrev"]);
 		$this->setCity($array["City"]);
 		$this->setState($array["State"]);
 		$this->setCountry($array["Country"]);
