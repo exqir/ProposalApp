@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title"><span class="label label-default">{{organization.Abbrev}}</span> {{organization.Name}}</h3>
+    <h3 class="modal-title"><span class="label label-default">{{vm.organization.Abbrev}}</span> {{vm.organization.Name}}</h3>
 </div>
 <div class="modal-body">
   <form>
@@ -7,37 +7,27 @@
       <label for="orgName">Name:</label>
       <div class="block">
         <select name="orgType" class="form-control select-inline"
-        ng-options="type as type.Abbrev for type in types" ng-model="selectedType"
-        ng-value="{{type.Abbrev}}" ng-change="setType()">
+        ng-options="type as type.Abbrev for type in vm.types" ng-model="vm.selectedType"
+        ng-value="{{type.Abbrev}}" ng-change="vm.setType()">
         </select>
-        <input name="orgName" class="form-control" type="text" ng-model="organization.Name">
+        <input name="orgName" class="form-control" type="text" ng-model="vm.organization.Name">
       </div>
     </div>
     <div class="form-group">
       <label for="orgCity">Stadt:</label>
-      <input name="orgCity" class="form-control" type="text" ng-model="organization.City">
+      <input name="orgCity" class="form-control" type="text" ng-model="vm.organization.City">
     </div>
     <div class="form-group">
       <label for="orgState">Bundesland:</label>
-      <input name="orgState" class="form-control" type="text" ng-model="organization.State">
+      <input name="orgState" class="form-control" type="text" ng-model="vm.organization.State">
     </div>
     <div class="form-group">
       <label for="orgCountry">Land:</label>
-      <input name="orgCountry" class="form-control" type="text" ng-model="organization.Country">
+      <input name="orgCountry" class="form-control" type="text" ng-model="vm.organization.Country">
     </div>
   </form>
-  <!-- <div class="form-group">
-    <div class="inline-select">
-      <label for="orgAlias" class="block">{{organization.Name}} ist die gleiche Organisation wie:</label>
-      <select name="orgAlias" class="form-control select-inline"
-      ng-options="org as org.Name for org in organizations" ng-model="selectedOrg"
-      ng-value="{{org.Name}}">
-      </select>
-      <button class="btn btn-primary" type="button" ng-click="setAlias(organization.ID, selectedOrg.ID)">Bestätigen</button>
-    </div>
-  </div> -->
   <div class="form-group">
-    <label class="block">{{organization.Name}} ist die gleiche Organisation wie: {{mainOrg.Name}}</label>
+    <label class="block">{{vm.organization.Name}} ist die gleiche Organisation wie: {{vm.aliasOrganization.Name}}</label>
     <div id="aliasDD" class="dropdown" uib-dropdown auto-close="disabled">
       <a class="btn btn-default dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
         Organisation auswählen
@@ -45,27 +35,27 @@
       </a>
       <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="aliasDD">
         <li>
-          <input type="text" class="form-control" placeholder="Search for..." ng-model="smartSearchOrg">
+          <input type="text" class="form-control" placeholder="Search for..." ng-model="vm.smartSearchOrg">
         </li>
         <li role="separator" class="divider filter"></li>
-        <li ng-repeat="org in organizations | filter: smartSearchOrg" class="list-item" ng-hide="organization.ID == org.ID">
-            <input type="checkbox" ng-click="setAliasOrganization(org)">
+        <li ng-repeat="org in vm.organizations | filter: vm.smartSearchOrg" class="list-item" ng-hide="vm.organization.ID == org.ID">
+            <input type="checkbox" ng-click="vm.setAliasOrganization(org)">
             {{org.Name}}
         </li>
       </ul>
     </div>
-    <button class="btn btn-primary" type="button" ng-click="setAlias(organization.ID, mainOrg.ID)">Bestätigen</button>
+    <button class="btn btn-primary" type="button" ng-click="vm.saveAlias(vm.organization.ID, vm.aliasOrganization.ID)">Bestätigen</button>
   </div>
-  <div class="form-group" ng-hide="aliases.length < 1">
-    <label class="block">{{organization.Name}} hat noch folgende andere Schreibweisen:</label>
+  <div class="form-group" ng-hide="vm.aliases.length < 1">
+    <label class="block">{{vm.organization.Name}} hat noch folgende andere Schreibweisen:</label>
     <ul>
-      <li ng-repeat="alias in aliases">
+      <li ng-repeat="alias in vm.aliases">
         {{alias.Name}}
       </li>
     </ul>
   </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
-    <button class="btn btn-primary" type="button" ng-click="editOrganization()">Save</button>
+    <button class="btn btn-default" type="button" ng-click="vm.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="vm.editOrganization()">Save</button>
 </div>

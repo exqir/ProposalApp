@@ -13,29 +13,26 @@
       @types = items.types
 
       @aliases = []
+      @aliasOrganization = {}
 
-      @selectedType = searchObjectById(@types, @organization.TypeID)
+      @selectedType
 
       # Modal
 
       @editOrganization = editOrganization
       @cancel = cancel
 
+      @saveAlias = saveAlias
+
       # Setter
 
       @setType = setType
-      @setAlias = setAlias
       @setAliasOrganization = setAliasOrganization
 
+      setSelection(@organization)
       pullData(@organization.ID)
 
     # Util
-    initSelection = (array, id) ->
-      for obj in array
-        do (obj) ->
-          obj.checked = if obj.ID == id
-            if obj.checked? then obj.checked else true
-          else false
 
     searchObjectById = (array, id) ->
       _result = {}
@@ -45,12 +42,6 @@
       return _result
 
     # pullData
-
-    getProposal = (proposalID) =>
-      proposalsDataService
-      .getProposal(proposalID)
-      .then (data) =>
-        @proposal = data
 
     getOrganizationAliases = (organizationID) =>
       organizationsDataService
@@ -66,8 +57,8 @@
 
     editOrganization = () =>
       console.log(@organization)
-    #      proposalsDataService
-    #        .editProposal(proposalID, @proposal)
+    #      organizationsDataService
+    #        .editOrganization(@organization.ID, @organization)
     #        .then (result) =>
     #          $uibModalInstance.dismiss() if result.status == 200
 
@@ -79,28 +70,19 @@
     setType = (id) =>
       @organization.TypeID = id
 
-    setCulture = (cultures, id, checked) =>
-      initSelection(cultures, id)
-      if @proposal.subject_culture isnt id
-        @proposal.subject_area = 0
-        @proposal.subject = 0
-      @proposal.subject_culture = checkIfSelected(id, checked)
+    setAliasOrganization = (organization) =>
+      @aliasOrganization = organization
 
-    setArea = (areas, id, checked) =>
-      initSelection(areas, id)
-      if @proposal.subject_area isnt id
-        @proposal.subject = 0
-      @proposal.subject_area = checkIfSelected(id, checked)
-
-    setSubject = (subjects, id, checked) =>
-      initSelection(subjects, id)
-      @proposal.subject = checkIfSelected(id, checked)
+    saveAlias = (orgID, parentID) =>
+      organizationsDataService
+      .setOrganizationAsAliasOf(orgID, parentID)
+      .then (result) =>
+        if result.status == 200 then console.log('success')
 
     # setSelection
 
-    setSelection = (proposal) =>
-      @selectedOrg = searchObjectById(@organizations, proposal.OrgID)
-      @subjectsTree = initSubjectsTree(@cultures, @areas, @subjects)
+    setSelection = (organization) =>
+      @selectedType = searchObjectById(@types, organization.TypeID)
 
     init()
 
