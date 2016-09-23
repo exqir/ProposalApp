@@ -96,7 +96,7 @@
 
     # Modal
 
-    open = (proposalID, cultures, areas, subjects) =>
+    open = (proposal, cultures, areas, subjects) =>
       modalInstance = $uibModal.open({
         animation: true,
         templateUrl: 'partials/_proposalModal.html',
@@ -107,7 +107,7 @@
           {
             items: () =>
               return {
-                id: proposalID,
+                proposal: proposal,
                 cultures: cultures,
                 areas: areas,
                 subjects: subjects

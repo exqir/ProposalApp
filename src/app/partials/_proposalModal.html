@@ -16,7 +16,7 @@
         <label for="proposalOrgName" class="block">Organisation:</label>
         <select name="proposalOrgName" class="form-control select-inline"
         ng-options="org as org.Name for org in modal.organizations" ng-model="modal.selectedOrg"
-        ng-value="{{org.Name}}" ng-change="modal.setOrganization(modal.selectedOrg.ID)">
+        ng-value="{{org.Name}}" ng-change="modal.setOrganization(modal.selectedOrg)">
         </select>
       </div>
     </div>
@@ -31,7 +31,7 @@
           <li role="separator" class="divider"></li>
           <li ng-repeat="culture in modal.subjectsTree">
             <label>
-              <input type="checkbox" name="culture" ng-model="culture.checked" ng-click="modal.setCulture(modal.subjectsTree, culture.ID, culture.checked)">
+              <input type="checkbox" name="culture" ng-model="culture.checked" ng-click="modal.setCulture(modal.subjectsTree, culture, culture.checked)">
               <span>{{culture.Name}}</span>
             </label>
             <ul class="drilldown-list" ng-class="{'drilldown-list--open': culture.checked}">
@@ -39,13 +39,13 @@
               <li role="separator" class="divider"></li>
               <li class="drilldown-list-item" ng-repeat="area in culture.children">
                 <label>
-                  <input type="checkbox" name="area" ng-model="area.checked" ng-click="modal.setArea(culture.children, area.ID, area.checked)">
+                  <input type="checkbox" name="area" ng-model="area.checked" ng-click="modal.setArea(culture.children, area, area.checked)">
                   <span>{{area.Name}}</span>
                 </label>
                 <ul class="drilldown-list" ng-class="{'drilldown-list--open': area.checked}">
                   <li>Fach</li>
                   <li role="separator" class="divider"></li>
-                  <li class="drilldown-list-item" ng-repeat="subject in area.children" ng-click="modal.setSubject(area.children, subject.ID, subject.checked)">
+                  <li class="drilldown-list-item" ng-repeat="subject in area.children" ng-click="modal.setSubject(area.children, subject, subject.checked)">
                     <label>
                       <input type="checkbox" name="subject" ng-model="subject.checked">
                       <span>{{subject.Name}}</span>

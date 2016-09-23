@@ -6,11 +6,9 @@
     proposalModalCtrl.$inject = ['$scope','$q','$uibModalInstance','$filter',
       '$injector','filterFilter','proposalsDataService','organizationsDataService','items']
 
-    proposalID = items.id
-
     init = () =>
 
-      @proposal
+      @proposal = items.proposal
 
       @organizations = []
       @cultures = items.cultures
@@ -33,7 +31,7 @@
       @setArea = setArea
       @setSubject = setSubject
 
-      $q.all(pullData(proposalID))
+      pullData()
         .then () =>
           setSelection(@proposal)
 
@@ -77,23 +75,14 @@
 
     # pullData
 
-    getProposal = (proposalID) =>
-      proposalsDataService
-        .getProposal(proposalID)
-        .then (data) =>
-          @proposal = data
-
     getOrganizations = () =>
       organizationsDataService
         .getOrganizations()
         .then (data) =>
           @organizations = data
 
-    pullData = (proposalID) =>
-      promises = []
-      promises.push(getProposal(proposalID))
-      promises.push(getOrganizations())
-      return promises
+    pullData = () =>
+      getOrganizations()
 
 
     # Public
@@ -110,25 +99,34 @@
 
     # Setter
 
-    setOrganization = (id) =>
-      @proposal.OrgID = id
+    setOrganization = (organization) =>
+      @proposal.OrgID = organization.ID
+      @proposal.orgName = organization.Name
+      @proposal.orgAbbrev = organization.Abbrev
 
-    setCulture = (cultures, id, checked) =>
-      initSelection(cultures, id)
-      if @proposal.subject_culture isnt id
+    setCulture = (cultures, culture, checked) =>
+      initSelection(cultures, culture.ID)
+      if @proposal.subject_culture isnt culture.ID
         @proposal.subject_area = 0
+        @proposal.Area = ''
         @proposal.subject = 0
-      @proposal.subject_culture = checkIfSelected(id, checked)
+        @proposal.SubjectName = ''
+      @proposal.subject_culture = checkIfSelected(culture.ID, checked)
+      @proposal.Culture = if checked then culture.Name else ''
 
-    setArea = (areas, id, checked) =>
-      initSelection(areas, id)
-      if @proposal.subject_area isnt id
+    setArea = (areas, area, checked) =>
+      initSelection(areas, area.ID)
+      if @proposal.subject_area isnt area.ID
         @proposal.subject = 0
-      @proposal.subject_area = checkIfSelected(id, checked)
+        @proposal.SubjectName = ''
+      @proposal.subject_area = checkIfSelected(area.ID, checked)
+      @proposal.Area = if checked then area.Name else ''
 
-    setSubject = (subjects, id, checked) =>
-      initSelection(subjects, id)
-      @proposal.subject = checkIfSelected(id, checked)
+    setSubject = (subjects, subject, checked) =>
+      initSelection(subjects, subject.ID)
+      @proposal.subject = checkIfSelected(subject.ID, checked)
+      @proposal.SubjectName = if checked then subject.Name else ''
+
 
     # setSelection
 

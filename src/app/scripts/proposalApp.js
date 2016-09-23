@@ -115,7 +115,7 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
   factory.search = "";
   factory.setSearch = function(search) {$location.search('search', search);};
   return factory;
-})
+});
 // .controller('header', function($scope, freeSearch) {
 //   //TODO delete function to reset the search phrase and filtering
 //   $scope.goSearch = function(search) {freeSearch.setSearch(JSURL.stringify(search));};
@@ -346,65 +346,65 @@ angular.module('proposalApp',['ngRoute','ngSanitize','ngAnimate','ui.bootstrap',
 //         });
 //     };
 // })
-.controller('organizationDetailCtrl', function($scope, $http, $routeParams, $uibModalInstance, $injector, restRessources, id){
-  var orgID = id;
-  var rest = $injector.get('restRessources');
-  var lookup = {};
-  var getLookupObject = function(array,attribute) {
-    var lookup = {};
-    for (var i = 0; i < array.length; i++) {
-      lookup[array[i][attribute]] = array[i];
-    }
-    return lookup;
-  };
-  rest.getOrganization(orgID)
-    .then(function (response) {
-      $scope.organization = response.data;
-      rest.getTypeIds()
-      .then(function(result) {
-        $scope.types = result.data;
-        var typesLookup = getLookupObject($scope.types, "ID");
-        $scope.selectedType = typesLookup[$scope.organization.TypeID];
-      });
-      rest.getOrganizations()
-      .then(function(result) {
-        $scope.organizations = result.data;
-        //$scope.organizations = $filter("filter")($scope.organizations, {ID: orgID});
-      });
-      rest.getAliases(orgID)
-      .then(function(result) {
-        if(!Array.isArray(result.data)) {
-          $scope.aliases = [];
-          if(result.data !== null) $scope.aliases.push(result.data);
-        } else {
-          $scope.aliases = result.data;
-        }
-        //$scope.organizations = $filter("filter")($scope.organizations, {ID: orgID});
-      });
-  });
-  $scope.editOrganization = function(){
-    console.log($scope.organization);
-    rest.putOrganization(orgID, $scope.organization)
-    .then(function (response) {
-      console.log(response.data);
-      if(response.status === 200) $uibModalInstance.dismiss();
-    });
-  };
-  $scope.cancel = function()
-  {
-      $uibModalInstance.dismiss();
-  };
-  $scope.setType = function() {
-    $scope.organization.TypeID = $scope.selectedType.ID;
-    $scope.organization.Abbrev = $scope.selectedType.Abbrev;
-  };
-  $scope.setAlias = function(id, mainOrg) {
-    rest.setAlias(id, mainOrg)
-    .then(function(response) {
-      if(response.status === 200) console.log("success");
-    });
-  };
-  $scope.setAliasOrganization = function(mainOrg) {
-    $scope.mainOrg = mainOrg;
-  };
-});
+// .controller('organizationDetailCtrl', function($scope, $http, $routeParams, $uibModalInstance, $injector, restRessources, id){
+//   var orgID = id;
+//   var rest = $injector.get('restRessources');
+//   var lookup = {};
+//   var getLookupObject = function(array,attribute) {
+//     var lookup = {};
+//     for (var i = 0; i < array.length; i++) {
+//       lookup[array[i][attribute]] = array[i];
+//     }
+//     return lookup;
+//   };
+//   rest.getOrganization(orgID)
+//     .then(function (response) {
+//       $scope.organization = response.data;
+//       rest.getTypeIds()
+//       .then(function(result) {
+//         $scope.types = result.data;
+//         var typesLookup = getLookupObject($scope.types, "ID");
+//         $scope.selectedType = typesLookup[$scope.organization.TypeID];
+//       });
+//       rest.getOrganizations()
+//       .then(function(result) {
+//         $scope.organizations = result.data;
+//         //$scope.organizations = $filter("filter")($scope.organizations, {ID: orgID});
+//       });
+//       rest.getAliases(orgID)
+//       .then(function(result) {
+//         if(!Array.isArray(result.data)) {
+//           $scope.aliases = [];
+//           if(result.data !== null) $scope.aliases.push(result.data);
+//         } else {
+//           $scope.aliases = result.data;
+//         }
+//         //$scope.organizations = $filter("filter")($scope.organizations, {ID: orgID});
+//       });
+//   });
+//   $scope.editOrganization = function(){
+//     console.log($scope.organization);
+//     rest.putOrganization(orgID, $scope.organization)
+//     .then(function (response) {
+//       console.log(response.data);
+//       if(response.status === 200) $uibModalInstance.dismiss();
+//     });
+//   };
+//   $scope.cancel = function()
+//   {
+//       $uibModalInstance.dismiss();
+//   };
+//   $scope.setType = function() {
+//     $scope.organization.TypeID = $scope.selectedType.ID;
+//     $scope.organization.Abbrev = $scope.selectedType.Abbrev;
+//   };
+//   $scope.setAlias = function(id, mainOrg) {
+//     rest.setAlias(id, mainOrg)
+//     .then(function(response) {
+//       if(response.status === 200) console.log("success");
+//     });
+//   };
+//   $scope.setAliasOrganization = function(mainOrg) {
+//     $scope.mainOrg = mainOrg;
+//   };
+// });
