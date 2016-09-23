@@ -52,16 +52,14 @@ gulp.task('sass', function () {
 });
 
 gulp.task('scripts',['coffee'], function() {
-    return gulp
-        .src(path.resolve(paths.src.scripts, '**/*'))
-        .pipe(gulp.dest(paths.build.app.scripts));
+
 });
 
 gulp.task('coffee', function() {
     return gulp
         .src(path.resolve(paths.src.scripts, '**/*.coffee'))
         .pipe(coffee({bare: true}))
-        .pipe(concat('coffee.js'))
+        .pipe(concat('proposalApp.js'))
         .pipe(gulp.dest(paths.build.app.scripts));
 });
 

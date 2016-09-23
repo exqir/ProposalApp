@@ -1,9 +1,11 @@
 (->
-  organizationListCtrl = ($scope, $uibModal,
-    $injector, $routeParams, organizationsDataService,
+  organizationListCtrl = ($scope,
+    $uibModal, $injector,
+    $routeParams, organizationsDataService,
     statisticsDataService, tableFilterService) ->
-    organizationListCtrl.$inject = ['$scope','$uibModal',
-      '$injector','$routeParams','organizationsDataService',
+    organizationListCtrl.$inject = ['$scope',
+      '$uibModal','$injector',
+      '$routeParams','organizationsDataService',
       'statisticsDataService','tableFilterService']
 
     init = () =>

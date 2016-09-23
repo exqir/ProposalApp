@@ -1,10 +1,14 @@
 (->
-  proposalModalCtrl = ($scope, $q, $uibModalInstance, $filter,
-    $injector, filterFilter,
-    proposalsDataService, organizationsDataService,
-    items) ->
-    proposalModalCtrl.$inject = ['$scope','$q','$uibModalInstance','$filter',
-      '$injector','filterFilter','proposalsDataService','organizationsDataService','items']
+  proposalModalCtrl = ($scope,
+    $q, $uibModalInstance,
+    $filter, $injector,
+    filterFilter, proposalsDataService,
+    organizationsDataService, items) ->
+    proposalModalCtrl.$inject = ['$scope',
+      '$q','$uibModalInstance',
+      '$filter','$injector',
+      'filterFilter','proposalsDataService',
+      'organizationsDataService','items']
 
     init = () =>
 

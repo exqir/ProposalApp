@@ -1,20 +1,20 @@
 (->
-  headerCtrl = ($scope, freeSearch) ->
-    headerCtrl.$inject = ['$scope','freeSearch']
+  headerCtrl = ($scope, search) ->
+    headerCtrl.$inject = ['$scope','search']
 
     init = () =>
 
-      @search = ''
+      @searchTerm = ''
       @startSearch = startSearch
       @resetSearch = resetSearch
 
     # Util
-    startSearch = (search) ->
-      freeSearch.setSearch(JSURL.stringify(search))
+    startSearch = (searchTerm) ->
+      search.setSearch(JSURL.stringify(searchTerm))
 
     resetSearch = () =>
-      freeSearch.setSearch('')
-      @search = ''
+      search.setSearch('')
+      @searchTerm = ''
 
     init()
 
