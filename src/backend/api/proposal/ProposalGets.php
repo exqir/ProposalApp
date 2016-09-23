@@ -11,16 +11,18 @@ class ProposalGets extends SqlConnection {
 
     public function getProposals() {
         return $this->selectArrayQuery("SELECT proposal.*, 
-            organizations.Abbrev AS orgAbbrev, 
             organizations.Name AS orgName, 
             organizations.State AS State, 
             organizations.Country AS Country,
+            types.Abbrev as orgAbbrev,
             subject_culture.Name AS Culture,
             subject_area.Name AS Area,
             subject.Name AS SubjectName
 			FROM proposal
 			INNER JOIN organizations
 				ON proposal.OrgID = organizations.ID
+            LEFT JOIN types
+            	ON organizations.TypeID = types.ID
             LEFT OUTER JOIN subject_culture
       	        ON proposal.subject_culture = subject_culture.ID
             LEFT OUTER JOIN subject_area
@@ -32,10 +34,19 @@ class ProposalGets extends SqlConnection {
     }
 
     public function getProposal($id) {
-        $query = "SELECT proposal.*, organizations.Abbrev AS orgAbbrev, organizations.Name AS orgName, organizations.State AS State, organizations.Country AS Country, subject_culture.Name AS Culture, subject_area.Name AS Area, subject.Name AS Subject
+        $query = "SELECT proposal.*, 
+            organizations.Name AS orgName,
+            organizations.State AS State,
+            organizations.Country AS Country,
+            types.Abbrev as orgAbbrev,
+            subject_culture.Name AS Culture,
+            subject_area.Name AS Area,
+            subject.Name AS Subject
 			FROM proposal
 			INNER JOIN organizations
 				ON proposal.OrgID = organizations.ID
+            LEFT JOIN types
+            	ON organizations.TypeID = types.ID
             LEFT OUTER JOIN subject_culture
       	        ON proposal.subject_culture = subject_culture.ID
             LEFT OUTER JOIN subject_area

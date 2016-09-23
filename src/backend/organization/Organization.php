@@ -31,7 +31,7 @@ class Organization {
 			return $this;
 		}
 		else {
-			$organization = $db->getOrganizationWithTypeAndAbbrev($this);
+			$organization = $db->getOrganizationWithType($this);
 			$ls = new LocationService();
 			return $ls->getOrganizationWithStateAndCountry($organization);
 		}

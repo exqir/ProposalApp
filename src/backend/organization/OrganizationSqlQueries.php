@@ -14,19 +14,13 @@ class OrganizationSqlQueries extends SqlConnection {
         return $this->sqlQuery($query,array($organization->getName()),'existsInDB',$organization);
     }
 
-    public function getOrganizationWithTypeAndAbbrev(Organization $organization) {
-        $organization = $this->sqlQuery("SELECT TypeID, Keyword, Strict FROM keywords",array(),'getOrganizationWithType',$organization);
-        return $this->sqlQuery("SELECT Abbrev FROM types WHERE ID=?",
-            array($organization->getTypeId()),'getOrganizationWithAbbrev', $organization);
-//        if ($organization->getTypeId() !== 0) return $this->sqlQuery("SELECT Abbrev FROM types WHERE ID=?",
-//            array($organization->getTypeId()),'getOrganizationWithAbbrev', $organization);
-//        else return $organization;
+    public function getOrganizationWithType(Organization $organization) {
+        return $organization->setTypeId($this->sqlQuery("SELECT TypeID, Keyword, Strict FROM keywords",array(),'getOrganizationTypeId',$organization));
     }
 
     public function save(Organization $organization) {
-        $query = "INSERT INTO organizations (TypeID, Abbrev, Name, City, State, Country) VALUES (?,?,?,?,?,?)";
+        $query = "INSERT INTO organizations (TypeID, Name, City, State, Country) VALUES (?,?,?,?,?)";
         $values = array($organization->getTypeId(),
-            $organization->getAbbrev(),
             $organization->getName(),
             $organization->getCity(),
             $organization->getState(),
@@ -52,7 +46,7 @@ class OrganizationSqlQueries extends SqlConnection {
         else return $id;
     }
 
-    protected function getOrganizationWithType($stmt, Organization $organization) {
+    protected function getOrganizationTypeId($stmt, Organization $organization) {
         $stmt->store_result();
         $stmt->bind_result($typeId,$keyword,$strict);
         $name = $organization->getName();
@@ -66,16 +60,7 @@ class OrganizationSqlQueries extends SqlConnection {
                 if(stripos($name,$keyword) !== false) $type = $typeId;
             }
         }
-        return $organization->setTypeId($type);
-    }
-
-    protected function getOrganizationWithAbbrev($stmt, Organization $organization) {
-        print("TypeID: " . $organization->getTypeId() . "<br>");
-        $stmt->store_result();
-        $stmt->bind_result($abbrev);
-        $stmt->fetch();
-        if($stmt->num_rows !== 1) return $organization->setAbbrev('');
-        else return $organization->setAbbrev($abbrev);
+        return $type;
     }
 
     protected function getInsertIdOrg($stmt, $referenceObject) {
