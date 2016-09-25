@@ -17,7 +17,7 @@
     .when('/proposals', {
       templateUrl: 'partials/_proposalList.html',
       controller: 'proposalListCtrl',
-      controllerAs: 'pTable'
+      controllerAs: 'vm'
     })
     .when('/organizations', {
       templateUrl: 'partials/_organizationList.html',

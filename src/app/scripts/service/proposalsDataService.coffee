@@ -9,6 +9,9 @@
     @getProposal = (id) =>
       apiCallService.get(base + id)
 
+    @getProposalDescription = (id) =>
+      apiCallService.get(base + id + '/description/')
+
     @editProposal = (id, proposal) =>
       apiCallService.put(base + id, proposal)
 

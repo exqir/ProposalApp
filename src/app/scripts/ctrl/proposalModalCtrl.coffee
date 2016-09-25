@@ -35,7 +35,7 @@
       @setArea = setArea
       @setSubject = setSubject
 
-      pullData()
+      pullData(@proposal.ID)
         .then () =>
           setSelection(@proposal)
 
@@ -79,13 +79,20 @@
 
     # pullData
 
+    getDescription = (id) =>
+      proposalsDataService
+      .getProposalDescription(id)
+      .then (data) =>
+        @proposal.Description = data.Description
+
     getOrganizations = () =>
       organizationsDataService
         .getOrganizations()
         .then (data) =>
           @organizations = data
 
-    pullData = () =>
+    pullData = (id) =>
+      getDescription(id)
       getOrganizations()
 
 

@@ -38,6 +38,14 @@ Flight::route('GET /proposals/@id/', function($id){
   $db->closeConnection();
 });
 
+Flight::route('GET /proposals/@id/description/', function($id){
+  $db = new SqlConnection(HOST,USER,PW,DB_NAME);
+  echo 'GET proposal';
+  $pg = new ProposalGets($db->getConnection());
+  Flight::json($pg->getProposalDescription($id));
+  $db->closeConnection();
+});
+
 Flight::route('PUT /proposals/@id', function(){
   $db = new SqlConnection(HOST,USER,PW,DB_NAME);
   echo 'PUT proposal';

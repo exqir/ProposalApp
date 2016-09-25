@@ -10,7 +10,25 @@ class ProposalGets extends SqlConnection {
     }
 
     public function getProposals() {
-        return $this->selectArrayQuery("SELECT proposal.*, 
+        return $this->selectArrayQuery("SELECT proposal.ID,
+            proposal.OrgID,
+            proposal.OrgOptID,
+            proposal.Title,
+            proposal.Link,
+            proposal.Raw,
+            proposal.Ass,
+            proposal.W1,
+            proposal.W2,
+            proposal.W3,
+            proposal.C1,
+            proposal.C2,
+            proposal.C3,
+            proposal.Tenure,
+            proposal.Enddate,
+            proposal.SaveTime,
+            proposal.subject_culture,
+            proposal.subject_area,
+            proposal.subject,
             organizations.Name AS orgName, 
             organizations.State AS State, 
             organizations.Country AS Country,
@@ -53,6 +71,13 @@ class ProposalGets extends SqlConnection {
       	        ON proposal.subject_area = subject_area.ID
             LEFT OUTER JOIN subject
       	        ON proposal.subject = subject.ID
+			WHERE proposal.ID = " . $id ."";
+        return $this->selectQuery($query);
+    }
+
+    public function getProposalDescription($id) {
+        $query = "SELECT proposal.Description
+			FROM proposal
 			WHERE proposal.ID = " . $id ."";
         return $this->selectQuery($query);
     }
