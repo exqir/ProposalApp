@@ -19,6 +19,13 @@
         ng-value="{{org.Name}}" ng-change="modal.setOrganization(modal.selectedOrg)">
         </select>
       </div>
+      <div class="inline-select">
+        <label for="proposalOptOrgName" class="block">Optional Organisation:</label>
+        <select name="proposalPotOrgName" class="form-control select-inline"
+                ng-options="org as org.Name for org in modal.organizations" ng-model="modal.selectedOptOrg"
+                ng-value="{{org.Name}}" ng-change="modal.setOptOrganization(modal.selectedOptOrg)">
+        </select>
+      </div>
     </div>
     <div class="form-group">
       <div class="dropdown" uib-dropdown auto-close="disabled">

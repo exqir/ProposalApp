@@ -20,6 +20,7 @@
       @subjects = items.subjects
 
       @selectedOrg
+      @selectedOptOrg
 
       @subjectsTree = []
 
@@ -31,13 +32,15 @@
       # Setter
 
       @setOrganization = setOrganization
+      @setOptOrganization = setOptOrganization
       @setCulture = setCulture
       @setArea = setArea
       @setSubject = setSubject
 
-      pullData(@proposal.ID)
+      $q.all(pullData(@proposal.ID))
         .then () =>
           setSelection(@proposal)
+          @subjectsTree = initSubjectsTree(@cultures, @areas, @subjects)
 
     # Util
     initSubjectsTree = (cultures, areas, subjects) =>
@@ -92,9 +95,10 @@
           @organizations = data
 
     pullData = (id) =>
-      getDescription(id)
-      getOrganizations()
-
+      promises = []
+      promises.push(getDescription(id))
+      promises.push(getOrganizations())
+      return promises
 
     # Public
 
@@ -114,6 +118,9 @@
       @proposal.OrgID = organization.ID
       @proposal.orgName = organization.Name
       @proposal.orgAbbrev = organization.Abbrev
+
+    setOptOrganization = (organization) =>
+      @proposal.OrgOptID = organization.ID
 
     setCulture = (cultures, culture, checked) =>
       initSelection(cultures, culture.ID)
@@ -143,7 +150,7 @@
 
     setSelection = (proposal) =>
       @selectedOrg = searchObjectById(@organizations, proposal.OrgID)
-      @subjectsTree = initSubjectsTree(@cultures, @areas, @subjects)
+      @selectedOptOrg = searchObjectById(@organizations, proposal.OrgOptID)
 
     init()
 

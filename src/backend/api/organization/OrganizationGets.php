@@ -13,7 +13,8 @@ class OrganizationGets extends SqlConnection {
         return $this->selectArrayQuery("SELECT organizations.*, types.Abbrev FROM organizations
         LEFT JOIN types
           ON organizations.TypeID = types.ID
-        WHERE AliasOf IS NULL");
+        WHERE AliasOf IS NULL
+        ORDER BY organizations.Name ASC");
     }
 
     public function getOrganization($id) {
