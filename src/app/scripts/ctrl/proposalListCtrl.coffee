@@ -54,7 +54,7 @@
 
       # Search
       @search = ''
-      #@.$on('$routeChangeSuccess', setSearchTerm)
+      $scope.$on('$routeChangeSuccess', setSearchTerm)
 
       # Modal
       @open = open
