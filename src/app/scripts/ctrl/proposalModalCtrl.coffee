@@ -15,9 +15,9 @@
       @proposal = items.proposal
 
       @organizations = []
-      @cultures = items.cultures
-      @areas = items.areas
-      @subjects = items.subjects
+      @cultures = deepCopyArray(items.cultures)
+      @areas = deepCopyArray(items.areas)
+      @subjects = deepCopyArray(items.subjects)
 
       @selectedOrg
       @selectedOptOrg
@@ -43,6 +43,13 @@
           @subjectsTree = initSubjectsTree(@cultures, @areas, @subjects)
 
     # Util
+    deepCopyArray = (array) ->
+      _array = []
+      for obj in array
+        do (obj) ->
+          _array.push(Object.assign({}, obj))
+      return _array
+
     initSubjectsTree = (cultures, areas, subjects) =>
       initSelection(cultures, @proposal.subject_culture)
       initSelection(areas, @proposal.subject_area)
