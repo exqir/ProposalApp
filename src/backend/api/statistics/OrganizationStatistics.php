@@ -38,6 +38,7 @@ class OrganizationStatistics extends SqlConnection {
           FROM proposal
           LEFT JOIN organizations
             ON proposal.OrgID = organizations.ID
+          WHERE proposal.Raw != -1
         ");
     }
 
@@ -82,7 +83,8 @@ class OrganizationStatistics extends SqlConnection {
         }
         $query .= " FROM proposal
             LEFT JOIN organizations
-                ON proposal.OrgID = organizations.ID";
+                ON proposal.OrgID = organizations.ID
+            WHERE proposal.Raw != -1";
         return $query;
     }
 

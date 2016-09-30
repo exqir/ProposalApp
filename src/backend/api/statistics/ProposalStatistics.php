@@ -10,7 +10,7 @@ class ProposalStatistics extends SqlConnection {
     }
 
     public function getProposalCount() {
-        return $this->selectQuery("SELECT COUNT(*) AS number FROM proposal");
+        return $this->selectQuery("SELECT COUNT(*) AS number FROM proposal WHERE RAW != -1");
     }
 
     public function getProposalCountByCountry($country) {
@@ -18,7 +18,7 @@ class ProposalStatistics extends SqlConnection {
           LEFT JOIN organizations
           ON proposal.OrgID = organizations.ID
           OR proposal.OrgOptID = organizations.ID
-          WHERE organizations.Country = '" . $country . "'";
+          WHERE organizations.Country = '" . $country . "' AND proposal.Raw != -1";
         return $this->selectQuery($query);
     }
 
@@ -28,6 +28,7 @@ class ProposalStatistics extends SqlConnection {
           SUM(CASE WHEN W2 != 0 THEN 1 ELSE 0 END) AS W2,
           SUM(CASE WHEN W3 != 0 THEN 1 ELSE 0 END) AS W3
           FROM proposal
+          WHERE Raw != -1
         ");
     }
 }

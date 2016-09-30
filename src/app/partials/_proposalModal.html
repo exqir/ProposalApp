@@ -11,6 +11,17 @@
       </a>
       <input name="proposalTitle" class="form-control" type="text" ng-model="modal.proposal.Title">
     </div>
+    <div class="inline-select">
+      <label for="rawType" class="block">Type:</label>
+      <select name="proposalPotOrgName" class="form-control select-inline"
+              ng-model="modal.selectedRawType"
+              ng-change="modal.setRaw(modal.selectedRawType)">
+        <option value="-1">Deaktiviert</option>
+        <option value="1">Raw</option>
+        <option value="2">Edited</option>
+        <option value="3">Imported</option>
+      </select>
+    </div>
     <div class="form-group">
       <div class="inline-select">
         <label for="proposalOrgName" class="block">Organisation:</label>
@@ -21,16 +32,17 @@
       </div>
       <div class="inline-select">
         <label for="proposalOptOrgName" class="block">Optional Organisation:</label>
-        <select name="proposalPotOrgName" class="form-control select-inline"
+        <select name="proposalOptOrgName" class="form-control select-inline"
                 ng-options="org as org.Name for org in modal.organizations" ng-model="modal.selectedOptOrg"
                 ng-value="{{org.Name}}" ng-change="modal.setOptOrganization(modal.selectedOptOrg)">
         </select>
       </div>
     </div>
     <div class="form-group">
+      <label for="subjects" class="block">Fächerzugehörigkeit:</label>
       <div class="dropdown" uib-dropdown auto-close="disabled">
         <a class="btn btn-default dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
-          Fachzugehörigkeit
+          Fächer auswählen
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="subjectsDD">

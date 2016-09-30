@@ -19,6 +19,7 @@
       @areas = deepCopyArray(items.areas)
       @subjects = deepCopyArray(items.subjects)
 
+      @selectedRawType = items.proposal.Raw
       @selectedOrg
       @selectedOptOrg
 
@@ -36,6 +37,7 @@
       @setCulture = setCulture
       @setArea = setArea
       @setSubject = setSubject
+      @setRaw = setRaw
 
       $q.all(pullData(@proposal.ID))
         .then () =>
@@ -152,6 +154,8 @@
       @proposal.subject = checkIfSelected(subject.ID, checked)
       @proposal.SubjectName = if checked then subject.Name else ''
 
+    setRaw = (value) =>
+      @proposal.Raw = value
 
     # setSelection
 
