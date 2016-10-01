@@ -29,7 +29,7 @@ The application is divided into the backend part, using php, and the frontend or
 | README.md
 
 ## Getting-Started
-Node.JS and npm is required to use the build process and to compile the app. You can get it [here](https://nodejs.org/en/) or install it via homebrew `brew install node`.
+Node.JS and npm are required to use the build process and to compile the app. You can get it [here](https://nodejs.org/en/) or install it via homebrew `brew install node`.
 
 To install the JS dependencies just use `npm install`. The php dependencies, currently only Flight as REST-API, are not included. Flight is located in `/src/backend/api/flight`.
 
