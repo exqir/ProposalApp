@@ -1,0 +1,60 @@
+<div class="wrapper">
+  <div class="dashboard">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-2">
+        <div class="dash">
+          <div class="title">
+            <p>Stellenauschreibungen</p>
+            <p>/ davon aus Deutschlad</p>
+          </div>
+          <div class="number">
+            {{dash.proposalNumber}}
+            <span>{{dash.proposalNumberByCountry}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="dash">
+          <div class="title">
+            Organisationen
+          </div>
+          <div class="number">
+            {{dash.organizationNumber}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-md-offset-2">
+        <div class="dash">
+          <div class="title">
+            Ausschreibungen pro Art
+          </div>
+          <div ng-repeat="type in dash.organizationTypes">
+            {{type.name}} | {{type.number}} | {{dash.calculatePercentage(type.number, dash.proposalNumber)}}%
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="dash">
+          <div class="title">
+            Besoldungen
+          </div>
+          <div ng-repeat="type in dash.proposalTypes">
+            {{type.name}} | {{type.number}} | {{dash.calculatePercentage(type.number, dash.proposalNumber)}}%
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="dash">
+          <div class="title">
+            Ausschreibungen pro Bundesland
+          </div>
+          <div ng-repeat="state in dash.stateNumberByCountry">
+            {{state.name}} | {{state.number}} | {{state.calculatePercentage(type.number, dash.proposalNumber)}}%
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

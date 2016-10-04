@@ -1,88 +1,186 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var rename = require('gulp-rename');
+var gulpSequence = require('gulp-sequence');
+var coffee = require('gulp-coffee');
+var concat = require('gulp-concat');
+var ftp = require('vinyl-ftp');
+var path = require('path');
+var del = require('del');
 
-var buildFolder = './build/';
-var input = './app/scss/*.scss';
-var output = './build/app/css';
+const credentials = require('./credentials')()
+
+const config = {
+    src: 'src',
+    dist: 'dist'
+}
+
+const paths = require('./path-config')(config)
+
+gulp.task('clean', function() {
+    return del(paths.build.dist);
+});
+
+gulp.task('php', function() {
+   return gulp
+       .src(path.resolve(paths.src.backend, '**/*'))
+       .pipe(gulp.dest(paths.build.backend));
+});
+
+gulp.task('root', function() {
+    return gulp
+        .src(path.resolve(paths.src.root, '*.php'))
+        .pipe(gulp.dest(paths.build.dist));
+});
+
+gulp.task('rename-to-70', function(){
+    return gulp
+        .src(path.resolve(paths.build.dist, 'proposalCollector.php'))
+        .pipe(rename('proposalCollector.php70'));
+//        .pipe(gulp.dest(paths.build.dist));
+});
+
+gulp.task('backend', function(cb) {
+    gulpSequence('php', 'root')(cb);
+});
 
 gulp.task('sass', function () {
   return gulp
-    // Find all `.scss` files from the `stylesheets/` folder
-    .src(input)
-    // Run Sass on those files
+    .src(path.resolve(paths.src.styles, '**/*.scss'))
     .pipe(sass())
-    // Write the resulting CSS in the output folder
-    .pipe(gulp.dest(output));
+    .pipe(gulp.dest(paths.build.app.styles));
 });
 
-gulp.task('watch', function() {
+gulp.task('scripts',['coffee'], function() {
+
+});
+
+gulp.task('coffee', function() {
+    return gulp
+        .src(path.resolve(paths.src.scripts, '**/*.coffee'))
+        .pipe(coffee({bare: true}))
+        .pipe(concat('proposalApp.js'))
+        .pipe(gulp.dest(paths.build.app.scripts));
+});
+
+gulp.task('partials', function() {
+    return gulp
+        .src(path.resolve(paths.src.partials,'**/*'))
+        .pipe(gulp.dest(paths.build.app.partials));
+});
+
+gulp.task('assets', function() {
+    return gulp
+        .src(path.resolve(paths.src.assets,'**/*'))
+        .pipe(gulp.dest(paths.build.app.assets));
+});
+
+gulp.task('bootstrap', function() {
+    return gulp
+        .src([paths.src.bootstrap.css,paths.src.bootstrap.map])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('jsurl', function() {
+    return gulp
+        .src(paths.src.jsurl)
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular',['angular-route','angular-sanitize','angular-animate','angular-filter','angular-ui-bootstrap'], function() {
+    return gulp
+        .src([paths.src.angular.js,paths.src.angular.map])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular-route', function() {
+    return gulp
+        .src([paths.src.angular.route.js,paths.src.angular.route.map])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular-sanitize', function() {
+    return gulp
+        .src([paths.src.angular.sanitize.js,paths.src.angular.sanitize.map])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular-animate', function() {
+    return gulp
+        .src([paths.src.angular.animate.js,paths.src.angular.animate.map])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular-filter', function() {
+    return gulp
+        .src(paths.src.angular.filter.js)
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('angular-ui-bootstrap', function() {
+    return gulp
+        .src([paths.src.angular.uiBootstrap.js,paths.src.angular.uiBootstrap.tpls])
+        .pipe(gulp.dest(paths.build.app.vendor));
+});
+
+gulp.task('app',['sass','scripts','partials','assets','bootstrap','jsurl', 'angular'], function() {
+    return gulp
+        .src(path.resolve(paths.src.app, 'index.html'))
+        .pipe(gulp.dest(paths.build.app.root));
+});
+
+gulp.task('watch-app', function() {
   return gulp
-    // Watch the input folder for change,
-    // and run `sass` task when something happens
-    .watch(input, ['sass'])
-    // When there is a change,
-    // log a message in the console
+    .watch(path.resolve(paths.src.app), ['app'])
     .on('change', function(event) {
       console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
     });
 });
 
-gulp.task('build',['copy-home','copy-rest','copy-php','copy-app','sass'], function () {
-    console.log('building project...')
-});
-
-gulp.task('copy-home',['rename-collector'], function() {
-   return gulp
-       .src('./*.php')
-       .pipe(gulp.dest(buildFolder));
-});
-
-gulp.task('rename-collector', function () {
+gulp.task('watch-backend', function() {
     return gulp
-        .src(buildFolder + 'proposalCollector.php')
-        .pipe(rename('proposalCollector.php70'))
-        .pipe(gulp.dest(buildFolder));
-})
-
-gulp.task('copy-rest', function () {
-    return gulp
-        .src('./restEndpoint/index.php')
-        .pipe(gulp.dest(buildFolder + 'restEndpoint'));
+        .watch(path.resolve(paths.src.backend), ['backend'])
+        .on('change', function(event) {
+            console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+        });
 });
 
-gulp.task('copy-php', function () {
-    return gulp
-        .src('./classes/*.php')
-        .pipe(gulp.dest(buildFolder + 'classes'));
+gulp.task('watch', ['watch-app','watch-backend'], function(){
+
 });
 
-gulp.task('copy-js', function () {
+gulp.task('credentials', function() {
     return gulp
-        .src('./app/js/*.{js,map}')
-        .pipe(gulp.dest(buildFolder + 'app/js'));
+        .src('credentials.php')
+        .pipe(gulp.dest(paths.build.dist));
 });
 
-gulp.task('copy-partials', function () {
-    return gulp
-        .src('./app/partials/*.html')
-        .pipe(gulp.dest(buildFolder + 'app/partials'));
+gulp.task('publish', function() {
+
+    console.log('Publishing to ' + credentials.server + ' ...');
+    var conn = ftp.create( {
+        host: credentials.server,
+        user: credentials.user,
+        password: credentials.pw
+    } );
+
+    return gulp.src(path.resolve(paths.build.dist, '**/*'), { base: '.', buffer: false } )
+//        .pipe( conn.newer( '/test' ) ) // only upload newer files
+        .pipe( conn.dest( '/test' ) );
 });
 
-gulp.task('copy-assets', function () {
-    return gulp
-        .src('./app/assets/*.{jpeg,png,jpg}')
-        .pipe(gulp.dest(buildFolder + 'app/assets'));
+gulp.task('dev', function (cb) {
+    gulpSequence('clean',['backend','app'],'credentials')(cb);
 });
 
-gulp.task('copy-app',['copy-js','copy-assets','copy-partials'], function () {
-    return gulp
-        .src('./app/*.html')
-        .pipe(gulp.dest(buildFolder + 'app'));
+gulp.task('build', function (cb) {
+    gulpSequence('clean',['backend','app'],'rename-to-70')(cb);
 });
 
+gulp.task('deploy', function (cb) {
+    gulpSequence('build','publish')(cb);
+});
 
-
-gulp.task('default', ['sass', 'watch'], function() {
+gulp.task('default', ['build'], function() {
   // place code for your default task here
 });

@@ -10,20 +10,22 @@ Thumbs.db
 .Spotlight-V100
 .Trashes
 
-# DB config
-db.php
+# Credentials
+credentials.php
+credentials.js
 
 # Node Modules
 /node_modules
-
-# CSS
-/app/css/style.css
-
-# Bourbon
-/app/scss/bourbon
 
 #IDEA
 .idea/
 
 #Build
 /build
+/dist
+
+#Temp
+temp
+
+#Tern
+.tern-project

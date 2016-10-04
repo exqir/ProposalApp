@@ -1,0 +1,110 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{modal.proposal.Title}}</h3>
+</div>
+<div class="modal-body">
+  <form>
+    <div class="form-group">
+      <label for="proposalTitle">Stellentitle:</label>
+      <a target="_blank" href="https://www.academics.de{{modal.proposal.Link}}">
+        <i class="fa fa-link" aria-hidden="true"></i>
+        Academics.de
+      </a>
+      <input name="proposalTitle" class="form-control" type="text" ng-model="modal.proposal.Title">
+    </div>
+    <div class="inline-select">
+      <label for="rawType" class="block">Type:</label>
+      <select name="proposalPotOrgName" class="form-control select-inline"
+              ng-model="modal.selectedRawType"
+              ng-change="modal.setRaw(modal.selectedRawType)">
+        <option value="-1">Deaktiviert</option>
+        <option value="1">Raw</option>
+        <option value="2">Edited</option>
+        <option value="3">Imported</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <div class="inline-select">
+        <label for="proposalOrgName" class="block">Organisation:</label>
+        <select name="proposalOrgName" class="form-control select-inline"
+        ng-options="org as org.Name for org in modal.organizations" ng-model="modal.selectedOrg"
+        ng-value="{{org.Name}}" ng-change="modal.setOrganization(modal.selectedOrg)">
+        </select>
+      </div>
+      <div class="inline-select">
+        <label for="proposalOptOrgName" class="block">Optional Organisation:</label>
+        <select name="proposalOptOrgName" class="form-control select-inline"
+                ng-options="org as org.Name for org in modal.organizations" ng-model="modal.selectedOptOrg"
+                ng-value="{{org.Name}}" ng-change="modal.setOptOrganization(modal.selectedOptOrg)">
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="subjects" class="block">Fächerzugehörigkeit:</label>
+      <div class="dropdown" uib-dropdown auto-close="disabled">
+        <a class="btn btn-default dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" type="button">
+          Fächer auswählen
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="subjectsDD">
+          <li>Fachkultur</li>
+          <li role="separator" class="divider"></li>
+          <li ng-repeat="culture in modal.subjectsTree">
+            <label>
+              <input type="checkbox" name="culture" ng-model="culture.checked" ng-click="modal.setCulture(modal.subjectsTree, culture, culture.checked)">
+              <span>{{culture.Name}}</span>
+            </label>
+            <ul class="drilldown-list" ng-class="{'drilldown-list--open': culture.checked}">
+              <li>Fachbereich</li>
+              <li role="separator" class="divider"></li>
+              <li class="drilldown-list-item" ng-repeat="area in culture.children">
+                <label>
+                  <input type="checkbox" name="area" ng-model="area.checked" ng-click="modal.setArea(culture.children, area, area.checked)">
+                  <span>{{area.Name}}</span>
+                </label>
+                <ul class="drilldown-list" ng-class="{'drilldown-list--open': area.checked}">
+                  <li>Fach</li>
+                  <li role="separator" class="divider"></li>
+                  <li class="drilldown-list-item" ng-repeat="subject in area.children" ng-click="modal.setSubject(area.children, subject, subject.checked)">
+                    <label>
+                      <input type="checkbox" name="subject" ng-model="subject.checked">
+                      <span>{{subject.Name}}</span>
+                    </label>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <!--<div class="inline-select">-->
+        <!--<label for="subject_culture" class="block">Fachkulture:</label>-->
+        <!--<select name="subject_culture" class="form-control select-inline"-->
+        <!--ng-options="culture as culture.Name for culture in modal.cultures" ng-model="modal.selectedCulture"-->
+        <!--ng-value="{{culture.Name}}" ng-change="modal.setCulture(modal.selectedCulture.ID)">-->
+        <!--</select>-->
+      <!--</div>-->
+      <!--<div class="inline-select">-->
+        <!--<label for="subject_area" class="block">Fachbereich:</label>-->
+        <!--<select name="subject_area" class="form-control select-inline"-->
+        <!--ng-options="area as area.Name for area in modal.areas" ng-model="modal.selectedArea"-->
+        <!--ng-value="{{area.Name}}" ng-change="modal.setArea(modal.selectedArea.ID)">-->
+        <!--</select>-->
+      <!--</div>-->
+      <!--<div class="inline-select">-->
+        <!--<label for="subject" class="block">Fach:</label>-->
+        <!--<select name="subject" class="form-control select-inline"-->
+        <!--ng-options="subject as subject.Name for subject in modal.subjects" ng-model="modal.selectedSubject"-->
+        <!--ng-value="{{subject.Name}}" ng-change="modal.setSubject(modal.selectedSubject.ID)">-->
+        <!--</select>-->
+      <!--</div>-->
+    <!--</div>-->
+    <div class="form-group">
+      <label for="proposalDescription">Beschreibung:</label>
+      <textarea name="proposalDescription" class="form-control" rows="15" type="text" ng-model="modal.proposal.Description"></textarea>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="modal.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="modal.editProposal()">Save</button>
+</div>
