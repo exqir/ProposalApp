@@ -2,7 +2,7 @@
 
 ## Architecture
 The application is divided into the backend part, using php, and the frontend or app part, using javascript/coffeescript and angular as framework.
-
+```
 | /example_database
 | /src
 | - /app
@@ -27,6 +27,7 @@ The application is divided into the backend part, using php, and the frontend or
 | package.json
 | path-config.js
 | README.md
+```
 
 ## Getting-Started
 Node.JS and npm are required to use the build process and to compile the app. You can get it [here](https://nodejs.org/en/) or install it via homebrew `brew install node`.
