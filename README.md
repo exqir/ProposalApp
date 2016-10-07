@@ -36,7 +36,7 @@ To install the JS dependencies just use `npm install`. The php dependencies, cur
 
 In `htaccess` the second line `RewriteBase /ProposalApp/dist/backend/api` has to be set to the path of the backend folder of the server, this is necessary resolving the routes of the REST-API.
 
-`credentials.php` contains the credentials of the SQL database, as well as the Google API KEY, used for the location service (`/src/backend/location). This file is contained in the gitignore and the file provided in the repository only contains localhost parameters.
+`credentials.php` contains the credentials of the SQL database, as well as the Google API KEY, used for the location service (`/src/backend/location`). This file is contained in the gitignore and the file provided in the repository only contains localhost parameters.
 *DO NOT* commit changes to this file into the repository. This file should only be push to the server once and it should only be edited on the server. It is not copied to the `/dist` folder during the normal build process.
 
 [Gulp](http://gulpjs.com/) is used as build tool. To build the app and create the `/dist` directory use `gulp build`.
