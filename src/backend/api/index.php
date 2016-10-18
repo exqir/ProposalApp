@@ -13,6 +13,7 @@ require_once __DIR__ . '/proposal/ProposalPuts.php';
 
 require_once __DIR__ . '/subject/SubjectGets.php';
 
+error_reporting(E_ERROR | E_PARSE);
 
 Flight::route('GET /', function(){
     echo 'GET hello world!';

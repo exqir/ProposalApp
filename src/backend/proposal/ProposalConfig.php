@@ -1,8 +1,8 @@
 <?php
 
-define("BASEURL", "https://www.academics.de");
+@define("BASEURL", "https://www.academics.de");
 
-define("TITLEADDITIONS", [
+@define("TITLEADDITIONS", [
 			"W1" => 0,
 			"W2" => 0,
 			"W3" => 0,
@@ -14,7 +14,7 @@ define("TITLEADDITIONS", [
 			"Ass" => 0,
 		]);
 
-define("TITLEEXPRESSIONS", [
+@define("TITLEEXPRESSIONS", [
 	"W1" => ["W1","Juniorprofessor","Jun.-Prof.","Juniorprofessur"],
 	"W2" => ["W2","Assoc. Prof","Associate Professor"],
 	"W3" => ["W3","Full Professor"],
@@ -26,7 +26,7 @@ define("TITLEEXPRESSIONS", [
 	"Ass" => ["Ass","Assistenz","Assistent","Assistant"],
 ]);
 
-define("DB_PROPOSAL", [
+@define("DB_PROPOSAL", [
 			"OrgID" => "?",
 			"OrgOptID" => "?",
 			"Title" => "?",
@@ -76,7 +76,7 @@ define("DB_PROPOSAL", [
 		]);
 
 // i = integer, s = string, d = double, b = blob
-define("DB_PARAM_TYPES", [
+@define("DB_PARAM_TYPES", [
 			"i", // OrgID
 			"i", // OrgOptID
 			"s", // Title

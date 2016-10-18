@@ -113,10 +113,10 @@
 
     editProposal = () =>
       console.log(@proposal)
-#      proposalsDataService
-#        .editProposal(proposalID, @proposal)
-#        .then (result) =>
-#          $uibModalInstance.dismiss() if result.status == 200
+      proposalsDataService
+        .editProposal(proposalID, @proposal)
+        .then (result) =>
+          $uibModalInstance.dismiss() if result.status == 200
 
     cancel = () =>
       $uibModalInstance.dismiss()

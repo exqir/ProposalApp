@@ -60,7 +60,7 @@
         </a>
         <ul class="dropdown-menu list-group" uib-dropdown-menu role="menu" aria-labelledby="cultureDD">
           <li ng-repeat="culture in vm.cultures" class="list-item">
-              <input type="checkbox" ng-click="vm.includeSubjectCulture(culture.Name)">
+              <input type="checkbox" ng-click="vm.includeCulture(culture.Name)">
               {{culture.Name}}
           </li>
         </ul>
@@ -78,7 +78,7 @@
           </li>
           <li role="separator" class="divider filter"></li>
           <li ng-repeat="area in vm.areas | filterBy: ['Name']:smartSearchArea" class="list-item">
-              <input type="checkbox" ng-click="vm.includeSubjectArea(area.Name)">
+              <input type="checkbox" ng-click="vm.includeArea(area.Name)">
               {{area.Name}}
           </li>
         </ul>

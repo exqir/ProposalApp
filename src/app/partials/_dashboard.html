@@ -48,10 +48,10 @@
       <div class="col-md-3">
         <div class="dash">
           <div class="title">
-            Ausschreibungen pro Bundesland
+            Ausschreibungen pro Bundesland (Deutschland)
           </div>
           <div ng-repeat="state in dash.stateNumberByCountry">
-            {{state.name}} | {{state.number}} | {{state.calculatePercentage(type.number, dash.proposalNumber)}}%
+            {{state.name}} | {{state.number}} | {{dash.calculatePercentage(state.number, dash.proposalNumber)}}%
           </div>
         </div>
       </div>

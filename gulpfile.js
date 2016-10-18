@@ -8,7 +8,7 @@ var ftp = require('vinyl-ftp');
 var path = require('path');
 var del = require('del');
 
-const credentials = require('./credentials')()
+//const credentials = require('./credentials')()
 
 const config = {
     src: 'src',
@@ -36,8 +36,8 @@ gulp.task('root', function() {
 gulp.task('rename-to-70', function(){
     return gulp
         .src(path.resolve(paths.build.dist, 'proposalCollector.php'))
-        .pipe(rename('proposalCollector.php70'));
-//        .pipe(gulp.dest(paths.build.dist));
+        .pipe(rename('proposalCollector.php70'))
+        .pipe(gulp.dest(paths.build.dist));
 });
 
 gulp.task('backend', function(cb) {

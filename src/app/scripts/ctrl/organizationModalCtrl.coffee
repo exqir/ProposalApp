@@ -60,10 +60,10 @@
 
     editOrganization = () =>
       console.log(@organization)
-    #      organizationsDataService
-    #        .editOrganization(@organization.ID, @organization)
-    #        .then (result) =>
-    #          $uibModalInstance.dismiss() if result.status == 200
+      organizationsDataService
+        .editOrganization(@organization.ID, @organization)
+        .then (result) =>
+          $uibModalInstance.dismiss() if result.status == 200
 
     cancel = () =>
       $uibModalInstance.dismiss()
